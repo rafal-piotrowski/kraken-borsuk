@@ -23,6 +23,8 @@ npm init @open-wc
 - `iron-form` npm install --save-dev @polymer/iron-form
 - `paper-tooltip` npm install --save-dev @polymer/paper-tooltip
 - `iron-icons` npm install --save-dev @polymer/iron-icons
+- `paper-toast` npm install --save-dev @polymer/paper-toast
+- `iron-collapse` npm install --save-dev @polymer/iron-collapse
 
 ## Pliki konfiguracyjne
 

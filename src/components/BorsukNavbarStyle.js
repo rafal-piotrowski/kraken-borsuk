@@ -42,10 +42,14 @@ export const BorsukNavbarStyle = css`
         top: 0;
         right: 0;
         left: 0;
-        /* padding-left: var(--borsuk-sidebar-width);
-        padding-top: var(--borsuk-navbar-padding-top); */
-        max-height: var(--borsuk-navbar-max-height);
+        /* padding-top: var(--borsuk-navbar-padding-top); */
+        /* max-height: var(--borsuk-navbar-max-height); */
         z-index: 4;
+    }
+
+    .navbar-oper {
+        padding-left: var(--borsuk-sidebar-width);
+        background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 86%, rgba(255,255,255,0) 100%);
     }
 
     .navbar-gradient {
@@ -72,7 +76,7 @@ export const BorsukNavbarStyle = css`
 
     .mainOptionsGrid {
         display: grid;
-        grid-gap: 25px;
+        /* grid-gap: 25px; */
     }
 
     .formGrid12 {
@@ -139,5 +143,54 @@ export const BorsukNavbarStyle = css`
 
     .inputFrame {
         padding: 20px 5px;
+    }
+
+    .container-fluid {
+        flex-wrap: nowrap;
+        padding-right: 0px;
+        padding-left: 0px;
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+
+    .flex-navbar {
+        display: flex;
+        flex-direction: row;
+        max-width: 100%;
+        height: 80px;
+        flex: 1;
+    }
+
+    .logo {
+        display: flex;
+        flex-direction: row;
+        vertical-align: middle !important;
+        margin: 0px;
+    }
+
+    .flex-navbar .logo {
+        /* padding: 14px 20px 12px; */
+    }
+
+    .navbar-brand-oper {
+        padding-left: 25px;
+        display: inline-block;
+        padding-top: 0.3125rem;
+        font-size: 1.25rem;
+        line-height: inherit;
+        white-space: nowrap;
+    }
+
+    #filterLayout {
+        padding-right: 25px;
+    }
+
+    .flexpaper {
+        display: flex;
+        justify-content: right;
+    }
+
+    .buttonsOper {
+        padding-top: 10px;
     }
 `;

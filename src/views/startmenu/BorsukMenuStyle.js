@@ -50,6 +50,10 @@ export const BorsukMenuStyle = css`
         --my-elem-visibility: visible;
         --width-errfix: 500px;
         --height-errfix: 150px;
+
+        --borsuk-sidebar-width: 325px;
+        --borsuk-navbar-max-height: 100px;
+        --borsuk-navbar-padding-top: 10px;
     }
 
     .inputGrid {

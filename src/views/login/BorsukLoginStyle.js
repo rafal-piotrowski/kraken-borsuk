@@ -176,7 +176,7 @@ export const BorsukLoginStyle = css`
     }
  
     .container {
-        min-width: 992px !important;
+        /* min-width: 992px !important; */
         width: 100%;
         padding-right: 15px;
         padding-left: 15px;

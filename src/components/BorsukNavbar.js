@@ -33,6 +33,20 @@ export class BorsukNavbar extends LitElement {
         `;
     }
 
+    get operNaviTemplate() {
+        return html`
+            <nav class="navbar-expand-lg navbar-transparent navbar-fixed navbar-oper">
+                <div class="mainOptionsGrid mainOptionNav formGrid12">
+                    <div class="simple-text logo inputGrid formSpanGrid3">
+                        <div class="img">${BorsukIngLogo}</div>
+                    </div>
+                    <div class="inputGrid formSpanGrid6">${this.mainNavTitle}</div>
+                    <div class="navbar-brand buttonsGrid buttonsOper formSpanGrid3">${this.navigationTamplete}</div>
+                </div>
+            </nav>
+        `;
+    }
+
     get logoTemplate() {
         return html`
             <div class="simple-text logo inputGrid inputFrame formSpanGrid3">
@@ -47,28 +61,6 @@ export class BorsukNavbar extends LitElement {
 
     get navigationTamplete() {
         return html`${this.buttonOptions.map(i => html`<borsuk-navbar-buttons .valuesButton="${i}"></borsuk-navbar-buttons>`)}`;
-    }
-
-    get operNaviTemplate() {
-        return html`
-            <nav class="navbar-expand-lg navbar-transparent navbar-fixed">
-                <div class="container-fluid">
-                    <div class="flex-navbar navbar-gradient">
-                        <div class="logo navbar-wrapper flexnav-left">
-                            <div class="simple-text logo-normal">
-                                <img src="../../../img/ing_logo_ux.png">
-                            </div>
-                            <div class="navbar-brand">${this.mainNavTitle}</div>
-                        </div>
-                        <div id="filterLayout" class="flexnav-right">
-                            <div class="flexpaper">
-                                <div>${this.navigationTamplete}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        `;
     }
 
     static get properties() {

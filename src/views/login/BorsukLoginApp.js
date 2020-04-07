@@ -99,7 +99,7 @@ export class BorsukLoginApp extends LitElement {
   }
 
   resolveLocation(location) {
-    if (location.search === "?error") { this._handleLoginError(true, true) };
+    if (location.search === "?error=") { this._handleLoginError(true, true) };
   }
 
   // resolveMQ(matches) {

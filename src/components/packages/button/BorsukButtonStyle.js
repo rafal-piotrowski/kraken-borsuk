@@ -54,6 +54,11 @@ export const BorsukButtonStyle = css`
         min-width: 5px;
     }
 
+    :host([reverse]) {
+        color: white;
+        background-color: var(--ing-orange-color);
+    }
+
     ::slotted(iron-icon) {
         width: 20px;
     }
