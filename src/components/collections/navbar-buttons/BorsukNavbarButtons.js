@@ -1,3 +1,8 @@
+/* eslint-disable spaced-comment */
+/* eslint-disable no-lone-blocks */
+/* eslint-disable babel/no-unused-expressions */
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/order */
 /* eslint-disable lit/binding-positions */
 /* eslint-disable import/first */
 /* eslint-disable import/newline-after-import */
@@ -7,26 +12,33 @@
 
 import { LitElement, html, css } from 'lit-element';
 import { BorsukNavbarButtonsStyle } from './BorsukNavbarButtonsStyle.js';
+
+// konektor do store-a
+import { connect } from 'pwa-helpers/connect-mixin.js';
 import '@polymer/paper-tooltip/paper-tooltip';
 import '@polymer/iron-icons/iron-icons';
 import '@polymer/iron-icon/iron-icon';
 import '../../packages/borsuk-button.js';
 
-export class BorsukNavbarButtons extends LitElement {
+// podłączenie do Redux store.
+import { store } from '../../../redux/store.js';
+
+// załadowanie kreatorów akcji.
+import { setClickAction } from '../../../redux/actions/menu.js';
+
+export class BorsukNavbarButtons extends connect(store)(LitElement) {
+// export class BorsukNavbarButtons extends LitElement {
     static get styles() {
         return [BorsukNavbarButtonsStyle];
     }
 
     render() {
         return html`
-                <!-- <paper-icon-button   -->
-                                <!-- icon="${this.valuesButton.buttonIcon}"  -->
-            <borsuk-button icon @click="${this.valuesButton.buttonAction}"
+            <borsuk-button icon @click=${this.clickAction}
                                 id="${this.valuesButton.buttonId}Button" 
                                 class="navIconButton">
                 <iron-icon icon="${this.valuesButton.buttonIcon}"></iron-icon>
             </borsuk-button>
-                <!-- </paper-icon-button> -->
             <paper-tooltip  id="${this.valuesButton.buttonId}Tooltip" 
                             for="${this.valuesButton.buttonId}Button" 
                             animation_delay="500" animation-entry="scale-up-animation" 
@@ -47,15 +59,8 @@ export class BorsukNavbarButtons extends LitElement {
     firstUpdated() {
     }
 
-    _home() {
-        console.log('going home...');
-    }
-
-    _userinfo() {
-    }
-
-    _logout() {
-        console.log('bye...');
+    clickAction() {
+        store.dispatch(setClickAction(this.valuesButton.buttonId));
     }
 
 }

@@ -1,0 +1,26 @@
+{
+    "menuNotifications": [
+        {
+            "notificationId": 1,
+            "optionId": 1,
+            "notificationTitle": "Jeżeli chcesz dodać nową subofertę, kliknij w ten ...",
+            "active": true,
+            "showLink": true,
+            "position": 1
+        },{
+            "notificationId": 2,
+            "optionId": 1,
+            "notificationTitle": "Do wyszukiwarki zaprowadzi Cie ten ...",
+            "active": true,
+            "showLink": true,
+            "position": 2
+        },{
+            "notificationId": 3,
+            "optionId": 2,
+            "notificationTitle": "moduł w trakcie prac developerskich",
+            "active": true,
+            "showLink": false,
+            "position": 1
+        }
+    ]
+}

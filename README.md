@@ -15,9 +15,8 @@ npm init @open-wc
 # niezbędny node w wersji > 10.16 & npm > 6
 ```
 
-## Dodatkowe komponenty
+## komponenty Polymer-owe do budowy części atomowych i molekularnych (Leyer 5 i 4)
 
-- `pwa-helpers` npm install --save-dev pwa-helpers
 - `paper-input` npm install --save-dev @polymer/paper-input
 - `paper-button` npm install --save-dev @polymer/paper-button
 - `iron-form` npm install --save-dev @polymer/iron-form
@@ -25,6 +24,18 @@ npm init @open-wc
 - `iron-icons` npm install --save-dev @polymer/iron-icons
 - `paper-toast` npm install --save-dev @polymer/paper-toast
 - `iron-collapse` npm install --save-dev @polymer/iron-collapse
+
+## komponenty wykorzystywane do budowy warstwy interakcji (Leyer 2)
+
+- `pwa-helpers` npm install --save-dev pwa-helpers
+- `redux` npm install --save-dev redux
+- `redux-thunk` npm install --save-dev redux-thunk
+- `reselect` npm install --save-dev reselect
+- `reselect-map` npm install --save-dev reselect-map
+
+## Biblioteki zewnętrzne
+
+- `sortablejs` npm install --save-dev sortablejs
 
 ## Pliki konfiguracyjne
 

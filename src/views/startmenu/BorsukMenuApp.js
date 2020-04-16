@@ -1,3 +1,12 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable radix */
+/* eslint-disable import/named */
+/* eslint-disable no-return-await */
+/* eslint-disable arrow-body-style */
+/* eslint-disable prefer-template */
+/* eslint-disable no-param-reassign */
+/* eslint-disable import/newline-after-import */
+/* eslint-disable import/order */
 /* eslint-disable func-names */
 /* eslint-disable no-undef */
 /* eslint-disable prefer-const */
@@ -11,11 +20,31 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { LitElement, html, css } from 'lit-element';
+import Sortable from 'sortablejs';
 import { BorsukMenuStyle } from './BorsukMenuStyle.js';
+import { loadJSON } from '../../helpers/asyncFunctions.js';
+
+// konektor służący podłączaniu się do store-a
+import { connect } from 'pwa-helpers/connect-mixin.js';
 import '../../components/borsuk-navbar.js';
 import '../../components/collections/borsuk-main-option.js';
 
-export class BorsukMenuApp extends LitElement {
+import { homeAction, infoAction, logoutAction } from '../../properties/navbarProperties.js';
+import { buttonClickAction } from '../../properties/mainMenuProperties.js';
+
+// podłączenie do Redux store.
+import { store } from '../../redux/store.js';
+
+// załadowanie kreatorów akcji.
+import { getUserInfo, getMenuOptions, getMenuNotifications, changeMenuIndex } from '../../redux/actions/menu.js';
+
+// podłączenie reducer-a.
+import menu, { menuOptionsSelector, menuIndexesSelector, actionClickSelector, actionParamSelector } from '../../redux/reducers/menu.js';
+store.addReducers({
+  menu
+});
+
+export class BorsukMenuApp extends connect(store)(LitElement) {
     static get styles() {
         return [
             BorsukMenuStyle,
@@ -44,13 +73,18 @@ export class BorsukMenuApp extends LitElement {
     get contentTemplate() {
         return html`
           <div id="menuLayout" class="mainOptionsGrid formGrid12 list-group">
-              ${this.menuOptions.map(i => html`<borsuk-main-option  id="option_${i.optionId}"
-                                                                    data-start-position="${i.optionId}"
-                                                                    data-end-position="${i.optionId}"
-                                                                    data-name="${i.optionTitle}"
-                                                                    class="menuOption inputGrid inputFrame formSpanGrid6"
-                                                                    .valuesMenu="${i}" >
-                                                </borsuk-main-option>`)}
+
+          ${Object.keys(this.menuOptions).map((key) => {
+                const i = this.menuOptions[key];
+                return html`<borsuk-main-option  id="${i.optionId}"
+                                                index="${i.index}"
+                                                data-name="${i.optionTitle}"
+                                                class="menuOption inputGrid inputFrame formSpanGrid6"
+                                                .valuesMenu="${i}" >
+                            </borsuk-main-option>
+                `;
+            })}
+
           </div>
         `;
     }
@@ -68,7 +102,52 @@ export class BorsukMenuApp extends LitElement {
     // }
 
     firstUpdated() {
-        // this.activateDraggableElements();
+        this.activateDraggableElements();
+
+        // poniższe akcje set do zakomentowania po wdrożeniu do projektu
+        this.setMenuOptions();
+        this.setMenuNotifications();
+        this.setUserInfo();
+    }
+
+    setMenuOptions(jsonData) {
+        if (jsonData) {
+            store.dispatch(getMenuOptions(jsonData.menuOptions));
+        } else {
+            loadJSON('/src/properties/menuOptions.json')
+            .then(data => {
+                store.dispatch(getMenuOptions(data.menuOptions));
+            })
+        }
+    }
+
+    setMenuNotifications(jsonData) {
+        if (jsonData) {
+            store.dispatch(getMenuNotifications(jsonData.menuNotifications));
+        } else {
+            loadJSON('/src/properties/menuNotifications.json')
+            .then(data => {
+                store.dispatch(getMenuNotifications(data.menuNotifications));
+            })
+        }
+    }
+
+    setUserInfo(jsonData) {
+        if (jsonData) {
+            store.dispatch(getUserInfo(jsonData.userInfo));
+        } else {
+            loadJSON('/src/properties/userInfo.json')
+            .then(data => {
+                store.dispatch(getUserInfo(data.userInfo));
+            })
+        }
+    }
+
+    stateChanged(state) {
+        if (this.menuOptions !== menuOptionsSelector(state)) { this.menuOptions = menuOptionsSelector(state); }
+        if (actionClickSelector(state) === infoAction) { this.openModal(); }
+        if (actionClickSelector(state) === logoutAction) { this.quitMenu(state, logoutAction); }
+        if (actionClickSelector(state) === buttonClickAction) { this.quitMenu(state, buttonClickAction, actionParamSelector(state)); }
     }
 
     activateDraggableElements() {
@@ -81,87 +160,45 @@ export class BorsukMenuApp extends LitElement {
             chosenClass: "my-chosen-class",
             dragClass: "my-drag-class",
             onEnd: function (evt) {
-                evt.item.setAttribute('dataendposition', evt.newIndex + 1);
+                for (let i = 0; i < evt.to.children.length; i++ ) {
+                    store.dispatch(changeMenuIndex(parseInt(evt.to.children[i].id), i));
+                }
             },
         });
+    }
+
+    openModal() {
+        // modal will be soon
+    }
+
+    quitMenu(state, type, param) {
+        let actionInfo = [];
+        let menuInfo = [];
+        actionInfo.push({ actionType: type, actionParam: param });
+        for(let i = 0; i < Object.keys(menuIndexesSelector(state)).length; i++){
+            menuInfo.push({ optionId: menuIndexesSelector(state)[i].optionId, 
+                            optionTitle: menuIndexesSelector(state)[i].optionTitle,
+                            newIndex: menuIndexesSelector(state)[i].newIndex
+                        });
+        }
+
+        this.menuElements = JSON.stringify({quitAction: actionInfo, menuOptions: menuInfo});
     }
 
     static get properties() {
         return {
             menuOptions: { type: Array },
+            userInfo: { type: Object },
+            positions: { type: Number }
         };
     }
 
     constructor() {
         super();
-        this.menuOptions = [{
-                optionId: 1,
-                optionTitle: 'SUBOFERTY OPERACYJNE',
-                optionList: [{
-                    title: '',
-                    text: 'Jeżeli chcesz dodać nową subofertę, kliknij w ten ...',
-                    typeButton: '',
-                    iconButton: '',
-                    textButton: 'LINK',
-                    show: true,
-                },{
-                    title: '',
-                    text: 'Do wyszukiwarki zaprowadzi Cie ten ...',
-                    typeButton: '',
-                    iconButton: '',
-                    textButton: 'LINK',
-                    show: true,
-                }],
-                active: true,
-            }, {
-                optionId: 2,
-                optionTitle: 'SUBOFERTY MARKETINGOWE',
-                optionList: [{
-                    title: '',
-                    text: 'moduł w trakcie prac developerskich',
-                    typeButton: '',
-                    iconButton: '',
-                    textButton: '',
-                    show: true,
-                }],
-                active: true,
-            }, {
-                optionId: 3,
-                optionTitle: 'FORMATKI MARKETINGOWE',
-                optionList: [{
-                    title: '',
-                    text: 'moduł w trakcie zbierania wymagań',
-                    typeButton: '',
-                    iconButton: '',
-                    textButton: '',
-                    show: true,
-                }],
-                active: false,
-            }, {
-                optionId: 4,
-                optionTitle: 'FORMATKI OPERACYJNE',
-                optionList: [{
-                    title: '',
-                    text: 'moduł w trakcie zbierania wymagań',
-                    typeButton: '',
-                    iconButton: '',
-                    textButton: '',
-                    show: true,
-                }],
-                active: false,
-            }, {
-                optionId: 5,
-                optionTitle: 'PANEL ADMINISTRACYJNY',
-                optionList: [{
-                    title: '',
-                    text: 'moduł w trakcie zbierania wymagań',
-                    typeButton: '',
-                    iconButton: '',
-                    textButton: '',
-                    show: true,
-                }],
-                active: false,
-            }
-        ]
+
+        this.userInfo = [];
+        this.menuOptions = [];
+        this.positions = 0;
     }
+
 }

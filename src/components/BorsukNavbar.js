@@ -8,6 +8,9 @@
 import { LitElement, html, css } from 'lit-element';
 import { BorsukNavbarStyle } from './BorsukNavbarStyle.js';
 import { BorsukIngLogo } from './packages/borsuk-ing-logo.js';
+
+import { homeAction, infoAction, logoutAction } from '../properties/navbarProperties.js';
+
 import './collections/borsuk-navbar-buttons.js';
 
 export class BorsukNavbar extends LitElement {
@@ -82,24 +85,21 @@ export class BorsukNavbar extends LitElement {
 
         // this.mainNavTitle = "MENU GŁÓWNE";
         this.buttonOptions = [{
-            buttonId: 'home',
+            buttonId: homeAction,
             buttonTooltip: 'Przejdź do strony głównej',
             buttonIcon: 'home',
-            buttonAction: '_home',
             buttonList: [{
             }],
         },{
-            buttonId: 'info',
+            buttonId: infoAction,
             buttonTooltip: 'Zobacz informacje o użytkowniku',
             buttonIcon: 'supervisor-account',
-            buttonAction: '_userinfo',
             buttonList: [{
             }],
         },{
-            buttonId: 'logout',
+            buttonId: logoutAction,
             buttonTooltip: 'Wyloguj',
             buttonIcon: 'power-settings-new',
-            buttonAction: '_logout',
             buttonList: [{
             }],
         }]

@@ -1,3 +1,9 @@
+/* eslint-disable prefer-const */
+/* eslint-disable no-undef */
+/* eslint-disable vars-on-top */
+/* eslint-disable no-var */
+/* eslint-disable arrow-body-style */
+/* eslint-disable import/order */
 /* eslint-disable import/first */
 /* eslint-disable import/newline-after-import */
 /* eslint-disable class-methods-use-this */
@@ -6,12 +12,29 @@
 
 import { LitElement, html, css } from 'lit-element';
 import { BorsukMainOptionStyle } from './BorsukMainOptionStyle.js';
+
+// konektor służący podłączaniu się do store-a
+import { connect } from 'pwa-helpers/connect-mixin.js';
 import '../../packages/borsuk-button.js';
 import '../../packages/borsuk-link.js';
 
-export class BorsukMainOption extends LitElement {
+import { buttonClickAction } from '../../../properties/mainMenuProperties.js';
+
+// podłączenie do Redux store.
+import { store } from '../../../redux/store.js';
+
+// załadowanie kreatorów akcji.
+import { setClickAction } from '../../../redux/actions/menu.js';
+
+// podłączenie reducer-a.
+import { menuNotificationsSelector } from '../../../redux/reducers/menu.js';
+
+export class BorsukMainOption extends connect(store)(LitElement) {
     static get styles() {
         return [BorsukMainOptionStyle];
+    }
+
+    firstUpdated() {
     }
 
     render() {
@@ -24,9 +47,23 @@ export class BorsukMainOption extends LitElement {
             </div>
     
             <div class="bodyContainer optionContainer">
-                ${this.valuesMenu.optionList.map(i => html`<div class="box">${i.text}</div><div class="buttonBox"><borsuk-link>${i.textButton}</borsuk-link></div>`)}
+                ${Object.keys(this.menuNotifications)
+                    .filter((key) => { return this.menuNotifications[key].optionId === this.valuesMenu.optionId})
+                    .map((key) => {
+                    const i = this.menuNotifications[key];
+                    return html`<div class="box">${i.notificationTitle}</div>
+                                <div class="buttonBox">
+                                ${i.showLink
+                                    ? html`<borsuk-link>LINK</borsuk-link>`
+                                    : ''}
+                                </div>`;
+                })}
             </div>
         `;
+    }
+
+    stateChanged(state) {
+        if (this.menuNotifications !== menuNotificationsSelector(state)) { this.menuNotifications = menuNotificationsSelector(state); }
     }
 
     get buttonActiveTemplate() {
@@ -38,13 +75,23 @@ export class BorsukMainOption extends LitElement {
     }
 
     get buttonInsideTemplate() {
-        return html`<borsuk-button id="${this.valuesMenu.optionId}">przejdź...</borsuk-button>`;
+        return html`<borsuk-button id="${this.valuesMenu.optionId}" @click=${this.clickAction}>przejdź...</borsuk-button>`;
     }
 
     static get properties() {
         return {
             endPosition: { type: Number },
+            menuNotifications: { type: Array }
         };
+    }
+
+    clickAction(event) {
+        store.dispatch(setClickAction(buttonClickAction, this.valuesMenu.optionId));
+    }
+
+    constructor() {
+        super();
+        this.menuNotifications = [];
     }
 
 }
