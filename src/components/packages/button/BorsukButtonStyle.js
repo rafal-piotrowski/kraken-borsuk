@@ -26,6 +26,16 @@ export const BorsukButtonStyle = css`
         border: 1px solid var(--ing-indigo-color);
     }
 
+    :host([white]) {
+        color: var(--ing-orange-color);
+        background-color: var(--ing-white-color);
+        border: 1px solid var(--ing-orange-color);
+    }
+
+    :host([gap]) {
+        margin: 0 5px;
+    }
+
     :host([icon]) {
         background-color: white;
         color: var(--ing-orange-color);

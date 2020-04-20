@@ -67,3 +67,4 @@ export const menuOptionsSelector = state => state.menu.moptions;
 export const menuIndexesSelector = state => state.menu.mindexes;
 export const actionClickSelector = state => state.menu.actionclick;
 export const actionParamSelector = state => state.menu.actionparam;
+export const userInfoSelector = state => state.menu.userinfos;

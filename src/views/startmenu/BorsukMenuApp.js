@@ -28,6 +28,7 @@ import { loadJSON } from '../../helpers/asyncFunctions.js';
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import '../../components/borsuk-navbar.js';
 import '../../components/collections/borsuk-main-option.js';
+import '../../components/collections/borsuk-dialog.js';
 
 import { homeAction, infoAction, logoutAction } from '../../properties/navbarProperties.js';
 import { buttonClickAction } from '../../properties/mainMenuProperties.js';
@@ -39,7 +40,7 @@ import { store } from '../../redux/store.js';
 import { getUserInfo, getMenuOptions, getMenuNotifications, changeMenuIndex } from '../../redux/actions/menu.js';
 
 // podłączenie reducer-a.
-import menu, { menuOptionsSelector, menuIndexesSelector, actionClickSelector, actionParamSelector } from '../../redux/reducers/menu.js';
+import menu, { menuOptionsSelector, menuIndexesSelector, actionClickSelector, actionParamSelector, userInfoSelector } from '../../redux/reducers/menu.js';
 store.addReducers({
   menu
 });
@@ -59,6 +60,10 @@ export class BorsukMenuApp extends connect(store)(LitElement) {
                 ${this.contentTemplate}
                 ${this.footTemplate}
             </div>
+            <borsuk-dialog  id="dialogWindow" 
+                            @confirm-dialog-fired=${this.confirmModal} 
+                            @cancel-dialog-fired=${this.cancelModal}>
+            </borsuk-dialog>
         `;
     }
 
@@ -145,7 +150,12 @@ export class BorsukMenuApp extends connect(store)(LitElement) {
 
     stateChanged(state) {
         if (this.menuOptions !== menuOptionsSelector(state)) { this.menuOptions = menuOptionsSelector(state); }
-        if (actionClickSelector(state) === infoAction) { this.openModal(); }
+        if (actionClickSelector(state) === infoAction) { 
+            this.openModal( 'M', 'C', 
+                            'Użytkownik: '+userInfoSelector(state)[1].ckey, 
+                            'Ostatnie logowanie: '+userInfoSelector(state)[1].lastLoginSuccess, 
+                            'Ostatnie niepoprawne logowanie: '+userInfoSelector(state)[1].lastLoginFailure); 
+        }
         if (actionClickSelector(state) === logoutAction) { this.quitMenu(state, logoutAction); }
         if (actionClickSelector(state) === buttonClickAction) { this.quitMenu(state, buttonClickAction, actionParamSelector(state)); }
     }
@@ -167,10 +177,6 @@ export class BorsukMenuApp extends connect(store)(LitElement) {
         });
     }
 
-    openModal() {
-        // modal will be soon
-    }
-
     quitMenu(state, type, param) {
         let actionInfo = [];
         let menuInfo = [];
@@ -183,6 +189,19 @@ export class BorsukMenuApp extends connect(store)(LitElement) {
         }
 
         this.menuElements = JSON.stringify({quitAction: actionInfo, menuOptions: menuInfo});
+    }
+
+    openModal(type, mode, textLine1, textLine2, textLine3, jsonToken, scale) {
+        if (type === 'T') { this.shadowRoot.getElementById('dialogWindow').openToast(mode, textLine1, jsonToken) }
+        if (type === 'M') { this.shadowRoot.getElementById('dialogWindow').openDialog(mode, textLine1, textLine2, textLine3, jsonToken, scale); }
+    }
+
+    confirmModal(event) {
+        // u can find token information in event.detail
+    }
+
+    cancelModal(event) {
+        // u can find token information in event.detail
     }
 
     static get properties() {
