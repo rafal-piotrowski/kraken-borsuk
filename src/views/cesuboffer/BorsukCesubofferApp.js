@@ -1,3 +1,6 @@
+/* eslint-disable import/newline-after-import */
+/* eslint-disable prefer-template */
+/* eslint-disable import/order */
 /* eslint-disable func-names */
 /* eslint-disable no-undef */
 /* eslint-disable prefer-const */
@@ -12,12 +15,31 @@
 
 import { LitElement, html, css } from 'lit-element';
 import { BorsukCesubofferStyle } from './BorsukCesubofferStyle.js';
+// import { loadJSON } from '../../helpers/asyncFunctions.js';
+
+// konektor służący podłączaniu się do store-a
+import { connect } from 'pwa-helpers/connect-mixin.js';
 import '../../components/borsuk-navbar.js';
 import '../../components/borsuk-sidebar.js';
 import '../../components/borsuk-content.js';
 import '../../components/borsuk-alert.js';
+import '../../components/collections/borsuk-dialog.js';
 
-export class BorsukCesubofferApp extends LitElement {
+import { homeAction, infoAction, logoutAction, cesubofferNavbarTitle } from '../../properties/navbarProperties.js';
+
+// podłączenie do Redux store.
+import { store } from '../../redux/store.js';
+
+// załadowanie kreatorów akcji.
+// import { getUserInfo } from '../../redux/actions/menu.js';
+
+// podłączenie reducer-a.
+import menu, { actionClickSelector, actionParamSelector, userInfoSelector } from '../../redux/reducers/menu.js';
+store.addReducers({
+    menu
+});
+
+export class BorsukCesubofferApp extends connect(store)(LitElement) {
     static get styles() {
         return [
             BorsukCesubofferStyle,
@@ -41,6 +63,11 @@ export class BorsukCesubofferApp extends LitElement {
                     ${this.contentTemplate}
                 </div>
             </div>
+
+            <borsuk-dialog  id="dialogWindow" 
+                            @confirm-dialog-fired=${this.confirmModal} 
+                            @cancel-dialog-fired=${this.cancelModal}>
+            </borsuk-dialog>
         `;
     }
 
@@ -57,7 +84,7 @@ export class BorsukCesubofferApp extends LitElement {
     get navbarTemplate() {
         return html`
             <div id="navLayout" class="flex-navbar">
-                <borsuk-navbar id="navbarApp" .mainNavTitle="${"SUBOFERTY OPERACYJNE"}"></borsuk-navbar>
+                <borsuk-navbar id="navbarApp" .mainNavTitle="${cesubofferNavbarTitle}"></borsuk-navbar>
             </div>
         `;
     }
@@ -79,7 +106,50 @@ export class BorsukCesubofferApp extends LitElement {
     // }
 
     firstUpdated() {
-        // this.activateDraggableElements();
+        // this.setUserInfo();
+    }
+
+    // setUserInfo(jsonData) {
+    //     if (jsonData) {
+    //         store.dispatch(getUserInfo(jsonData.userInfo));
+    //     } else {
+    //         loadJSON('/src/properties/userInfo.json')
+    //         .then(data => {
+    //             store.dispatch(getUserInfo(data.userInfo));
+    //         })
+    //     }
+    // }
+
+    stateChanged(state) {
+        if (actionClickSelector(state) === infoAction) { 
+            this.openModal( 'M', 'I', 
+                            'Użytkownik: '+userInfoSelector(state)[1].ckey, 
+                            'Ostatnie logowanie: '+userInfoSelector(state)[1].lastLoginSuccess, 
+                            'Ostatnie niepoprawne logowanie: '+userInfoSelector(state)[1].lastLoginFailure); 
+        }
+        if (actionClickSelector(state) === logoutAction) { this.quitCesuboffer(state, logoutAction); }
+        if (actionClickSelector(state) === homeAction) { this.quitCesuboffer(state, homeAction); }
+    }
+
+    openModal(type, mode, textLine1, textLine2, textLine3, jsonToken, scale) {
+        if (type === 'T') { this.shadowRoot.getElementById('dialogWindow').openToast(mode, textLine1, jsonToken) }
+        if (type === 'M') { this.shadowRoot.getElementById('dialogWindow').openDialog(mode, textLine1, textLine2, textLine3, jsonToken, scale); }
+    }
+
+    confirmModal(event) {
+        // u can find token information in event.detail
+    }
+
+    cancelModal(event) {
+        // u can find token information in event.detail
+    }
+
+    quitCesuboffer(state, type, param) {
+        let actionInfo = [];
+        actionInfo.push({ actionType: type, actionParam: param });
+
+        this.menuElements = JSON.stringify({ quitAction: actionInfo });
+        console.log(this.menuElements);
     }
 
     static get properties() {

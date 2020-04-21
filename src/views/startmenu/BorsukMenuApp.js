@@ -30,7 +30,7 @@ import '../../components/borsuk-navbar.js';
 import '../../components/collections/borsuk-main-option.js';
 import '../../components/collections/borsuk-dialog.js';
 
-import { homeAction, infoAction, logoutAction } from '../../properties/navbarProperties.js';
+import { homeAction, infoAction, logoutAction, menuNavbarTitle } from '../../properties/navbarProperties.js';
 import { buttonClickAction } from '../../properties/mainMenuProperties.js';
 
 // podłączenie do Redux store.
@@ -70,7 +70,7 @@ export class BorsukMenuApp extends connect(store)(LitElement) {
     get navTemplate() {
         return html`
             <div id="navLayout" class="inputGrid formSpanGrid12">
-                <borsuk-navbar id="navbarApp" .mainNavi=${true} .mainNavTitle=${"BORSUK - MENU GŁÓWNE"}></borsuk-navbar>
+                <borsuk-navbar id="navbarApp" .mainNavi=${true} .mainNavTitle=${menuNavbarTitle}></borsuk-navbar>
             </div>
         `;
     }
@@ -151,7 +151,7 @@ export class BorsukMenuApp extends connect(store)(LitElement) {
     stateChanged(state) {
         if (this.menuOptions !== menuOptionsSelector(state)) { this.menuOptions = menuOptionsSelector(state); }
         if (actionClickSelector(state) === infoAction) { 
-            this.openModal( 'M', 'C', 
+            this.openModal( 'M', 'I', 
                             'Użytkownik: '+userInfoSelector(state)[1].ckey, 
                             'Ostatnie logowanie: '+userInfoSelector(state)[1].lastLoginSuccess, 
                             'Ostatnie niepoprawne logowanie: '+userInfoSelector(state)[1].lastLoginFailure); 
