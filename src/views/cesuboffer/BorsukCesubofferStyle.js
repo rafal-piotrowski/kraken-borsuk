@@ -52,7 +52,7 @@ export const BorsukCesubofferStyle = css`
         --height-errfix: 150px;
 
         --borsuk-sidebar-width: 325px;
-        --borsuk-navbar-max-height: 100px;
+        --borsuk-navbar-max-height: 60px;
         --borsuk-navbar-padding-top: 10px;
     }
 

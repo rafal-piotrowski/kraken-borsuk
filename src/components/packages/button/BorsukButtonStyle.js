@@ -72,4 +72,32 @@ export const BorsukButtonStyle = css`
     ::slotted(iron-icon) {
         width: 20px;
     }
+
+    :host([smicon]) {
+        background-color: transparent;
+        color: white;
+        position: relative;
+        display: inline-block;
+        width: 35px !important;
+        height: 35px !important;
+        border: none;
+        border-radius: 50%;
+        border-radius: 50%;
+        overflow: hidden;
+        /* transition: box-shadow 0.2s cubic-bezier(0.7, 0, 0.2, 1);
+        transition-delay: 0.2s;
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26); */
+        /* margin: 10px; */
+    }
+
+    :host([smicon]):active {
+        box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
+        transition-delay: 0s;
+    }
+
+    :host([smicon]) paper-button {
+        margin: 5px 0 5px 10px;
+        padding: 0;
+        min-width: 5px;
+    }
 `;

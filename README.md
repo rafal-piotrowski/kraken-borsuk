@@ -25,6 +25,8 @@ npm init @open-wc
 - `paper-toast` npm install --save-dev @polymer/paper-toast
 - `iron-collapse` npm install --save-dev @polymer/iron-collapse
 - `paper-dialog` npm install --save-dev @polymer/paper-dialog
+- `paper-tabs` npm install --save-dev @polymer/paper-tabs
+- `iron-pages` npm install --save-dev @polymer/iron-pages
 
 ## komponenty wykorzystywane do budowy warstwy interakcji (Leyer 2)
 

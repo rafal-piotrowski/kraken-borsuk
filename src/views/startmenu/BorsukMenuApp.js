@@ -37,7 +37,7 @@ import { buttonClickAction } from '../../properties/mainMenuProperties.js';
 import { store } from '../../redux/store.js';
 
 // załadowanie kreatorów akcji.
-import { getUserInfo, getMenuOptions, getMenuNotifications, changeMenuIndex } from '../../redux/actions/menu.js';
+import { getUserInfo, getMenuOptions, getMenuNotifications, changeMenuIndex, setClickAction } from '../../redux/actions/menu.js';
 
 // podłączenie reducer-a.
 import menu, { menuOptionsSelector, menuIndexesSelector, actionClickSelector, actionParamSelector, userInfoSelector } from '../../redux/reducers/menu.js';
@@ -151,13 +151,20 @@ export class BorsukMenuApp extends connect(store)(LitElement) {
     stateChanged(state) {
         if (this.menuOptions !== menuOptionsSelector(state)) { this.menuOptions = menuOptionsSelector(state); }
         if (actionClickSelector(state) === infoAction) { 
+            store.dispatch(setClickAction(''));
             this.openModal( 'M', 'I', 
                             'Użytkownik: '+userInfoSelector(state)[1].ckey, 
                             'Ostatnie logowanie: '+userInfoSelector(state)[1].lastLoginSuccess, 
-                            'Ostatnie niepoprawne logowanie: '+userInfoSelector(state)[1].lastLoginFailure); 
+                            'Ostatnie niepoprawne logowanie: '+userInfoSelector(state)[1].lastLoginFailure);
         }
-        if (actionClickSelector(state) === logoutAction) { this.quitMenu(state, logoutAction); }
-        if (actionClickSelector(state) === buttonClickAction) { this.quitMenu(state, buttonClickAction, actionParamSelector(state)); }
+        if (actionClickSelector(state) === logoutAction) { 
+            store.dispatch(setClickAction('')); 
+            this.quitMenu(state, logoutAction); 
+        }
+        if (actionClickSelector(state) === buttonClickAction) { 
+            store.dispatch(setClickAction('')); 
+            this.quitMenu(state, buttonClickAction, actionParamSelector(state)); 
+        }
     }
 
     activateDraggableElements() {

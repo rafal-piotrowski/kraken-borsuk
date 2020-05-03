@@ -1,0 +1,37 @@
+{
+    "cesubofferTabs": [
+        {
+            "tabPageId": "1",
+            "tabSlotId": "S00",
+            "tabTitle": "Informacja",
+            "tabSubtitle": "",
+            "tabPageType": "I",
+            "tabIndex": 0,
+            "tabClose": false
+        },{
+            "tabPageId": "4512",
+            "tabSlotId": "S01",
+            "tabTitle": "suboferta jeden",
+            "tabSubtitle": "",
+            "tabPageType": "A",
+            "tabIndex": 1,
+            "tabClose": true
+        },{
+            "tabPageId": "1845",
+            "tabSlotId": "S02",
+            "tabTitle": "wersja jeden",
+            "tabSubtitle": "suboferta jeden",
+            "tabPageType": "E",
+            "tabIndex": 2,
+            "tabClose": true
+        },{
+            "tabPageId": "5002",
+            "tabSlotId": "S01",
+            "tabTitle": "suboferta dwa",
+            "tabSubtitle": "",
+            "tabPageType": "E",
+            "tabIndex": 3,
+            "tabClose": true
+        }
+    ]
+}

@@ -1,4 +1,9 @@
+/* eslint-disable import/newline-after-import */
+/* eslint-disable import/order */
+/* eslint-disable import/no-useless-path-segments */
 /* eslint-disable import/no-extraneous-dependencies */
+
+// import cesuboffer from '../redux/reducers/cesuboffer.js';
 
 import {
     createStore,
@@ -17,3 +22,7 @@ export const store = createStore(
     state => state,
     devCompose(lazyReducerEnhancer(combineReducers), applyMiddleware(thunk))
   );
+
+// store.addReducers({
+//     cesuboffer
+// });

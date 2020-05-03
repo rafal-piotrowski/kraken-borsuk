@@ -15,7 +15,7 @@
 
 import { LitElement, html, css } from 'lit-element';
 import { BorsukCesubofferStyle } from './BorsukCesubofferStyle.js';
-// import { loadJSON } from '../../helpers/asyncFunctions.js';
+import { loadJSON } from '../../helpers/asyncFunctions.js';
 
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -26,17 +26,22 @@ import '../../components/borsuk-alert.js';
 import '../../components/collections/borsuk-dialog.js';
 
 import { homeAction, infoAction, logoutAction, cesubofferNavbarTitle } from '../../properties/navbarProperties.js';
+import { closeTabAction } from '../../properties/tabsProperties.js';
 
 // podłączenie do Redux store.
 import { store } from '../../redux/store.js';
 
 // załadowanie kreatorów akcji.
-// import { getUserInfo } from '../../redux/actions/menu.js';
+// getUserInfo do wywalenia po wrzuceniu do projektu.
+import { getUserInfo, setClickAction } from '../../redux/actions/menu.js';
+import { getCesubofferTabs, setCeClickAction } from '../../redux/actions/cesuboffer.js';
 
 // podłączenie reducer-a.
 import menu, { actionClickSelector, actionParamSelector, userInfoSelector } from '../../redux/reducers/menu.js';
+import cesuboffer, { ceActionClickSelector } from '../../redux/reducers/cesuboffer.js';
 store.addReducers({
-    menu
+    menu,
+    cesuboffer
 });
 
 export class BorsukCesubofferApp extends connect(store)(LitElement) {
@@ -106,29 +111,55 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
     // }
 
     firstUpdated() {
-        // this.setUserInfo();
+
+        // poniższe do wycięcia po wdrożeniu do projektu
+        this.setUserInfo();
+        this.setCesubofferTabs();
     }
 
-    // setUserInfo(jsonData) {
-    //     if (jsonData) {
-    //         store.dispatch(getUserInfo(jsonData.userInfo));
-    //     } else {
-    //         loadJSON('/src/properties/userInfo.json')
-    //         .then(data => {
-    //             store.dispatch(getUserInfo(data.userInfo));
-    //         })
-    //     }
-    // }
+    // setUserInfo do wycięcia po wdrożeniu do projektu
+    setUserInfo(jsonData) {
+        if (jsonData) {
+            store.dispatch(getUserInfo(jsonData.userInfo));
+        } else {
+            loadJSON('/src/properties/userInfo.json')
+            .then(data => {
+                store.dispatch(getUserInfo(data.userInfo));
+            })
+        }
+    }
+
+    setCesubofferTabs(jsonData) {
+        if (jsonData) {
+            store.dispatch(getCesubofferTabs(jsonData.cesubofferTabs));
+        } else {
+            loadJSON('/src/properties/cesubofferTabs.json')
+            .then(data => {
+                store.dispatch(getCesubofferTabs(data.cesubofferTabs));
+            })
+        }
+    }
 
     stateChanged(state) {
+        if (ceActionClickSelector(state) === closeTabAction) {
+            setTimeout(() => this.closeTab(state.cesuboffer.page), 200);
+        }
+
         if (actionClickSelector(state) === infoAction) { 
+            store.dispatch(setClickAction(''));
             this.openModal( 'M', 'I', 
                             'Użytkownik: '+userInfoSelector(state)[1].ckey, 
                             'Ostatnie logowanie: '+userInfoSelector(state)[1].lastLoginSuccess, 
                             'Ostatnie niepoprawne logowanie: '+userInfoSelector(state)[1].lastLoginFailure); 
         }
-        if (actionClickSelector(state) === logoutAction) { this.quitCesuboffer(state, logoutAction); }
-        if (actionClickSelector(state) === homeAction) { this.quitCesuboffer(state, homeAction); }
+        if (actionClickSelector(state) === logoutAction) { 
+            store.dispatch(setClickAction(''));
+            this.quitCesuboffer(state, logoutAction); 
+        }
+        if (actionClickSelector(state) === homeAction) { 
+            store.dispatch(setClickAction(''));
+            this.quitCesuboffer(state, homeAction); 
+        }
     }
 
     openModal(type, mode, textLine1, textLine2, textLine3, jsonToken, scale) {
@@ -144,12 +175,18 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         // u can find token information in event.detail
     }
 
+    closeTab(page) {
+        // do implementacji event z danymi potrzebnymi dla backendu (chyba tylko tabPageId)
+        console.log(page);
+        store.dispatch(setCeClickAction(''));
+    }
+
     quitCesuboffer(state, type, param) {
         let actionInfo = [];
         actionInfo.push({ actionType: type, actionParam: param });
 
         this.menuElements = JSON.stringify({ quitAction: actionInfo });
-        console.log(this.menuElements);
+        // console.log(this.menuElements);
     }
 
     static get properties() {

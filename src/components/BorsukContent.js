@@ -1,3 +1,9 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-return-assign */
+/* eslint-disable lit/no-legacy-template-syntax */
+/* eslint-disable lit/binding-positions */
+/* eslint-disable prefer-template */
+/* eslint-disable import/order */
 /* eslint-disable no-useless-constructor */
 /* eslint-disable no-undef */
 /* eslint-disable import/first */
@@ -8,97 +14,91 @@
 
 import { LitElement, html, css } from 'lit-element';
 import { BorsukContentStyle } from './BorsukContentStyle.js';
+import './collections/borsuk-tabs.js';
 
-export class BorsukContent extends LitElement {
+// konektor służący podłączaniu się do store-a
+import { connect } from 'pwa-helpers/connect-mixin.js';
+import { installRouter } from 'pwa-helpers/router.js';
+import { updateMetadata } from 'pwa-helpers/metadata.js';
+
+// import './borsuk-welcome.js';
+// import './borsuk-suboffer-form.js';
+// import './borsuk-version-form.js';
+
+// podłączenie do Redux store.
+import { store } from '../redux/store.js';
+
+// załadowanie kreatorów akcji.
+import { navigate } from '../redux/actions/cesuboffer.js';
+
+// podłączenie reducer-a.
+import cesuboffer, { cesubofferTabsSelector } from '../redux/reducers/cesuboffer.js';
+// store.addReducers({
+//     cesuboffer
+// });
+
+export class BorsukContent extends connect(store)(LitElement) {
     static get styles() {
         return [BorsukContentStyle];
     }
 
     render() {
         return html`
-            <div id="contentTabsForm">
-                <div class="centerFace centerFrame">
-                    <h2><strong>Witamy w nowej odsłonie aplikacji Borsuk.</strong></h2>
+            <div class="flex-subcontent">
+                <div class="flex-margin"></div>
+                    <div class="flex-midsubcontent">
+                        ${this.tabsContent}
+                    </div>
                 </div>
-
-                <blockquote class="textareaParallax">
-                    <p>Oddajemy Wam do użytku moduł zarządzania komunikacją operacyjną.</p>
-                    <p>Moduł jest w fazie rozwojowej dlatego prosimy o każdą infromację zwrotną dotyczącą jego funkcjonalności.</p>
-                    <p>Chcemy, żeby cała aplikacja tworzona była zgodnie z zasadą User Centered Design, a więc zgodnie z powiedzeniem: </p><br>
-                    <p><cite>Interfejs użytkownika jest jak dobry żart. Jeśli musisz go tłumaczyć - nie jest taki dobry.</cite></p>
-                    <br>
-                    <p>Mając na uwadze doświaczenie użytkownika z pierwszą wesją aplikacji staraliśmy się zbudować interfejs który agreguje istoną treść w jednym miejscu,
-                    minimalizując ilość przejść pomiędzy różnymi częściami aplikacji podczas realizacji podstawowych czynności</p>
-                    <p>Spójny interfejs to również taki który charakteryzuje się krótkim czasem niezbędnym na jego poznanie.</p>
-                    <p>Oznacza to, że użytkownik poznając jedynie fragment systemu pozostałe jego części zrozumie w oparciu o dotychczasowe doświadczenie.</p>
-                </blockquote>
-
-                <!-- <watsonlogic-parallax parallax-image-height="400" parallax-text="" parallax-image="{{imgsrcfeature1}}">
-                </watsonlogic-parallax> -->
-
-                <blockquote class="textareaParallax">
-                    <div class="centerFrame">
-                        <p>Nowa wersja aplikacji jest realizowana zgodnie z podejściem SPA.</p>
-                        <p>Single Page Application bo o tym mowa to w skrócie podejście do tworzenia aplikacji webowych polegające na jednorazowym załadowaniu całego wyglądu strony.</p>
-                        <p>Aplikacja działa dużo szybciej, ponieważ widok aplikacji jest tworzony wyłącznie raz, a poszczególne elementy są podmieniane wyłącznie, gdy jest to konieczne.</p>
-                        <p>Podejście takie to mniejsze obciążenie dla serwera, dzięki temu ze wykonujemy część operacji po stronie klienta.</p>
-                        <p>Do budowy aplikacji wykorzystaliśmy framework Vaadin. Jest to framework umożliwiającym tworzenie aplikacji webowych w języku Java.</p>
-                        <p>Pomimo tego, że Vaadin jest plaformą, która pozwala stworzyć interfejs użytkownika w całości w Javie to przy towrzeniu Borsuka zdecydowaliśmy się oddzielić część frontową od całości.</p>
-                        <p>Vaadin działający po stronie serwera automatycznie i z zachowaniem wymogów bezpieczeństwa obsługuje całą komunikację</p>
-                        <p>Opierając się na ekosystemie Java płynnie współpracuje z komponentami frontowymi.</p>
-                    </div>
-                </blockquote>
-
-                <!-- <watsonlogic-parallax parallax-image-height="400" parallax-text="" parallax-image="{{imgsrcfeature2}}">
-                </watsonlogic-parallax> -->
-
-                <blockquote class="textareaParallax">
-                    <div class="centerFrame">
-                        <p>Część frontowa aplikacji została zbudowana z użyciem komponentów webowych.</p>
-                        <p>Web Components o których mowa to koncepcja re-używalnych kawałków kodu (komponentów), które zawierają szablon widoku HTML i które mogą być następnie zaimportowane w innych komponentach.</p>
-                        <p>Po zaimportowaniu web komponentu można używać go w kodzie tak, jakby był on zwykłym tagiem HTML.</p>
-                        <p>Tworzenie tychże komponentów możliwe jest dzięki bibliotece Polymer.</p>
-                        <p>Polymer to biblioteka dostarczająca dodatkowy zestaw narzędzi oraz deklaratywną składnię, która pomaga w definiowaniu struktury elementów, nadawaniu im styli CSS oraz dodawaniu zachowań tworzonych w języku JavaScript</p>
-                    </div>
-                </blockquote>
-
-                <!-- <watsonlogic-parallax parallax-image-height="400" parallax-image="{{imgsrcfeature3}}">
-                </watsonlogic-parallax> -->
-
-                <blockquote class="textareaParallax">
-                    <div class="centerFrame">
-                        <p>Przed nami jeszcze dużo pracy.</p>
-                        <p>W najbliższych planach jest udostępnienie modułu do zarządzania ofertami marketingowymi.</p>
-                        <p>W dalszym etapie - moduł zarządzania procesem.</p>
-
-                        <p>Poszczególne etapy rozwoju Borsuka będziemy opisywać w części informacyjnej aplikacji oraz w ...</p>
-                        <div class="row">
-                            <div class="col-4"></div>
-                            <div class="onboarding col-4">
-                                <a href="http://sdpl04365.pl.ing-ad:8080/" target="#">
-                                    <paper-button class="btn btn-warning btn-block">...dokumentacji</paper-button>
-                                </a>
-                            </div>
-                            <div class="col-4"></div>
-                        </div>
-                    </div>
-
-                    <footer>— Zespół Borsuk</footer>
-                </blockquote>
+                <div class="flex-margin"></div>
             </div>
+        `;
+    }
+
+    get tabsContent() {
+        return html`
+            <borsuk-tabs .tabsList="${this.cesubofferTabsList}">
+                <borsuk-welcome class="page" ?active="${this._slot === 'S00'}" .page=${this._page}></borsuk-welcome>
+                <borsuk-suboffer-form class="page" ?active="${this._slot === 'S01'}" .page=${this._page}></borsuk-suboffer-form>
+                <borsuk-version-form class="page" ?active="${this._slot === 'S02'}" .page=${this._page}></borsuk-version-form>
+                <borsuk-page404 class="page" ?active="${this._slot === 'S404'}" .page=${this._page}></borsuk-page404>
+            </borsuk-tabs>
         `;
     }
 
     static get properties() {
         return {
+            appTitle: { type: String },
+            _page: { type: String },
+            _slot: { type: String },
+            cesubofferTabsList: { type: Array },
         };
     }
 
     constructor() {
         super();
+        this.appTitle = "BORSUK";
+        this.cesubofferTabsList = [];
     }
 
     firstUpdated() {
+    }
+
+    updated(changedProps) {
+        if (changedProps.has('_page')) {
+            const pageTitle = this.appTitle + ' - ' + this._page;
+            updateMetadata({
+                title: pageTitle,
+                description: pageTitle
+                // This object also takes an image property, that points to an img src.
+            });
+        }
+    }
+
+    stateChanged(state) {
+        if (this.cesubofferTabsList !== cesubofferTabsSelector(state)) { this.cesubofferTabsList = cesubofferTabsSelector(state); }
+        this._page = state.cesuboffer.page;
+        this._slot = state.cesuboffer.slot;
     }
 
 }
