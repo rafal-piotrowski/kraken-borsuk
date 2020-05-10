@@ -9,7 +9,7 @@ import { LitElement, html, css } from 'lit-element';
 import { BorsukNavbarStyle } from './BorsukNavbarStyle.js';
 import { BorsukIngLogo } from './packages/borsuk-ing-logo.js';
 
-import { homeAction, infoAction, logoutAction } from '../properties/navbarProperties.js';
+import { homeAction, infoAction, logoutAction } from '../properties/actions.js';
 
 import './collections/borsuk-navbar-buttons.js';
 

@@ -13,12 +13,13 @@ import '../../components/packages/borsuk-button.js';
 import '@polymer/paper-input/paper-input';
 import '@polymer/iron-form/iron-form';
 
+import { titles } from '../../properties/titles.js';
+
 export class BorsukLoginApp extends LitElement {
   static get properties() {
     return {
       error: { type: Boolean },
       heading: { type: String },
-      err_login: { type: String },
       version: { type: String },
       buildTime: { type: String },
       loginErrorMsg: { type: String },
@@ -30,10 +31,9 @@ export class BorsukLoginApp extends LitElement {
     super();
     this.keypressListener = this.handleKeypress.bind(this);
     this.error = false;
-    this.heading = "Witamy w aplikacji Borsuk 2";
-    this.err_login = "Wprowadzone CKey lub hasło jest niepoprawne";
-    this.version = "1.0.1.0";
-    this.buildTime = "24.03.2020";
+    this.heading = titles.get('headingLoginLabel');
+    this.version = titles.get('versionLoginLabel');
+    this.buildTime = titles.get('buildLoginLabel');
   }
 
   connectedCallback() {
@@ -65,14 +65,14 @@ export class BorsukLoginApp extends LitElement {
     return this.shadowRoot.getElementById('form');
   }
 
-  _handleLoginError(ckey, pass) {
+  handleLoginError(ckey, pass) {
     if (ckey) {
       this.username.invalid = true;
-      this.loginErrorMsg = "wprowadzono niepoprawny CKey";
+      this.loginErrorMsg = titles.get('invalidLogin');
     }
     if (pass) {
       this.password.invalid = true;
-      this.passErrorMsg = "wprowadzono niepoprawne hasło";
+      this.passErrorMsg = titles.get('invalidPassword');
     }
   }
 
@@ -88,8 +88,8 @@ export class BorsukLoginApp extends LitElement {
     if (!this.username.invalid && !this.password.invalid) {
       this.form.submit();
     } else {
-      this.loginErrorMsg = "wprowadź CKey";
-      this.passErrorMsg = "wprowadź hasło";
+      this.loginErrorMsg = titles.get('emptyLogin');
+      this.passErrorMsg = titles.get('emptyPassword');
     }
   }
 
@@ -99,7 +99,7 @@ export class BorsukLoginApp extends LitElement {
   }
 
   resolveLocation(location) {
-    if (location.search === "?error=") { this._handleLoginError(true, true) };
+    if (location.search === "?error=") { this.handleLoginError(true, true) };
   }
 
   // resolveMQ(matches) {
@@ -145,7 +145,7 @@ export class BorsukLoginApp extends LitElement {
                                 </form>
                             </iron-form>
 
-                            <borsuk-button indigo @click="${this.login}">Zaloguj</borsuk-button>
+                            <borsuk-button indigo @click="${this.login}">${titles.get('buttonLoginLabel')}</borsuk-button>
           
                         </div>
                         <div class="flexmargin"></div>

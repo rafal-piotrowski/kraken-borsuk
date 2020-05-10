@@ -25,8 +25,9 @@ import '../../components/borsuk-content.js';
 import '../../components/borsuk-alert.js';
 import '../../components/collections/borsuk-dialog.js';
 
-import { homeAction, infoAction, logoutAction, cesubofferNavbarTitle } from '../../properties/navbarProperties.js';
-import { closeTabAction } from '../../properties/tabsProperties.js';
+import { titles } from '../../properties/titles.js';
+import { actions } from '../../properties/actions.js';
+import { events } from '../../properties/events.js';
 
 // podłączenie do Redux store.
 import { store } from '../../redux/store.js';
@@ -38,7 +39,7 @@ import { getCesubofferTabs, setCeClickAction } from '../../redux/actions/cesubof
 
 // podłączenie reducer-a.
 import menu, { actionClickSelector, actionParamSelector, userInfoSelector } from '../../redux/reducers/menu.js';
-import cesuboffer, { ceActionClickSelector } from '../../redux/reducers/cesuboffer.js';
+import cesuboffer, { ceActionClickSelector, ceActionParamSelector } from '../../redux/reducers/cesuboffer.js';
 store.addReducers({
     menu,
     cesuboffer
@@ -89,7 +90,7 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
     get navbarTemplate() {
         return html`
             <div id="navLayout" class="flex-navbar">
-                <borsuk-navbar id="navbarApp" .mainNavTitle="${cesubofferNavbarTitle}"></borsuk-navbar>
+                <borsuk-navbar id="navbarApp" .mainNavTitle="${titles.get('cesubofferNavbarTitle')}"></borsuk-navbar>
             </div>
         `;
     }
@@ -113,27 +114,27 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
     firstUpdated() {
 
         // poniższe do wycięcia po wdrożeniu do projektu
-        this.setUserInfo();
-        this.setCesubofferTabs();
+        this._setUserInfo();
+        this._setCesubofferTabs();
     }
 
     // setUserInfo do wycięcia po wdrożeniu do projektu
-    setUserInfo(jsonData) {
+    _setUserInfo(jsonData) {
         if (jsonData) {
             store.dispatch(getUserInfo(jsonData.userInfo));
         } else {
-            loadJSON('/src/properties/userInfo.json')
+            loadJSON('/src/properties/_userInfo.json')
             .then(data => {
                 store.dispatch(getUserInfo(data.userInfo));
             })
         }
     }
 
-    setCesubofferTabs(jsonData) {
+    _setCesubofferTabs(jsonData) {
         if (jsonData) {
             store.dispatch(getCesubofferTabs(jsonData.cesubofferTabs));
         } else {
-            loadJSON('/src/properties/cesubofferTabs.json')
+            loadJSON('/src/properties/_cesubofferTabs.json')
             .then(data => {
                 store.dispatch(getCesubofferTabs(data.cesubofferTabs));
             })
@@ -141,24 +142,24 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
     }
 
     stateChanged(state) {
-        if (ceActionClickSelector(state) === closeTabAction) {
-            setTimeout(() => this.closeTab(state.cesuboffer.page), 200);
+        if (ceActionClickSelector(state) === actions.get('closeTabAction')) {
+            this.fireCustomEvent(state, actions.get('closeTabAction'), ceActionParamSelector(state));
         }
 
-        if (actionClickSelector(state) === infoAction) { 
+        if (actionClickSelector(state) === actions.get('infoAction')) { 
             store.dispatch(setClickAction(''));
             this.openModal( 'M', 'I', 
-                            'Użytkownik: '+userInfoSelector(state)[1].ckey, 
-                            'Ostatnie logowanie: '+userInfoSelector(state)[1].lastLoginSuccess, 
-                            'Ostatnie niepoprawne logowanie: '+userInfoSelector(state)[1].lastLoginFailure); 
+                            titles.get('ckeyLabel')+userInfoSelector(state)[1].ckey, 
+                            titles.get('lastLoginSuccessLabel')+userInfoSelector(state)[1].lastLoginSuccess, 
+                            titles.get('lastLoginFailureLabel')+userInfoSelector(state)[1].lastLoginFailure);
         }
-        if (actionClickSelector(state) === logoutAction) { 
+        if (actionClickSelector(state) === actions.get('logoutAction')) { 
             store.dispatch(setClickAction(''));
-            this.quitCesuboffer(state, logoutAction); 
+            this.fireCustomEvent(state, actions.get('logoutAction')); 
         }
-        if (actionClickSelector(state) === homeAction) { 
+        if (actionClickSelector(state) === actions.get('homeAction')) { 
             store.dispatch(setClickAction(''));
-            this.quitCesuboffer(state, homeAction); 
+            this.fireCustomEvent(state, actions.get('homeAction')); 
         }
     }
 
@@ -168,25 +169,30 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
     }
 
     confirmModal(event) {
-        // u can find token information in event.detail
+        this.dialogElements = event.detail;
+        this.dispatchEvent(new CustomEvent(events.get('confirmModalEvent'), { detail: this.dialogElements }));
     }
 
     cancelModal(event) {
-        // u can find token information in event.detail
+        this.dialogElements = event.detail;
+        this.dispatchEvent(new CustomEvent(events.get('cancelModalEvent'), { detail: this.dialogElements }));
     }
 
-    closeTab(page) {
-        // do implementacji event z danymi potrzebnymi dla backendu (chyba tylko tabPageId)
-        console.log(page);
-        store.dispatch(setCeClickAction(''));
-    }
-
-    quitCesuboffer(state, type, param) {
+    fireCustomEvent(state, type, param) {
         let actionInfo = [];
         actionInfo.push({ actionType: type, actionParam: param });
 
-        this.menuElements = JSON.stringify({ quitAction: actionInfo });
-        // console.log(this.menuElements);
+        this.menuElements = JSON.stringify({ cesubofferAction: actionInfo });
+        
+        if (type === actions.get('logoutAction')) {
+            this.eventName = events.get('logoutEvent');
+        } else if (type === actions.get('homeAction')) {
+            this.eventName = events.get('homeEvent');
+        } else if (type === actions.get('closeTabAction')) {
+            this.eventName = events.get('closeTabEvent');
+            setTimeout(() => store.dispatch(setCeClickAction('')), 200);
+        }
+        this.dispatchEvent(new CustomEvent(this.eventName, { detail: this.menuElements }));
     }
 
     static get properties() {
@@ -199,8 +205,25 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
 
     constructor() {
         super();
-        this.heading = ' Drogi użytkowniku';
-        this.footing = 'Przejdź do strony głównej lub zgłoś problem do administratora sytemu';
-        this.title = 'Na chwilę obecną nie możemy obsłużyć tej rozdzielczości ekranu';
+        this.heading = titles.get('headRwdAlert');
+        this.footing = titles.get('footRwdAlert');
+        this.title = titles.get('titleRwdAlert');
+    
+        // **************************************
+        // to powinno być chyba gdzieś w testach
+        // **************************************
+        this.addEventListener(events.get('logoutEvent'), this.handleCustomEvent);
+        this.addEventListener(events.get('homeEvent'), this.handleCustomEvent);
+        this.addEventListener(events.get('closeTabEvent'), this.handleCustomEvent);
+        this.addEventListener(events.get('confirmModalEvent'), this.handleCustomEvent);
+        this.addEventListener(events.get('cancelModalEvent'), this.handleCustomEvent);
+    }
+
+    // **************************************
+    // to powinno być chyba gdzieś w testach
+    // **************************************
+    handleCustomEvent(event) { 
+        console.log(event.type);
+        console.log(event.detail); 
     }
 }

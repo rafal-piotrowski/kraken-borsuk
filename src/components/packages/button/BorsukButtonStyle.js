@@ -81,8 +81,8 @@ export const BorsukButtonStyle = css`
         width: 35px !important;
         height: 35px !important;
         border: none;
-        border-radius: 50%;
-        border-radius: 50%;
+        /* border-radius: 50%;
+        border-radius: 50%; */
         overflow: hidden;
         /* transition: box-shadow 0.2s cubic-bezier(0.7, 0, 0.2, 1);
         transition-delay: 0.2s;
@@ -96,8 +96,52 @@ export const BorsukButtonStyle = css`
     }
 
     :host([smicon]) paper-button {
-        margin: 5px 0 5px 10px;
+        margin: 5px 0 5px 5px;
         padding: 0;
         min-width: 5px;
+    }
+
+    :host([animate]) {
+        color: orange;
+        display: inline-block;
+        width: 48px !important;
+        height: 48px !important;
+        border-radius: 50%;
+        position: relative;
+    }
+
+    :host([animate]):after {
+        position: absolute;
+        width: 80% !important;
+        height: 80% !important;
+        border-radius: 50%;
+        content: '';
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+
+        top: -6px;
+        left: -6px;
+        padding: 8px;
+        z-index: -1;
+        opacity: 0;
+
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+        -webkit-transition: opacity 0.2s, -webkit-transform 0.2s;
+        -moz-transition: opacity 0.2s, -moz-transform 0.2s;
+        transition: opacity 0.2s, transform 0.2s;
+
+        box-shadow: 2px 2px orange;
+    }
+
+    :host([animate]):hover:after {
+        opacity: 1;
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        transform: rotate(0deg);
     }
 `;

@@ -41,7 +41,7 @@ export const BorsukSidebarStyle = css`
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-bottom: 10px;
+        margin: 10px;
     }
 
 `;

@@ -17,7 +17,7 @@ import '@polymer/iron-icons/iron-icons';
 import '@polymer/iron-icon/iron-icon';
 import '../../packages/borsuk-button.js';
 
-import { closeTabAction } from '../../../properties/tabsProperties.js';
+import { closeTabAction } from '../../../properties/actions.js';
 
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -71,10 +71,10 @@ export class BorsukTabs extends connect(store)(LitElement) {
                       </div>
                       <div>
                         ${i.tabClose ? html`
-                          <borsuk-button smicon id="tabClose" @click="${this.closeTabClick}" data-page-id="${i.tabPageId}">
+                          <borsuk-button smicon id="tabClose_${i.tabPageId}" @click="${(event) => { this.closeTabClick(event, i.tabPageId) } }">
                               <iron-icon icon="close"></iron-icon>
                           </borsuk-button>
-                          <paper-tooltip id="tabCloseTooltip" for="tabClose">Zamknij</paper-tooltip>
+                          <paper-tooltip id="tabCloseTooltip_${i.tabPageId}" for="tabClose_${i.tabPageId}">Zamknij</paper-tooltip>
                           ` : html``}
                       </div>
                     </div>
@@ -103,8 +103,11 @@ export class BorsukTabs extends connect(store)(LitElement) {
     });
   }
 
-  closeTabClick(event) {
-    store.dispatch(setCeClickAction(closeTabAction));
+  closeTabClick(event, pageId) {
+    setTimeout(() => {
+      store.dispatch(setCeClickAction(closeTabAction, pageId));
+    }, 200);
+    
   }
 
   static get properties() {

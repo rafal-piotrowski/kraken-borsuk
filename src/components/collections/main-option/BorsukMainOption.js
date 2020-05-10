@@ -18,7 +18,8 @@ import { connect } from 'pwa-helpers/connect-mixin.js';
 import '../../packages/borsuk-button.js';
 import '../../packages/borsuk-link.js';
 
-import { buttonClickAction } from '../../../properties/mainMenuProperties.js';
+import { actions } from '../../../properties/actions.js';
+import { titles } from '../../../properties/titles.js';
 
 // podłączenie do Redux store.
 import { store } from '../../../redux/store.js';
@@ -54,7 +55,7 @@ export class BorsukMainOption extends connect(store)(LitElement) {
                     return html`<div class="box">${i.notificationTitle}</div>
                                 <div class="buttonBox">
                                 ${i.showLink
-                                    ? html`<borsuk-link>LINK</borsuk-link>`
+                                    ? html`<borsuk-link>${titles.get('linkRedirectLabel')}</borsuk-link>`
                                     : ''}
                                 </div>`;
                 })}
@@ -75,7 +76,7 @@ export class BorsukMainOption extends connect(store)(LitElement) {
     }
 
     get buttonInsideTemplate() {
-        return html`<borsuk-button id="${this.valuesMenu.optionId}" @click=${this.clickAction}>przejdź...</borsuk-button>`;
+        return html`<borsuk-button id="${this.valuesMenu.optionId}" @click=${this.clickAction}>${titles.get('buttonRedirectLabel')}</borsuk-button>`;
     }
 
     static get properties() {
@@ -86,7 +87,7 @@ export class BorsukMainOption extends connect(store)(LitElement) {
     }
 
     clickAction(event) {
-        store.dispatch(setClickAction(buttonClickAction, this.valuesMenu.optionId));
+        store.dispatch(setClickAction(actions.get('buttonClickAction'), this.valuesMenu.optionId));
     }
 
     constructor() {

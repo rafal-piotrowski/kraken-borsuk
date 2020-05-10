@@ -11,6 +11,9 @@
 
 import { LitElement, html, css } from 'lit-element';
 import { BorsukSidebarStyle } from './BorsukSidebarStyle.js';
+import { borsukAddSuboffer, borsukAddVersion, borsukApprove, borsukCopySuboffer, borsukCopyVersion, 
+        borsukEditSuboffer, borsukEditVersion, borsukPublic, borsukChevronDown, borsukChevronUp,
+        borsukRemoveSuboffer, borsukRemoveVersion, borsukSaveSuboffer, borsukSaveVersion } from '../icons/icons.js';
 import '@polymer/paper-tooltip/paper-tooltip';
 import '@polymer/iron-icons/iron-icons';
 import '@polymer/iron-icon/iron-icon';
@@ -19,6 +22,9 @@ import '@polymer/iron-form/iron-form';
 import '@polymer/paper-toast/paper-toast';
 import './collections/borsuk-sidebar-collapse.js';
 import './packages/borsuk-button.js';
+import './packages/borsuk-icon.js';
+
+import { tooltips } from '../properties/tooltips.js';
 
 export class BorsukSidebar extends LitElement {
     static get styles() {
@@ -37,10 +43,10 @@ export class BorsukSidebar extends LitElement {
     get treeTemplate() {
         return html`
             <div class="flexbuttons">
-                <borsuk-button icon id="addSuboffer" class="btn-icon-animated btn-icon-ing" @click="${this._addSuboffer}">
-                    <iron-icon icon="add"></iron-icon>
+                <borsuk-button smicon animate id="addSuboffer" class="btn-icon-animated btn-icon-ing" @click="${this._addSuboffer}">
+                    <borsuk-icon .svg=${borsukAddSuboffer}></borsuk-icon>
                 </borsuk-button>
-                <paper-tooltip id="addSubofferTooltip" for="addSuboffer">Dodaj nową subofertę</paper-tooltip>
+                <paper-tooltip id="addSubofferTooltip" for="addSuboffer">${tooltips.get('addSubofferTooltip')}</paper-tooltip>
             </div>
 
             ${this.subtypes.map(i => html`
@@ -71,10 +77,7 @@ export class BorsukSidebar extends LitElement {
                     <iron-icon icon="search"></iron-icon>
                 </borsuk-button>
 
-                <!-- <paper-icon-button id="filterButton" icon="search" class="fab ing" @click="${this._search}">
-                    <paper-ripple class="circle" recenters=""></paper-ripple>
-                </paper-icon-button> -->
-                <paper-tooltip id="filterButton_tooltip" for="filterButton">Szukanie zaawansowane...</paper-tooltip>
+                <paper-tooltip id="filterButton_tooltip" for="filterButton">${tooltips.get('advancedFilterTooltip')}</paper-tooltip>
 
                 <div>
                     <iron-form id="findform" class="navbar-form">
@@ -122,8 +125,6 @@ export class BorsukSidebar extends LitElement {
             filterText: { observer: 'refreshFilter' },
             svlExpandStatus: { type: Boolean, attribute: false, reflect: true },
             svlSubofferName: { type: String },
-            // activeItem: { observer: '_activeItemChanged' },
-            // eventsDict: { type: Array },
             _suboffer_name: String,
             _suboffer_version: String,
             _suboffer_sourcesap: String,
