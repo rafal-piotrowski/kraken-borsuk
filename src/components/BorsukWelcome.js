@@ -10,6 +10,7 @@
 import { LitElement, html, css } from 'lit-element';
 import { until } from 'lit-html/directives/until';
 import { BorsukWelcomeStyle } from './BorsukWelcomeStyle.js';
+import './collections/borsuk-preloader.js'
 
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -24,7 +25,7 @@ export class BorsukWelcome extends connect(store)(LitElement) {
 
     render() {
         return html`
-            ${until(this.welcomeContent, this.lazyFunction())}
+            ${until(this.welcomeContent, html`<borsuk-preloader></borsuk-preloader>`)}
         `;
     }
 
@@ -119,10 +120,6 @@ export class BorsukWelcome extends connect(store)(LitElement) {
         this.welcomeContent = new Promise((resolve) => {
             setTimeout(() => resolve(this.welcomeTemplate), 2000);
         });
-    }
-
-    lazyFunction() {
-        return html`Please wait, Loading...`;
     }
 
     shouldUpdate() {

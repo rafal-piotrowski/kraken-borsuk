@@ -1,7 +1,9 @@
 import {
     UPDATE_PAGE,
     GET_CESUBOFFER_TABS,
-    SET_CE_CLICK_ACTION
+    SET_CE_CLICK_ACTION,
+    GET_SIDEBAR_TYPES,
+    GET_SIDEBAR_NAMES
 } from '../actions/cesuboffer.js';
   
 const INITIAL_STATE = {
@@ -9,7 +11,9 @@ const INITIAL_STATE = {
     slot: '',
     ceactionclick: '',
     ceactionparam: '',
-    cesubtabs: {}
+    cesubtabs: {},
+    cesubtypes: {},
+    cesubnames: {}
 };
   
 const cesuboffer = (state = INITIAL_STATE, action) => {
@@ -31,6 +35,16 @@ const cesuboffer = (state = INITIAL_STATE, action) => {
                 ceactionclick: action.ceClickAction,
                 ceactionparam: action.ceClickParam
             };
+        case GET_SIDEBAR_TYPES:
+            return {
+                ...state,
+                cesubtypes: action.cesubtypes
+            }
+        case GET_SIDEBAR_NAMES:
+            return {
+                ...state,
+                cesubnames: action.cesubnames
+            }
         default:
             return state;
     }
@@ -39,6 +53,8 @@ const cesuboffer = (state = INITIAL_STATE, action) => {
 export default cesuboffer;
 
 export const cesubofferTabsSelector = state => state.cesuboffer.cesubtabs;
+export const cesubofferTypesSelector = state => state.cesuboffer.cesubtypes;
+export const cesubofferNamesSelector = state => state.cesuboffer.cesubnames;
 export const ceActionClickSelector = state => state.cesuboffer.ceactionclick;
 export const ceActionParamSelector = state => state.cesuboffer.ceactionparam;
   

@@ -10,6 +10,8 @@ import { LitElement, html, css } from 'lit-element';
 export const UPDATE_PAGE = 'UPDATE_PAGE';
 export const GET_CESUBOFFER_TABS = 'GET_CESUBOFFER_TABS';
 export const SET_CE_CLICK_ACTION = 'SET_CE_CLICK_ACTION';
+export const GET_SIDEBAR_TYPES = 'GET_SIDEBAR_TYPES';
+export const GET_SIDEBAR_NAMES = 'GET_SIDEBAR_NAMES';
 
 export const navigate = (path, search) => (dispatch) => {
   // Extract the page name from path.
@@ -65,6 +67,30 @@ export const getCesubofferTabs = (cesubofferTabs) => (dispatch) => {
   dispatch({
     type: GET_CESUBOFFER_TABS,
     cesubtabs
+  });
+};
+
+export const getSidebarTypes = (subtypes) => (dispatch) => {
+  const cesubtypes = subtypes.reduce((obj, option) => {
+    obj[option.index] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_SIDEBAR_TYPES,
+    cesubtypes
+  });
+};
+
+export const getSidebarNames = (subnames) => (dispatch) => {
+  const cesubnames = subnames.reduce((obj, option) => {
+    obj[option.subtypeId + option.index] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_SIDEBAR_NAMES,
+    cesubnames
   });
 };
 

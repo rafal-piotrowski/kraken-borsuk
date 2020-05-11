@@ -14,6 +14,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { LitElement, html, css } from 'lit-element';
+import { until } from 'lit-html/directives/until';
 import { BorsukCesubofferStyle } from './BorsukCesubofferStyle.js';
 import { loadJSON } from '../../helpers/asyncFunctions.js';
 
@@ -24,6 +25,7 @@ import '../../components/borsuk-sidebar.js';
 import '../../components/borsuk-content.js';
 import '../../components/borsuk-alert.js';
 import '../../components/collections/borsuk-dialog.js';
+import '../../components/collections/borsuk-preloader.js'
 
 import { titles } from '../../properties/titles.js';
 import { actions } from '../../properties/actions.js';
@@ -35,7 +37,7 @@ import { store } from '../../redux/store.js';
 // załadowanie kreatorów akcji.
 // getUserInfo do wywalenia po wrzuceniu do projektu.
 import { getUserInfo, setClickAction } from '../../redux/actions/menu.js';
-import { getCesubofferTabs, setCeClickAction } from '../../redux/actions/cesuboffer.js';
+import { getCesubofferTabs, setCeClickAction, getSidebarTypes, getSidebarNames } from '../../redux/actions/cesuboffer.js';
 
 // podłączenie reducer-a.
 import menu, { actionClickSelector, actionParamSelector, userInfoSelector } from '../../redux/reducers/menu.js';
@@ -63,7 +65,7 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
             </borsuk-alert>>
 
             <div id="subofferOper" class="wrapper flex-stretch-align">
-                    ${this.sidebarTemplate}
+                ${until(this.sidebarTemplate, html`<borsuk-preloader></borsuk-preloader>`)}
                 <div id="workLayout" class="stretch-right">
                     ${this.navbarTemplate}
                     ${this.contentTemplate}
@@ -116,6 +118,8 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         // poniższe do wycięcia po wdrożeniu do projektu
         this._setUserInfo();
         this._setCesubofferTabs();
+        this._setSidebarSubtypes();
+        this._setSidebarSubnames();
     }
 
     // setUserInfo do wycięcia po wdrożeniu do projektu
@@ -137,6 +141,28 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
             loadJSON('/src/properties/_cesubofferTabs.json')
             .then(data => {
                 store.dispatch(getCesubofferTabs(data.cesubofferTabs));
+            })
+        }
+    }
+
+    _setSidebarSubtypes(jsonData) {
+        if (jsonData) {
+            store.dispatch(getSidebarTypes(jsonData.sidebarSubtypes));
+        } else {
+            loadJSON('/src/properties/_sidebarSubtypes.json')
+            .then(data => {
+                store.dispatch(getSidebarTypes(data.sidebarSubtypes));
+            })
+        }
+    }
+
+    _setSidebarSubnames(jsonData) {
+        if (jsonData) {
+            store.dispatch(getSidebarNames(jsonData.sidebarSubnames));
+        } else {
+            loadJSON('/src/properties/_sidebarSubnames.json')
+            .then(data => {
+                store.dispatch(getSidebarNames(data.sidebarSubnames));
             })
         }
     }

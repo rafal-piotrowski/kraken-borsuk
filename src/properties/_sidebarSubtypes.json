@@ -1,0 +1,18 @@
+{
+    "sidebarSubtypes": [{
+        "subtypeId": 100,
+        "text": "Informacyjne",
+        "show": true,
+        "index": 0
+    }, {
+        "subtypeId": 50,
+        "text": "Operacyjne",
+        "show": true,
+        "index": 1
+    }, {
+        "subtypeId": 75,
+        "text": "Marketingowe",
+        "show": true,
+        "index": 2
+    }]
+}
