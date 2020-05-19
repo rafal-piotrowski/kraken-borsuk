@@ -1,0 +1,20 @@
+{
+    "searchResults": [
+        {
+            "subofferId": "1515",
+            "subofferName": "batchBMawariaScenariusz1",
+            "eventName": "batchBMawariaEvent1",
+            "index": 0
+        },{
+            "subofferId": "2150",
+            "subofferName": "batchCRSpowiadomGr2",
+            "eventName": "batchCRSpowiadomEvent2",
+            "index": 1
+        },{
+            "subofferId": "9999",
+            "subofferName": "batchKYCsms2",
+            "eventName": "batchKYCEvent",
+            "index": 2
+        }
+    ]
+}

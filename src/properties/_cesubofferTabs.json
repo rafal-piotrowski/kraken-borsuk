@@ -10,24 +10,24 @@
             "tabClose": false
         },{
             "tabPageId": "4512",
-            "tabSlotId": "S01",
-            "tabTitle": "suboferta jeden",
-            "tabSubtitle": "",
+            "tabSlotId": "S99",
+            "tabTitle": "Szukanie",
+            "tabSubtitle": "zaawansowane",
             "tabPageType": "A",
             "tabIndex": 1,
             "tabClose": true
         },{
             "tabPageId": "1845",
             "tabSlotId": "S02",
-            "tabTitle": "wersja jeden",
-            "tabSubtitle": "suboferta jeden",
+            "tabTitle": "suboferta batchBMawaria...",
+            "tabSubtitle": "wersja_191007_JR",
             "tabPageType": "E",
             "tabIndex": 2,
             "tabClose": true
         },{
             "tabPageId": "5002",
             "tabSlotId": "S01",
-            "tabTitle": "suboferta dwa",
+            "tabTitle": "suboferta_likwidacja...",
             "tabSubtitle": "",
             "tabPageType": "E",
             "tabIndex": 3,

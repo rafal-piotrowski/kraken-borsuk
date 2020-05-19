@@ -51,7 +51,8 @@ export const BorsukSidebarCollapseStyle = css`
         font-weight: 300;
         color: white;
         font-size: 1.0625rem;
-        background-color: #ff6200;
+        /* background-color: #ff6200; */
+        background-color: #525199;
         padding: 10px;
         border-radius: 3px;
         border-width: initial;

@@ -1,3 +1,6 @@
+/* eslint-disable object-shorthand */
+/* eslint-disable prefer-const */
+/* eslint-disable prefer-object-spread */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-console */
 /* eslint-disable prefer-template */
@@ -17,7 +20,7 @@ import '@polymer/iron-icons/iron-icons';
 import '@polymer/iron-icon/iron-icon';
 import '../../packages/borsuk-button.js';
 
-import { closeTabAction } from '../../../properties/actions.js';
+import { closeTabAction, changeTabAction } from '../../../properties/actions.js';
 
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -27,7 +30,8 @@ import { installRouter } from 'pwa-helpers/router.js';
 import { store } from '../../../redux/store.js';
 
 // załadowanie kreatorów akcji.
-import { navigate, setCeClickAction } from '../../../redux/actions/cesuboffer.js';
+import { navigate } from '../../../redux/actions/cesuboffer.js';
+import { setClickAction } from '../../../redux/actions/customevents.js';
 
 export class BorsukTabs extends connect(store)(LitElement) {
   static get styles() {
@@ -62,17 +66,18 @@ export class BorsukTabs extends connect(store)(LitElement) {
             const i = this.tabsList[key];
             return html`
               <a href="/${i.tabPageId}?${i.tabSlotId}">
-                <paper-tab page="${i.tabPageId}" ?selected="${this._page === i.tabPageId}">
+                <paper-tab page="${i.tabPageId}" ?selected="${this._page === i.tabPageId}" @tap="${(event) => { this.changeTabClick(event, i.tabPageId) } }">
                   <div class="tabsWrapper">
                     <div id="tabNav" class="tabsNav">
-                      <div><iron-icon icon="info"></iron-icon></div>
+                      <!-- <div><iron-icon icon="info"></iron-icon></div> -->
                       <div id="tabName" class="tabName">
                         ${i.tabTitle}
+                        <p class="subTitleTab">${i.tabSubtitle}</p>
                       </div>
                       <div>
                         ${i.tabClose ? html`
-                          <borsuk-button smicon id="tabClose_${i.tabPageId}" @click="${(event) => { this.closeTabClick(event, i.tabPageId) } }">
-                              <iron-icon icon="close"></iron-icon>
+                          <borsuk-button smicon id="tabClose_${i.tabPageId}" @click="${(event) => { this.closeTabClick(event, i.tabPageId) } }" data-action="closing">
+                              <iron-icon icon="close" data-action="closing"></iron-icon>
                           </borsuk-button>
                           <paper-tooltip id="tabCloseTooltip_${i.tabPageId}" for="tabClose_${i.tabPageId}">Zamknij</paper-tooltip>
                           ` : html``}
@@ -103,11 +108,22 @@ export class BorsukTabs extends connect(store)(LitElement) {
     });
   }
 
-  closeTabClick(event, pageId) {
-    setTimeout(() => {
-      store.dispatch(setCeClickAction(closeTabAction, pageId));
-    }, 200);
-    
+  closeTabClick(event, page) {
+    if (event.target.getAttribute('data-action') === 'closing') {
+      let eventParams = Object.assign({pageId: page});
+      setTimeout(() => {
+        store.dispatch(setClickAction(closeTabAction, eventParams));
+      }, 200);
+    }
+  }
+
+  changeTabClick(event, page) {
+    if ((event.target.getAttribute('data-action') != 'closing') && (page != this._page)) {
+      let eventParams = Object.assign({pageId: page});
+      setTimeout(() => {
+        store.dispatch(setClickAction(changeTabAction, eventParams));
+      }, 200);
+    }
   }
 
   static get properties() {

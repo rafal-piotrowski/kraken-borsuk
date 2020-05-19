@@ -9,9 +9,9 @@ import { LitElement, html, css } from 'lit-element';
 
 export const UPDATE_PAGE = 'UPDATE_PAGE';
 export const GET_CESUBOFFER_TABS = 'GET_CESUBOFFER_TABS';
-export const SET_CE_CLICK_ACTION = 'SET_CE_CLICK_ACTION';
 export const GET_SIDEBAR_TYPES = 'GET_SIDEBAR_TYPES';
 export const GET_SIDEBAR_NAMES = 'GET_SIDEBAR_NAMES';
+export const GET_SEARCH_RESULTS = 'GET_SEARCH_RESULTS';
 
 export const navigate = (path, search) => (dispatch) => {
   // Extract the page name from path.
@@ -43,6 +43,11 @@ const loadPage = (page, slot) => (dispatch) => {
         // console.log('loading ... '+slot+' - '+page);
     });
       break;
+    case 'S99':
+        import('../../components/borsuk-filter-form.js').then((module) => {
+          // console.log('loading ... '+slot+' - '+page);
+      });
+        break;
     default:
       slot = 'S404';
       import('../../components/borsuk-page404.js');
@@ -94,10 +99,14 @@ export const getSidebarNames = (subnames) => (dispatch) => {
   });
 };
 
-export const setCeClickAction = (ceClickAction, ceClickParam) => {
-  return {
-    type: SET_CE_CLICK_ACTION,
-    ceClickAction,
-    ceClickParam
-  };
+export const getSearchResults = (results) => (dispatch) => {
+  const searchresults = results.reduce((obj, option) => {
+    obj[option.index] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_SEARCH_RESULTS,
+    searchresults
+  });
 };

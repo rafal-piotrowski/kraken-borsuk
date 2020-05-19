@@ -9,12 +9,6 @@ export const BorsukNavbarButtonsStyle = css`
         height: 35px !important; */
     }
 
-    .navIconButton {
-        background-color: white;
-        /* color: #ff6200; */
-        color: black;
-    }
-
     #naviButton {
         position: relative;
         display: inline-block;

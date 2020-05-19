@@ -1,3 +1,9 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable vars-on-top */
+/* eslint-disable no-var */
+/* eslint-disable no-prototype-builtins */
 /* eslint-disable import/newline-after-import */
 /* eslint-disable prefer-template */
 /* eslint-disable import/order */
@@ -30,21 +36,26 @@ import '../../components/collections/borsuk-preloader.js'
 import { titles } from '../../properties/titles.js';
 import { actions } from '../../properties/actions.js';
 import { events } from '../../properties/events.js';
+import { actions2events } from '../../properties/actions2events.js';
 
 // podłączenie do Redux store.
 import { store } from '../../redux/store.js';
 
 // załadowanie kreatorów akcji.
 // getUserInfo do wywalenia po wrzuceniu do projektu.
-import { getUserInfo, setClickAction } from '../../redux/actions/menu.js';
-import { getCesubofferTabs, setCeClickAction, getSidebarTypes, getSidebarNames } from '../../redux/actions/cesuboffer.js';
+import { getUserInfo } from '../../redux/actions/menu.js';
+import { getCesubofferTabs, getSidebarTypes, getSidebarNames, getSearchResults } from '../../redux/actions/cesuboffer.js';
+import { setClickAction } from '../../redux/actions/customevents.js';
 
 // podłączenie reducer-a.
-import menu, { actionClickSelector, actionParamSelector, userInfoSelector } from '../../redux/reducers/menu.js';
-import cesuboffer, { ceActionClickSelector, ceActionParamSelector } from '../../redux/reducers/cesuboffer.js';
+import menu, { userInfoSelector } from '../../redux/reducers/menu.js';
+import cesuboffer from '../../redux/reducers/cesuboffer.js';
+import customevents, { actionClickSelector, actionParamSelector } from '../../redux/reducers/customevents.js';
+
 store.addReducers({
     menu,
-    cesuboffer
+    cesuboffer,
+    customevents
 });
 
 export class BorsukCesubofferApp extends connect(store)(LitElement) {
@@ -167,26 +178,21 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         }
     }
 
-    stateChanged(state) {
-        if (ceActionClickSelector(state) === actions.get('closeTabAction')) {
-            this.fireCustomEvent(state, actions.get('closeTabAction'), ceActionParamSelector(state));
+    _setFilterContent(jsonData) {
+        if (jsonData) {
+            store.dispatch(getSearchResults(jsonData.searchResults));
+        } else {
+            loadJSON('/src/properties/_searchResults.json')
+            .then(data => {
+                store.dispatch(getSearchResults(data.searchResults));
+            })
         }
+    }
 
-        if (actionClickSelector(state) === actions.get('infoAction')) { 
-            store.dispatch(setClickAction(''));
-            this.openModal( 'M', 'I', 
-                            titles.get('ckeyLabel')+userInfoSelector(state)[1].ckey, 
-                            titles.get('lastLoginSuccessLabel')+userInfoSelector(state)[1].lastLoginSuccess, 
-                            titles.get('lastLoginFailureLabel')+userInfoSelector(state)[1].lastLoginFailure);
-        }
-        if (actionClickSelector(state) === actions.get('logoutAction')) { 
-            store.dispatch(setClickAction(''));
-            this.fireCustomEvent(state, actions.get('logoutAction')); 
-        }
-        if (actionClickSelector(state) === actions.get('homeAction')) { 
-            store.dispatch(setClickAction(''));
-            this.fireCustomEvent(state, actions.get('homeAction')); 
-        }
+    stateChanged(state) {
+        if (this.userInfo !== userInfoSelector(state)) { this.userInfo = userInfoSelector(state); }
+        if (actionClickSelector(state) === actions.get('logoutAction')) { localStorage.clear(); }
+        if (actionClickSelector(state)) { this.fireCustomEvent(state, actionClickSelector(state), actionParamSelector(state) ? actionParamSelector(state) : null) }
     }
 
     openModal(type, mode, textLine1, textLine2, textLine3, jsonToken, scale) {
@@ -205,49 +211,47 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
     }
 
     fireCustomEvent(state, type, param) {
-        let actionInfo = [];
-        actionInfo.push({ actionType: type, actionParam: param });
-
-        this.menuElements = JSON.stringify({ cesubofferAction: actionInfo });
-        
-        if (type === actions.get('logoutAction')) {
-            this.eventName = events.get('logoutEvent');
-        } else if (type === actions.get('homeAction')) {
-            this.eventName = events.get('homeEvent');
-        } else if (type === actions.get('closeTabAction')) {
-            this.eventName = events.get('closeTabEvent');
-            setTimeout(() => store.dispatch(setCeClickAction('')), 200);
+        setTimeout(() => store.dispatch(setClickAction('')), 200);
+        if (!param) {
+            this.dispatchEvent(new CustomEvent(actions2events.get(type)));
+        } else {
+            this.dispatchEvent(new CustomEvent(actions2events.get(type), { detail: JSON.stringify(Object.assign(param)) }));
         }
-        this.dispatchEvent(new CustomEvent(this.eventName, { detail: this.menuElements }));
     }
 
     static get properties() {
         return {
             heading: { type: String },
             footing: { type: String },
-            title: { type: String }
+            title: { type: String },
+            userInfo: { type: Object },
         };
     }
 
     constructor() {
         super();
+
+        this.userInfo = [];
         this.heading = titles.get('headRwdAlert');
         this.footing = titles.get('footRwdAlert');
         this.title = titles.get('titleRwdAlert');
-    
-        // **************************************
-        // to powinno być chyba gdzieś w testach
-        // **************************************
-        this.addEventListener(events.get('logoutEvent'), this.handleCustomEvent);
-        this.addEventListener(events.get('homeEvent'), this.handleCustomEvent);
-        this.addEventListener(events.get('closeTabEvent'), this.handleCustomEvent);
-        this.addEventListener(events.get('confirmModalEvent'), this.handleCustomEvent);
-        this.addEventListener(events.get('cancelModalEvent'), this.handleCustomEvent);
+
+        // do celow produkcyjnych potrzebny będzie tylko listener dla infoEvent w celu otwarcia modala z info o użytkowniku
+        for (let [eventKey, eventValue] of events) {
+            this.addEventListener(eventValue, (eventValue === events.get('infoEvent')) ? this.handleInfoEvent : this.handleCustomEvent);
+        }
     }
 
-    // **************************************
-    // to powinno być chyba gdzieś w testach
-    // **************************************
+    handleInfoEvent(event) {
+        console.log(event.type);
+        console.log(event.detail); 
+        store.dispatch(setClickAction(''));
+        this.openModal( 'M', 'I', 
+                        titles.get('ckeyLabel')+this.userInfo[1].ckey, 
+                        titles.get('lastLoginSuccessLabel')+this.userInfo[1].lastLoginSuccess, 
+                        titles.get('lastLoginFailureLabel')+this.userInfo[1].lastLoginFailure);
+    }
+
     handleCustomEvent(event) { 
         console.log(event.type);
         console.log(event.detail); 

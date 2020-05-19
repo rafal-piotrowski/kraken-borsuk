@@ -1,3 +1,4 @@
+/* eslint-disable prefer-object-spread */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-plusplus */
 /* eslint-disable radix */
@@ -34,17 +35,22 @@ import '../../components/collections/borsuk-dialog.js';
 import { titles } from '../../properties/titles.js';
 import { actions } from '../../properties/actions.js';
 import { events } from '../../properties/events.js';
+import { actions2events } from '../../properties/actions2events.js';
 
 // podłączenie do Redux store.
 import { store } from '../../redux/store.js';
 
 // załadowanie kreatorów akcji.
-import { getUserInfo, getMenuOptions, getMenuNotifications, changeMenuIndex, setClickAction } from '../../redux/actions/menu.js';
+import { getUserInfo, getMenuOptions, getMenuNotifications, changeMenuIndex } from '../../redux/actions/menu.js';
+import { setClickAction } from '../../redux/actions/customevents.js';
 
 // podłączenie reducer-a.
-import menu, { menuOptionsSelector, menuIndexesSelector, actionClickSelector, actionParamSelector, userInfoSelector } from '../../redux/reducers/menu.js';
+import menu, { menuOptionsSelector, menuIndexesSelector, userInfoSelector } from '../../redux/reducers/menu.js';
+import customevents, { actionClickSelector, actionParamSelector } from '../../redux/reducers/customevents.js';
+
 store.addReducers({
-  menu
+  menu,
+  customevents
 });
 
 export class BorsukMenuApp extends connect(store)(LitElement) {
@@ -152,20 +158,9 @@ export class BorsukMenuApp extends connect(store)(LitElement) {
 
     stateChanged(state) {
         if (this.menuOptions !== menuOptionsSelector(state)) { this.menuOptions = menuOptionsSelector(state); }
-        if (actionClickSelector(state) === actions.get('infoAction')) { 
-            store.dispatch(setClickAction(''));
-            this.openModal( 'M', 'I', 
-                            titles.get('ckeyLabel')+userInfoSelector(state)[1].ckey, 
-                            titles.get('lastLoginSuccessLabel')+userInfoSelector(state)[1].lastLoginSuccess, 
-                            titles.get('lastLoginFailureLabel')+userInfoSelector(state)[1].lastLoginFailure);
-        }
-        if (actionClickSelector(state) === actions.get('logoutAction')) { 
-            store.dispatch(setClickAction('')); 
-            this.fireCustomEvent(state, actions.get('logoutAction')); 
-        }
-        if (actionClickSelector(state) === actions.get('buttonClickAction')) { 
-            store.dispatch(setClickAction('')); 
-            this.fireCustomEvent(state, actions.get('buttonClickAction'), actionParamSelector(state)); 
+        if (this.userInfo !== userInfoSelector(state)) { this.userInfo = userInfoSelector(state); }
+        if (actionClickSelector(state)) { 
+            this.fireCustomEvent(state, actionClickSelector(state), actionParamSelector(state) ? actionParamSelector(state) : null)
         }
     }
 
@@ -187,24 +182,23 @@ export class BorsukMenuApp extends connect(store)(LitElement) {
     }
 
     fireCustomEvent(state, type, param) {
-        let actionInfo = [];
+
         let menuInfo = [];
-        actionInfo.push({ actionType: type, actionParam: param });
         for(let i = 0; i < Object.keys(menuIndexesSelector(state)).length; i++){
             menuInfo.push({ optionId: menuIndexesSelector(state)[i].optionId, 
                             optionTitle: menuIndexesSelector(state)[i].optionTitle,
                             newIndex: menuIndexesSelector(state)[i].newIndex
                         });
         }
-
-        this.menuElements = JSON.stringify({menuAction: actionInfo, menuOptions: menuInfo});
-
-        if (type === actions.get('logoutAction')) {
-            this.eventName = events.get('logoutEvent');
-        } else if (type === actions.get('buttonClickAction')) {
-            this.eventName = events.get('buttonClickEvent');
+        
+        if (!param) {
+            this.menuElements = JSON.stringify(Object.assign({menuOptions: menuInfo}));
+        } else {
+            this.menuElements = JSON.stringify(Object.assign(param, {menuOptions: menuInfo}));
         }
-        this.dispatchEvent(new CustomEvent(this.eventName, { detail: this.menuElements }));
+
+        setTimeout(() => store.dispatch(setClickAction('')), 200);
+        this.dispatchEvent(new CustomEvent(actions2events.get(type), { detail: this.menuElements }));
     }
 
     openModal(type, mode, textLine1, textLine2, textLine3, jsonToken, scale) {
@@ -239,18 +233,19 @@ export class BorsukMenuApp extends connect(store)(LitElement) {
         this.positions = 0;
         this.eventName = '';
 
-        // **************************************
-        // to powinno być chyba gdzieś w testach
-        // **************************************
-        this.addEventListener(events.get('logoutEvent'), this.handleCustomEvent);
-        this.addEventListener(events.get('buttonClickEvent'), this.handleCustomEvent);
-        this.addEventListener(events.get('confirmModalEvent'), this.handleCustomEvent);
-        this.addEventListener(events.get('cancelModalEvent'), this.handleCustomEvent);
+        for (let [eventKey, eventValue] of events) {
+            this.addEventListener(eventValue, (eventValue === events.get('infoEvent')) ? this.handleInfoEvent : this.handleCustomEvent);
+        }
     }
 
-    // **************************************
-    // to powinno być chyba gdzieś w testach
-    // **************************************
+    handleInfoEvent(event) {
+        store.dispatch(setClickAction(''));
+        this.openModal( 'M', 'I', 
+                        titles.get('ckeyLabel')+this.userInfo[1].ckey, 
+                        titles.get('lastLoginSuccessLabel')+this.userInfo[1].lastLoginSuccess, 
+                        titles.get('lastLoginFailureLabel')+this.userInfo[1].lastLoginFailure);
+    }
+
     handleCustomEvent(event) { 
         console.log(event.type);
         console.log(event.detail); 

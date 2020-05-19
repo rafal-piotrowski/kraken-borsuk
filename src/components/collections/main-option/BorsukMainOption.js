@@ -1,3 +1,5 @@
+/* eslint-disable prefer-object-spread */
+/* eslint-disable prefer-template */
 /* eslint-disable prefer-const */
 /* eslint-disable no-undef */
 /* eslint-disable vars-on-top */
@@ -25,7 +27,7 @@ import { titles } from '../../../properties/titles.js';
 import { store } from '../../../redux/store.js';
 
 // załadowanie kreatorów akcji.
-import { setClickAction } from '../../../redux/actions/menu.js';
+import { setClickAction } from '../../../redux/actions/customevents.js';
 
 // podłączenie reducer-a.
 import { menuNotificationsSelector } from '../../../redux/reducers/menu.js';
@@ -87,7 +89,8 @@ export class BorsukMainOption extends connect(store)(LitElement) {
     }
 
     clickAction(event) {
-        store.dispatch(setClickAction(actions.get('buttonClickAction'), this.valuesMenu.optionId));
+        let eventParams = Object.assign({actionRedirect: this.valuesMenu.optionId});
+        store.dispatch(setClickAction(actions.get('buttonClickAction'), eventParams));
     }
 
     constructor() {

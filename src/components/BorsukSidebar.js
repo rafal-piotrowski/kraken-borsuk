@@ -1,3 +1,6 @@
+/* eslint-disable prefer-template */
+/* eslint-disable prefer-const */
+/* eslint-disable prefer-object-spread */
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable func-names */
 /* eslint-disable no-console */
@@ -17,6 +20,7 @@
 
 import { LitElement, html, css } from 'lit-element';
 import { BorsukSidebarStyle } from './BorsukSidebarStyle.js';
+import { BorsukSidebarCollapseStyle } from './collections/sidebar-collapse/BorsukSidebarCollapseStyle.js';
 import { borsukAddSuboffer, borsukAddVersion, borsukApprove, borsukCopySuboffer, borsukCopyVersion, 
         borsukEditSuboffer, borsukEditVersion, borsukPublic, borsukChevronDown, borsukChevronUp,
         borsukRemoveSuboffer, borsukRemoveVersion, borsukSaveSuboffer, borsukSaveVersion } from '../icons/icons.js';
@@ -30,6 +34,8 @@ import './collections/borsuk-sidebar-collapse.js';
 import './packages/borsuk-button.js';
 import './packages/borsuk-icon.js';
 
+import { addSubofferAction, editSubofferAction, filterOpenAction } from '../properties/actions.js';
+
 import { tooltips } from '../properties/tooltips.js';
 
 // konektor służący podłączaniu się do store-a
@@ -38,26 +44,15 @@ import { connect } from 'pwa-helpers/connect-mixin.js';
 // podłączenie do Redux store.
 import { store } from '../redux/store.js';
 
+// załadowanie kreatorów akcji.
+import { setClickAction } from '../redux/actions/customevents.js';
+
 // podłączenie reducer-a.
 import cesuboffer, { cesubofferTypesSelector, cesubofferNamesSelector } from '../redux/reducers/cesuboffer.js';
 
-function getSubnamesTemplate(item) {
-    const baseTemplate = html`<div>${item.message}</div>`;
-    return html`
-        <div class="content">
-            ${i.subnames.map(j => html`
-                ${j.show? html`
-                    <borsuk-sidebar-collapse class="toFilterExpandSub" .title="${j.text}" .data-item="${j.id}">
-                    </borsuk-sidebar-collapse>
-                `: html``}
-            `)}
-        </div>
-    `;
-}
-
 export class BorsukSidebar extends connect(store)(LitElement) {
     static get styles() {
-        return [BorsukSidebarStyle];
+        return [BorsukSidebarStyle,BorsukSidebarCollapseStyle];
     }
 
     render() {
@@ -72,7 +67,7 @@ export class BorsukSidebar extends connect(store)(LitElement) {
     get treeTemplate() {
         return html`
             <div class="flexbuttons">
-                <borsuk-button smicon animate id="addSuboffer" class="btn-icon-animated btn-icon-ing" @click="${this._addSuboffer}">
+                <borsuk-button smicon animate id="addSuboffer" class="btn-icon-animated btn-icon-ing" @click="${this.addSuboffer}">
                     <borsuk-icon .svg=${borsukAddSuboffer}></borsuk-icon>
                 </borsuk-button>
                 <paper-tooltip id="addSubofferTooltip" for="addSuboffer">${tooltips.get('addSubofferTooltip')}</paper-tooltip>
@@ -90,8 +85,17 @@ export class BorsukSidebar extends connect(store)(LitElement) {
                                         const j = this.sidebarSubnames[subkey];
                                         return html`
                                                 ${j.show? html`
-                                                    <borsuk-sidebar-collapse class="toFilterExpandSub" .title="${j.text}" .data-item="${j.id}">
-                                                    </borsuk-sidebar-collapse>
+
+                                                    <div class="card card-collapse">
+                                                        <div class="subcard-header header-flex">
+                                                            <button id="notrigger" class="mb-1" @click="${(event) => { this.editSuboffer(event, j.subnameId) } }">
+                                                                <div class="titleNav">
+                                                                    <div>${this.getTitle(j.text)}</div>
+                                                                </div>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
                                                 `: html``}
                                             
                                         `;
@@ -105,48 +109,36 @@ export class BorsukSidebar extends connect(store)(LitElement) {
         `;
     }
 
+    getTitle(title) {
+        return (title.length > 23) ? (title.substr(0,23) + '...') : title;
+    }
+
     get filterTemplate() {
         return html`
             <div id="sidebarFilter" class="sidebarFilter">
                 <paper-input id="lightFinderInput" type="text" label="filtruj suboferty..." class="br-input" value="${this.filterText}">
                 </paper-input>
 
-                <borsuk-button icon reverse id="filterButton" class="fab ing" @click="${this._search}">
+                <borsuk-button icon reverse id="filterButton" class="fab ing" @click="${this.openFilter}">
                     <iron-icon icon="search"></iron-icon>
                 </borsuk-button>
-
                 <paper-tooltip id="filterButton_tooltip" for="filterButton">${tooltips.get('advancedFilterTooltip')}</paper-tooltip>
-
-                <div>
-                    <iron-form id="findform" class="navbar-form">
-                        <form>
-                            <div class="flexpaperform">
-                                <div>
-                                    <paper-toast id="searchToast" duration="2000" text="">
-                                        <div class="searchToastBody">
-                                            <div class="titleNav">
-                                                <div class="filterHeader"><h4>Tu było kiedyś szukanie zaawansowane...</h4></div>
-                                                <div><paper-icon-button id="filterCloseButton" icon="close" on-click="_searchCancel"></paper-icon-button></div>
-                                            </div>
-                                        </div>
-                                    </paper-toast>
-                                </div>
-                            </div>
-                        </form>
-                    </iron-form>
-                </div>
             </div>
         `;
 
     }
 
-    _addSuboffer() {
-
+    addSuboffer(event) {
+        store.dispatch(setClickAction(addSubofferAction));
     }
 
-    _search(event) {
-        this.subofferFilterValue =  this.filterText;
-        (this.shadowRoot.querySelectorAll('.paper-toast-open')) ? this.shadowRoot.querySelector('#searchToast').toggle() : this.shadowRoot.querySelector('#searchToast').open();
+    editSuboffer(event, suboffer) {
+        let eventParams = Object.assign({subofferId: suboffer});
+        store.dispatch(setClickAction(editSubofferAction, eventParams));
+      }
+
+    openFilter(event) {
+        store.dispatch(setClickAction(filterOpenAction));
     }
 
     _searchCancel() {

@@ -24,7 +24,7 @@ import '../../packages/borsuk-button.js';
 import { store } from '../../../redux/store.js';
 
 // załadowanie kreatorów akcji.
-import { setClickAction } from '../../../redux/actions/menu.js';
+import { setClickAction } from '../../../redux/actions/customevents.js';
 
 export class BorsukNavbarButtons extends connect(store)(LitElement) {
 // export class BorsukNavbarButtons extends LitElement {
@@ -34,17 +34,29 @@ export class BorsukNavbarButtons extends connect(store)(LitElement) {
 
     render() {
         return html`
-            <borsuk-button icon @click=${this.clickAction}
-                                id="${this.valuesButton.buttonId}Button" 
-                                class="navIconButton">
-                <iron-icon icon="${this.valuesButton.buttonIcon}"></iron-icon>
-            </borsuk-button>
+            ${this.valuesButton.buttonActive ? html`${this.buttonActiveTemplate}` : html`${this.buttonDisabledTemplate}`}
             <paper-tooltip  id="${this.valuesButton.buttonId}Tooltip" 
                             for="${this.valuesButton.buttonId}Button" 
                             animation_delay="500" animation-entry="scale-up-animation" 
                             animation-exit="scale-down-animation">
                 ${this.valuesButton.buttonTooltip}
             </paper-tooltip>
+        `;
+    }
+
+    get buttonActiveTemplate() {
+        return html`
+            <borsuk-button icon @click=${this.clickAction} id="${this.valuesButton.buttonId}Button">
+                <iron-icon icon="${this.valuesButton.buttonIcon}"></iron-icon>
+            </borsuk-button>
+        `;
+    }
+
+    get buttonDisabledTemplate() {
+        return html`
+            <borsuk-button icon disable id="${this.valuesButton.buttonId}Button">
+                <iron-icon icon="${this.valuesButton.buttonIcon}"></iron-icon>
+            </borsuk-button>
         `;
     }
 

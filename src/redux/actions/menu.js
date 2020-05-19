@@ -5,7 +5,6 @@ export const GET_MENU_OPTIONS = 'GET_MENU_OPTIONS';
 export const GET_MENU_NOTIFICATIONS = 'GET_MENU_NOTIFICATIONS';
 export const GET_USER_INFO = 'GET_USER_INFO';
 export const CHANGE_MENU_INDEX = 'CHANGE_MENU_INDEX';
-export const SET_CLICK_ACTION = 'SET_CLICK_ACTION';
 
 export const getUserInfo = (userInfo) => (dispatch) => {
     const userinfos = userInfo.reduce((obj, info) => {
@@ -48,13 +47,5 @@ export const changeMenuIndex = (optionId, nIndex) => {
       type: CHANGE_MENU_INDEX,
       optionId,
       nIndex
-    };
-  };
-
-  export const setClickAction = (clickAction, clickParam) => {
-    return {
-      type: SET_CLICK_ACTION,
-      clickAction,
-      clickParam
     };
   };

@@ -19,11 +19,27 @@ export const BorsukButtonStyle = css`
         cursor: pointer;
     }
 
+    :host paper-button {
+        text-transform: none;
+    }
+
     :host([indigo]) {
         width: 100%;
         color: var(--ing-white-color);
         background-color: var(--ing-indigo-color);
         border: 1px solid var(--ing-indigo-color);
+    }
+
+    :host([wide]) {
+        width: 100%;
+    }
+
+    :host([wide]) paper-button {
+        padding: 6px 16px 8px 16px;
+    }
+    
+    :host([narrow]) paper-button {
+        padding: 0 !important;
     }
 
     :host([white]) {
@@ -53,9 +69,17 @@ export const BorsukButtonStyle = css`
         margin: 10px;
     }
 
+    :host([disable]) {
+        color: var(--ing-15percent-black-color) !important;
+    }
+
     :host([icon]):active {
         box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
         transition-delay: 0s;
+    }
+
+    :host([icongrey]) {
+        color: grey;
     }
 
     :host([icon]) paper-button {

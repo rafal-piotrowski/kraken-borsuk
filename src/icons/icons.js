@@ -15,3 +15,5 @@ export { default as borsukSaveSuboffer } from './borsuk-save-suboffer/borsuk-sav
 export { default as borsukSaveVersion } from './borsuk-save-version/borsuk-save-version.js';
 export { default as borsukChevronDown } from './borsuk-chevron-down/borsuk-chevron-down.js';
 export { default as borsukChevronUp } from './borsuk-chevron-up/borsuk-chevron-up.js';
+export { default as borsukDoubleChevronDown } from './borsuk-dchevron-down/borsuk-dchevron-down.js';
+export { default as borsukDoubleChevronUp } from './borsuk-dchevron-up/borsuk-dchevron-up.js';

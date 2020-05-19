@@ -1,3 +1,4 @@
+/* eslint-disable no-else-return */
 /* eslint-disable no-undef */
 /* eslint-disable import/first */
 /* eslint-disable import/newline-after-import */
@@ -63,12 +64,17 @@ export class BorsukNavbar extends LitElement {
     }
 
     get navigationTamplete() {
-        return html`${this.buttonOptions.map(i => html`<borsuk-navbar-buttons .valuesButton="${i}"></borsuk-navbar-buttons>`)}`;
+        if (this.mainNavi) {
+            return html`${this.mainButtons.map(i => html`<borsuk-navbar-buttons .valuesButton="${i}"></borsuk-navbar-buttons>`)}`;
+        } else {
+            return html`${this.operButtons.map(i => html`<borsuk-navbar-buttons .valuesButton="${i}"></borsuk-navbar-buttons>`)}`;
+        }
     }
 
     static get properties() {
         return {
-            buttonOptions: { type: Array },
+            mainButtons: { type: Array },
+            operButtons: { type: Array },
             imgsrcIngLogo: { type: String },
             corporateKey: { type: String },
             lastSuccessLogin: { type: String },
@@ -84,22 +90,48 @@ export class BorsukNavbar extends LitElement {
         super();
 
         // this.mainNavTitle = "MENU GŁÓWNE";
-        this.buttonOptions = [{
+        this.mainButtons = [{
             buttonId: homeAction,
             buttonTooltip: 'Przejdź do strony głównej',
             buttonIcon: 'home',
+            buttonActive: false,
             buttonList: [{
             }],
         },{
             buttonId: infoAction,
             buttonTooltip: 'Zobacz informacje o użytkowniku',
             buttonIcon: 'supervisor-account',
+            buttonActive: true,
             buttonList: [{
             }],
         },{
             buttonId: logoutAction,
             buttonTooltip: 'Wyloguj',
             buttonIcon: 'power-settings-new',
+            buttonActive: true,
+            buttonList: [{
+            }],
+        }];
+
+        this.operButtons = [{
+            buttonId: homeAction,
+            buttonTooltip: 'Przejdź do strony głównej',
+            buttonIcon: 'home',
+            buttonActive: true,
+            buttonList: [{
+            }],
+        },{
+            buttonId: infoAction,
+            buttonTooltip: 'Zobacz informacje o użytkowniku',
+            buttonIcon: 'supervisor-account',
+            buttonActive: true,
+            buttonList: [{
+            }],
+        },{
+            buttonId: logoutAction,
+            buttonTooltip: 'Wyloguj',
+            buttonIcon: 'power-settings-new',
+            buttonActive: true,
             buttonList: [{
             }],
         }]

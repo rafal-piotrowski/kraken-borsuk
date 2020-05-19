@@ -238,4 +238,16 @@ export const BorsukTabsStyle = css`
         padding-right: 5px;
     }
 
+    .subTitleTab {
+        font-size: 12px;
+        font-style: italic;
+        margin: 0;
+        padding-top: 4px;
+        color: #5ae6d8;
+    }
+
+    paper-tab[selected] .subTitleTab {
+        color: var(--ing-indigo-color);
+    }
+
 `;
