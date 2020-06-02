@@ -19,6 +19,8 @@ import '@polymer/paper-checkbox/paper-checkbox';
 import './packages/borsuk-button.js';
 import '@polymer/iron-collapse/iron-collapse';
 
+import './collections/borsuk-events-modal.js';
+
 import { filterConfirmAction, filterSelectResultAction } from '../properties/actions.js';
 
 import { borsukDoubleChevronUp, borsukDoubleChevronDown } from '../icons/icons.js';
@@ -79,6 +81,7 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
                             label="Event" 
                             id="filterEvent"
                             class="br-input inputFormSize90"
+                            @focus="${this.chooseEventFromDict}"
                             value=""
                             char-counter
                             maxlength=50
@@ -136,6 +139,11 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
                 </div>
             </filter-collapse>
 
+            <borsuk-events-modal
+                id="eventModal"
+                @evConfirmEventChosen=${this.confirmModal}>
+            </borsuk-events-modal>
+
             ${this.resultsTemplate}
 
         `;
@@ -186,6 +194,10 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
     constructor() {
         super();
         this.searchResults = [];
+    }
+
+    chooseEventFromDict() {
+        this.shadowRoot.getElementById("eventModal").openModal();
     }
 
     filterConfirm(event) {

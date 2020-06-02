@@ -1,0 +1,35 @@
+{
+    "cesubofferSlots": [
+        {
+            "tabPageId": "1845",
+            "tabSlotId": "S02",
+            "subofferName": "suboferta batchBMawaria...",
+            "versionName": "wersja_191007_JR",
+            "pushAndSms": "bothChannels",
+            "statusPub": 2
+        },{
+            "tabPageId": "5002",
+            "tabSlotId": "S01",
+            "subofferName": "suboferta_likwidacja...",
+            "groupId": "123",
+            "categoryId": "2",
+            "eventId": "666",
+            "statusPub": 4
+        },{
+            "tabPageId": "-1",
+            "tabSlotId": "S02",
+            "subofferName": "suboferta batchBMawaria...",
+            "versionName": "NOWA WERSJA",
+            "pushAndSms": "pushChannel",
+            "statusPub": 0
+        },{
+            "tabPageId": "-2",
+            "tabSlotId": "S01",
+            "subofferName": "NOWA SUBOFERTA",
+            "groupId": "",
+            "categoryId": "",
+            "eventId": "",
+            "statusPub": 0
+        }
+    ]
+}

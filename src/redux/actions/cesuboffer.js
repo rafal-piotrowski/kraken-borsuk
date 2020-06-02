@@ -9,9 +9,11 @@ import { LitElement, html, css } from 'lit-element';
 
 export const UPDATE_PAGE = 'UPDATE_PAGE';
 export const GET_CESUBOFFER_TABS = 'GET_CESUBOFFER_TABS';
+export const GET_CESUBOFFER_SLOTS = 'GET_CESUBOFFER_SLOTS';
 export const GET_SIDEBAR_TYPES = 'GET_SIDEBAR_TYPES';
 export const GET_SIDEBAR_NAMES = 'GET_SIDEBAR_NAMES';
 export const GET_SEARCH_RESULTS = 'GET_SEARCH_RESULTS';
+export const CHANGE_FORM_VALUE = 'CHANGE_FORM_VALUE';
 
 export const navigate = (path, search) => (dispatch) => {
   // Extract the page name from path.
@@ -35,11 +37,13 @@ const loadPage = (page, slot) => (dispatch) => {
       break;
     case 'S01':
       import('../../components/borsuk-suboffer-form.js').then((module) => {
+        import('../../components/collections/borsuk-suboffer-input-form.js');
         // console.log('loading ... '+slot+' - '+page);
     });
       break;
     case 'S02':
       import('../../components/borsuk-version-form.js').then((module) => {
+        import('../../components/collections/borsuk-version-input-form.js');
         // console.log('loading ... '+slot+' - '+page);
     });
       break;
@@ -72,6 +76,18 @@ export const getCesubofferTabs = (cesubofferTabs) => (dispatch) => {
   dispatch({
     type: GET_CESUBOFFER_TABS,
     cesubtabs
+  });
+};
+
+export const getCesubofferSlots = (cesubofferSlots) => (dispatch) => {
+  const cesubslots = cesubofferSlots.reduce((obj, option) => {
+    obj[option.tabPageId] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_CESUBOFFER_SLOTS,
+    cesubslots
   });
 };
 
@@ -109,4 +125,13 @@ export const getSearchResults = (results) => (dispatch) => {
     type: GET_SEARCH_RESULTS,
     searchresults
   });
+};
+
+export const changeFormValue = (tabPageId, sParam, nValue) => {
+  return {
+    type: CHANGE_FORM_VALUE,
+    tabPageId,
+    sParam,
+    nValue
+  };
 };

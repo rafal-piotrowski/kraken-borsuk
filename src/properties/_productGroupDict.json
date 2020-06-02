@@ -1,0 +1,13 @@
+{
+    "productGroupDict": [
+        {
+            "groupId": "123",
+            "groupName": "OTH",
+            "index": 0
+        },{
+            "groupId": "412",
+            "groupName": "brak",
+            "index": 1
+        }
+    ]
+}

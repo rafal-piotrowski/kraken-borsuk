@@ -1,0 +1,17 @@
+{
+    "categoryDict": [
+        {
+            "categoryId": "1",
+            "categoryName": "Informacyjne",
+            "index": 0
+        },{
+            "categoryId": "2",
+            "categoryName": "Operacyjne",
+            "index": 1
+        },{
+            "categoryId": "3",
+            "categoryName": "Marketingowe",
+            "index": 2
+        }
+    ]
+}

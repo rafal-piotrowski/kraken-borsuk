@@ -31,6 +31,16 @@ export const headRwdAlert = ' Drogi użytkowniku';
 export const footRwdAlert = 'Przejdź do strony głównej lub zgłoś problem do administratora sytemu';
 export const titleRwdAlert = 'Na chwilę obecną nie możemy obsłużyć tej rozdzielczości ekranu';
 
+// Labelki na formularzasz edycyjnych
+export const subofferNameLabel = 'Nazwa suboferty';
+export const versionName = 'Nazwa wersji';
+export const pushAndSmsPrompt = 'Gdy zdefiniowano PUSH i SMS:';
+export const bothChannelsLabel = 'wyślij obydwoma kanałami';
+export const preferPushLabel = 'preferuj PUSH';
+export const subofferCategoryLabel = 'Kategoria';
+export const subofferProductGroupLabel = 'Grupa produktowa';
+export const subofferEventLabel = 'Event';
+
 titles.set('menuNavbarTitle', menuNavbarTitle);
 titles.set('cesubofferNavbarTitle', cesubofferNavbarTitle);
 titles.set('ckeyLabel', ckeyLabel);
@@ -49,3 +59,11 @@ titles.set('emptyPassword', emptyPassword);
 titles.set('headRwdAlert', headRwdAlert);
 titles.set('footRwdAlert', footRwdAlert);
 titles.set('titleRwdAlert', titleRwdAlert);
+titles.set('subofferNameLabel', subofferNameLabel);
+titles.set('versionName', versionName);
+titles.set('pushAndSmsPrompt', pushAndSmsPrompt);
+titles.set('bothChannelsLabel', bothChannelsLabel);
+titles.set('preferPushLabel', preferPushLabel);
+titles.set('subofferCategoryLabel', subofferCategoryLabel);
+titles.set('subofferProductGroupLabel', subofferProductGroupLabel);
+titles.set('subofferEventLabel', subofferEventLabel);

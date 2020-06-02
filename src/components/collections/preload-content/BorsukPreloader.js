@@ -6,6 +6,7 @@
 
 import { LitElement, html, css } from 'lit-element';
 import { BorsukPreloaderStyle } from './BorsukPreloaderStyle.js';
+import '@polymer/paper-spinner/paper-spinner';
 
 export class BorsukPreloader extends LitElement {
     static get styles() {
@@ -19,7 +20,14 @@ export class BorsukPreloader extends LitElement {
 
     render() {
         return html`
-            <h4>Loading page ...</h4>
+            <div class="loadingList">
+                <div class="listCircle">
+                    <paper-spinner active></paper-spinner>
+                </div>
+                <div class="listText">
+                    <h4>Proszę czekać ...</h4>
+                </div>
+            </div>
         `;
     }
 

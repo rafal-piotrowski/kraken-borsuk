@@ -8,6 +8,8 @@ export { default as borsukEditVersion } from './borsuk-edit-version/borsuk-edit-
 export { default as borsukHome } from './borsuk-home/borsuk-home.js';
 export { default as borsukInfo } from './borsuk-info/borsuk-info.js';
 export { default as borsukLogout } from './borsuk-logout/borsuk-logout.js';
+export { default as borsukPublishProd } from './borsuk-publish-prod/borsuk-publish-prod.js';
+export { default as borsukPublishTest } from './borsuk-publish-test/borsuk-publish-test.js';
 export { default as borsukPublic } from './borsuk-public/borsuk-public.js';
 export { default as borsukRemoveSuboffer } from './borsuk-remove-suboffer/borsuk-remove-suboffer.js';
 export { default as borsukRemoveVersion } from './borsuk-remove-version/borsuk-remove-version.js';

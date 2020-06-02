@@ -13,6 +13,10 @@ export const BorsukIconStyle = css`
         fill: #ff6200;
     }
 
+    :host([leaf]) {
+        fill: #349651;
+    }
+
     :host:first-child {
         margin-left: 0;
     }

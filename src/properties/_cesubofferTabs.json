@@ -13,7 +13,7 @@
             "tabSlotId": "S99",
             "tabTitle": "Szukanie",
             "tabSubtitle": "zaawansowane",
-            "tabPageType": "A",
+            "tabPageType": "F",
             "tabIndex": 1,
             "tabClose": true
         },{
@@ -31,6 +31,22 @@
             "tabSubtitle": "",
             "tabPageType": "E",
             "tabIndex": 3,
+            "tabClose": true
+        },{
+            "tabPageId": "-1",
+            "tabSlotId": "S02",
+            "tabTitle": "suboferta batchBMawaria...",
+            "tabSubtitle": "NOWA WERSJA",
+            "tabPageType": "A",
+            "tabIndex": 4,
+            "tabClose": true
+        },{
+            "tabPageId": "-2",
+            "tabSlotId": "S01",
+            "tabTitle": "NOWA SUBOFERTA",
+            "tabSubtitle": "",
+            "tabPageType": "A",
+            "tabIndex": 5,
             "tabClose": true
         }
     ]
