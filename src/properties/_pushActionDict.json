@@ -1,0 +1,21 @@
+{
+    "pushActionDict": [
+        {
+            "id": "12",
+            "name": "GO-TO-PRELOAN",
+            "index": 0
+        },{
+            "id": "4",
+            "name": "GO-TO-MAINPAGE",
+            "index": 1
+        },{
+            "id": "24",
+            "name": "GO-TO-OKO",
+            "index": 2
+        },{
+            "id": "42",
+            "name": "GO-TO-PRECARD",
+            "index": 3
+        }
+    ]
+}

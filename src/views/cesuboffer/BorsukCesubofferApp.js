@@ -45,8 +45,8 @@ import { store } from '../../redux/store.js';
 // załadowanie kreatorów akcji.
 // getUserInfo do wywalenia po wrzuceniu do projektu.
 import { getUserInfo } from '../../redux/actions/menu.js';
-import { getCesubofferTabs, getCesubofferSlots, getSidebarTypes, getSidebarNames, getSearchResults } from '../../redux/actions/cesuboffer.js';
-import { getProductGroupDict, getCategoryDict, getEventsDict } from '../../redux/actions/dictionaries.js';
+import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSlots, getSidebarTypes, getSidebarNames, getSearchResults, navigate } from '../../redux/actions/cesuboffer.js';
+import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict } from '../../redux/actions/dictionaries.js';
 import { setClickAction } from '../../redux/actions/customevents.js';
 
 // podłączenie reducer-a.
@@ -132,8 +132,10 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
 
         // poniższe do wycięcia po wdrożeniu do projektu
         this._setUserInfo();
-        this._setCesubofferTabs();
-        this._setCesubofferSlots();
+        this._setCeTabs();
+        this._setCeSlots();
+        this._setCeChannelTabs();
+        this._setCeChannelSlots();
         this._setSidebarSubtypes();
         this._setSidebarSubnames();
 
@@ -141,6 +143,15 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         this._setProductGroupDict();
         this._setCategoryDict();
         this._setEventsDict();
+        this._setPushActionDict();
+        this._setPeriodsDict();
+        this._setPhoneTypeDict();
+        this._setMessageGroupDict();
+
+        // to tylko test wymuszenia aktywności taba
+        // setTimeout(() => {
+        //     this._forceActivePage('1845', 'S02');
+        //   }, 7000);
     }
 
     // setUserInfo do wycięcia po wdrożeniu do projektu
@@ -149,16 +160,28 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         else { loadJSON('/src/properties/_userInfo.json').then(data => { store.dispatch(getUserInfo(data.userInfo)); }) }
     }
 
-    _setCesubofferTabs(jsonData) {
-        if (jsonData) { store.dispatch(getCesubofferTabs(jsonData.cesubofferTabs)); } 
-        else { loadJSON('/src/properties/_cesubofferTabs.json').then(data => { store.dispatch(getCesubofferTabs(data.cesubofferTabs)); }) }
+    // metody do zasilenia tabów
+    _setCeTabs(jsonData) {
+        if (jsonData) { store.dispatch(getCesubofferTabs(jsonData.ceTabs)); } 
+        else { loadJSON('/src/properties/_cesubofferTabs.json').then(data => { store.dispatch(getCesubofferTabs(data.ceTabs)); }) }
     }
 
-    _setCesubofferSlots(jsonData) {
-        if (jsonData) { store.dispatch(getCesubofferSlots(jsonData.cesubofferSlots)); } 
-        else { loadJSON('/src/properties/_cesubofferSlots.json').then(data => { store.dispatch(getCesubofferSlots(data.cesubofferSlots)); }) }
+    _setCeSlots(jsonData) {
+        if (jsonData) { store.dispatch(getCesubofferSlots(jsonData.ceSlots)); } 
+        else { loadJSON('/src/properties/_cesubofferSlots.json').then(data => { store.dispatch(getCesubofferSlots(data.ceSlots)); }) }
     }
 
+    _setCeChannelTabs(jsonData) {
+        if (jsonData) { store.dispatch(getCeChannelTabs(jsonData.ceChannelTabs)); } 
+        else { loadJSON('/src/properties/_ceChannelTabs.json').then(data => { store.dispatch(getCeChannelTabs(data.ceChannelTabs)); }) }
+    }
+
+    _setCeChannelSlots(jsonData) {
+        if (jsonData) { store.dispatch(getCeChannelSlots(jsonData.ceChannelSlots)); } 
+        else { loadJSON('/src/properties/_ceChannelSlots.json').then(data => { store.dispatch(getCeChannelSlots(data.ceChannelSlots)); }) }
+    }
+
+    // metody do zasilenia drzewa subofert
     _setSidebarSubtypes(jsonData) {
         if (jsonData) { store.dispatch(getSidebarTypes(jsonData.sidebarSubtypes)); } 
         else { loadJSON('/src/properties/_sidebarSubtypes.json').then(data => { store.dispatch(getSidebarTypes(data.sidebarSubtypes)); }) }
@@ -169,6 +192,7 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         else { loadJSON('/src/properties/_sidebarSubnames.json').then(data => { store.dispatch(getSidebarNames(data.sidebarSubnames)); }) }
     }
 
+    // metoda do zasilenia filtra
     _setFilterContent(jsonData) {
         if (jsonData) { store.dispatch(getSearchResults(jsonData.searchResults)); } 
         else { loadJSON('/src/properties/_searchResults.json').then(data => { store.dispatch(getSearchResults(data.searchResults)); }) }
@@ -188,6 +212,31 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
     _setEventsDict(jsonData) {
         if (jsonData) { store.dispatch(getEventsDict(jsonData.eventsDict)); } 
         else { loadJSON('/src/properties/_eventsDict.json').then(data => { store.dispatch(getEventsDict(data.eventsDict)); }) }
+    }
+
+    _setPushActionDict(jsonData) {
+        if (jsonData) { store.dispatch(getPushActionDict(jsonData.pushActionDict)); } 
+        else { loadJSON('/src/properties/_pushActionDict.json').then(data => { store.dispatch(getPushActionDict(data.pushActionDict)); }) }
+    }
+
+    _setPeriodsDict(jsonData) {
+        if (jsonData) { store.dispatch(getPeriodsDict(jsonData.periodsDict)); } 
+        else { loadJSON('/src/properties/_periodsDict.json').then(data => { store.dispatch(getPeriodsDict(data.periodsDict)); }) }
+    }
+
+    _setPhoneTypeDict(jsonData) {
+        if (jsonData) { store.dispatch(getPhoneTypeDict(jsonData.phoneTypeDict)); } 
+        else { loadJSON('/src/properties/_phoneTypeDict.json').then(data => { store.dispatch(getPhoneTypeDict(data.phoneTypeDict)); }) }
+    }
+
+    _setMessageGroupDict(jsonData) {
+        if (jsonData) { store.dispatch(getMessageGroupDict(jsonData.messageGroupDict)); } 
+        else { loadJSON('/src/properties/_messageGroupDict.json').then(data => { store.dispatch(getMessageGroupDict(data.messageGroupDict)); }) }
+    }
+
+    // metoda wymuszająca aktywność taba
+    _forceActivePage(page, slot) {
+        store.dispatch(navigate(page, slot));
     }
 
     stateChanged(state) {

@@ -77,7 +77,7 @@ export class BorsukEventsModal extends connect(store)(LitElement) {
                                     .selectedItems=${this.selectedItem}
                                     @active-item-changed="${this.activeItemChanged}">
                         
-                        <vaadin-grid-filter-column width="40%" path="eventName" header="Nazwa"></vaadin-grid-filter-column>
+                        <vaadin-grid-filter-column width="40%" path="name" header="Nazwa"></vaadin-grid-filter-column>
                         <vaadin-grid-filter-column width="20%" path="sourceGroup" header="sourceGroup"></vaadin-grid-filter-column>
                         <vaadin-grid-filter-column width="40%" path="sourceSap" header="sourceSap"></vaadin-grid-filter-column>
 

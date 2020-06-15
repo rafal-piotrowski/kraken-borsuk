@@ -1,5 +1,5 @@
 {
-    "cesubofferTabs": [
+    "ceTabs": [
         {
             "tabPageId": "1",
             "tabSlotId": "S00",
@@ -7,7 +7,8 @@
             "tabSubtitle": "",
             "tabPageType": "I",
             "tabIndex": 0,
-            "tabClose": false
+            "tabClose": false,
+            "tabActive": true
         },{
             "tabPageId": "4512",
             "tabSlotId": "S99",
@@ -15,7 +16,8 @@
             "tabSubtitle": "zaawansowane",
             "tabPageType": "F",
             "tabIndex": 1,
-            "tabClose": true
+            "tabClose": true,
+            "tabActive": false
         },{
             "tabPageId": "1845",
             "tabSlotId": "S02",
@@ -23,7 +25,8 @@
             "tabSubtitle": "wersja_191007_JR",
             "tabPageType": "E",
             "tabIndex": 2,
-            "tabClose": true
+            "tabClose": true,
+            "tabActive": false
         },{
             "tabPageId": "5002",
             "tabSlotId": "S01",
@@ -31,7 +34,8 @@
             "tabSubtitle": "",
             "tabPageType": "E",
             "tabIndex": 3,
-            "tabClose": true
+            "tabClose": true,
+            "tabActive": false
         },{
             "tabPageId": "-1",
             "tabSlotId": "S02",
@@ -39,7 +43,8 @@
             "tabSubtitle": "NOWA WERSJA",
             "tabPageType": "A",
             "tabIndex": 4,
-            "tabClose": true
+            "tabClose": true,
+            "tabActive": false
         },{
             "tabPageId": "-2",
             "tabSlotId": "S01",
@@ -47,7 +52,8 @@
             "tabSubtitle": "",
             "tabPageType": "A",
             "tabIndex": 5,
-            "tabClose": true
+            "tabClose": true,
+            "tabActive": false
         }
     ]
 }

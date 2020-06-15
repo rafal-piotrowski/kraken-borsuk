@@ -1,16 +1,16 @@
 {
     "categoryDict": [
         {
-            "categoryId": "1",
-            "categoryName": "Informacyjne",
+            "id": "1",
+            "name": "Informacyjne",
             "index": 0
         },{
-            "categoryId": "2",
-            "categoryName": "Operacyjne",
+            "id": "2",
+            "name": "Operacyjne",
             "index": 1
         },{
-            "categoryId": "3",
-            "categoryName": "Marketingowe",
+            "id": "3",
+            "name": "Marketingowe",
             "index": 2
         }
     ]

@@ -1,3 +1,4 @@
+/* eslint-disable no-unneeded-ternary */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable prefer-template */
 /* eslint-disable no-param-reassign */
@@ -8,17 +9,25 @@
 import { LitElement, html, css } from 'lit-element';
 
 export const UPDATE_PAGE = 'UPDATE_PAGE';
+export const ACTIVATE_CHANNEL_TAB = 'ACTIVATE_CHANNEL_TAB';
+export const DISACTIVATE_CHANNEL_TAB = 'DISACTIVATE_CHANNEL_TAB';
 export const GET_CESUBOFFER_TABS = 'GET_CESUBOFFER_TABS';
 export const GET_CESUBOFFER_SLOTS = 'GET_CESUBOFFER_SLOTS';
+export const GET_CE_CHANNEL_TABS = 'GET_CE_CHANNEL_TABS';
+export const GET_CE_CHANNEL_SLOTS = 'GET_CE_CHANNEL_SLOTS';
 export const GET_SIDEBAR_TYPES = 'GET_SIDEBAR_TYPES';
 export const GET_SIDEBAR_NAMES = 'GET_SIDEBAR_NAMES';
 export const GET_SEARCH_RESULTS = 'GET_SEARCH_RESULTS';
 export const CHANGE_FORM_VALUE = 'CHANGE_FORM_VALUE';
+export const CHANGE_CHANNEL_ACTIVE_FLG = 'CHANGE_CHANNEL_ACTIVE_FLG';
 
 export const navigate = (path, search) => (dispatch) => {
-  // Extract the page name from path.
-  const page = path === '/' ? '1' : path.slice(1);
-  const slot = !search ? (page === '1' ? 'S00' : 'S404') : search.slice(1);
+
+  // console.log('_PATH is: ' + path);
+  // console.log('_SEARCH is: ' + search);
+
+  const page = (path) ? path : '1';
+  const slot = !search ? (page === '1' ? 'S00' : 'S404') : search;
 
   // Any other info you might want to extract from the path (like page type),
   // you can do here
@@ -39,16 +48,31 @@ const loadPage = (page, slot) => (dispatch) => {
       import('../../components/borsuk-suboffer-form.js').then((module) => {
         import('../../components/collections/borsuk-suboffer-input-form.js');
         // console.log('loading ... '+slot+' - '+page);
-    });
+      });
       break;
     case 'S02':
       import('../../components/borsuk-version-form.js').then((module) => {
         import('../../components/collections/borsuk-version-input-form.js');
         // console.log('loading ... '+slot+' - '+page);
-    });
+      });
       break;
+    case 'S11':
+      import('../../components/collections/borsuk-push-input-form.js').then((module) => {
+        // console.log('loading ... '+slot+' - '+page);
+      });
+      break;
+    case 'S12':
+      import('../../components/collections/borsuk-sms-input-form.js').then((module) => {
+        // console.log('loading ... '+slot+' - '+page);
+      });
+      break;
+    case 'S13':
+        import('../../components/collections/borsuk-message-input-form.js').then((module) => {
+          // console.log('loading ... '+slot+' - '+page);
+        });
+        break;
     case 'S99':
-        import('../../components/borsuk-filter-form.js').then((module) => {
+      import('../../components/borsuk-filter-form.js').then((module) => {
           // console.log('loading ... '+slot+' - '+page);
       });
         break;
@@ -65,6 +89,46 @@ const updatePage = (page, slot) => {
       type: UPDATE_PAGE,
       page, slot
     };
+};
+
+export const switchannel = (prev, page, slot) => (dispatch) => {
+  switch(slot) {
+    case 'S11':
+      import('../../components/collections/borsuk-push-input-form.js').then((module) => {
+        // console.log('loading ... '+slot+' - '+page);
+      });
+      break;
+    case 'S12':
+      import('../../components/collections/borsuk-sms-input-form.js').then((module) => {
+        // console.log('loading ... '+slot+' - '+page);
+      });
+      break;
+    case 'S13':
+        import('../../components/collections/borsuk-message-input-form.js').then((module) => {
+          // console.log('loading ... '+slot+' - '+page);
+        });
+        break;
+    default:
+      slot = 'S404';
+      import('../../components/borsuk-page404.js');
+  }
+ 
+  dispatch(activateChannelTab(page, slot));
+  dispatch(disactivateChannelTab(prev, slot));
+};
+
+const disactivateChannelTab = (prev, slot) => {
+  return {
+    type: DISACTIVATE_CHANNEL_TAB,
+    prev, slot
+  };
+};
+
+const activateChannelTab = (page, slot) => {
+  return {
+    type: ACTIVATE_CHANNEL_TAB,
+    page, slot
+  };
 };
 
 export const getCesubofferTabs = (cesubofferTabs) => (dispatch) => {
@@ -88,6 +152,30 @@ export const getCesubofferSlots = (cesubofferSlots) => (dispatch) => {
   dispatch({
     type: GET_CESUBOFFER_SLOTS,
     cesubslots
+  });
+};
+
+export const getCeChannelTabs = (ceChannelTabs) => (dispatch) => {
+  const cechnltabs = ceChannelTabs.reduce((obj, option) => {
+    obj[option.tabPageId + option.tabIndex] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_CE_CHANNEL_TABS,
+    cechnltabs
+  });
+};
+
+export const getCeChannelSlots = (ceChannelSlots) => (dispatch) => {
+  const cechnlslots = ceChannelSlots.reduce((obj, option) => {
+    obj[option.tabPageId] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_CE_CHANNEL_SLOTS,
+    cechnlslots
   });
 };
 
@@ -132,6 +220,14 @@ export const changeFormValue = (tabPageId, sParam, nValue) => {
     type: CHANGE_FORM_VALUE,
     tabPageId,
     sParam,
+    nValue
+  };
+};
+
+export const changeChannelActiveFlg = (tabPageId, nValue) => {
+  return {
+    type: CHANGE_CHANNEL_ACTIVE_FLG,
+    tabPageId,
     nValue
   };
 };

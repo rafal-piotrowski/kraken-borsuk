@@ -1,56 +1,56 @@
 {
     "eventsDict": [
         {
-            "eventId": "1",
-            "eventName": "SmartSaverRejectedTransfer_powiadomienie",
+            "id": "1",
+            "name": "SmartSaverRejectedTransfer_powiadomienie",
             "sourceGroup": "FLINK",
             "sourceSap": "SmartSaverRejectedTransfer_powiadomienie",
             "index": 0
         }, {
-            "eventId": "12",
-            "eventName": "transferToMobileRejectedByReceiver",
+            "id": "12",
+            "name": "transferToMobileRejectedByReceiver",
             "sourceGroup": "FLINK",
             "sourceSap": "transferToMobileRejectedByReceiver",
             "index": 1
         }, {
-            "eventId": "3",
-            "eventName": "transferToMobileUnrealized_powiadomienie",
+            "id": "3",
+            "name": "transferToMobileUnrealized_powiadomienie",
             "sourceGroup": "INB",
             "sourceSap": "transferToMobileUnrealizedPowiadom",
             "index": 2
         }, {
-            "eventId": "45",
-            "eventName": "REL_powerOfAttorneyRevoked_REL",
+            "id": "45",
+            "name": "REL_powerOfAttorneyRevoked_REL",
             "sourceGroup": "INB",
             "sourceSap": "powerOfAttorneyRevokedREL",
             "index": 3
         }, {
-            "eventId": "15",
-            "eventName": "ComplaintAcceptedATM",
+            "id": "15",
+            "name": "ComplaintAcceptedATM",
             "sourceGroup": "Echo",
             "sourceSap": "ComplaintAcceptedATM",
             "index": 4
         }, {
-            "eventId": "666",
-            "eventName": "personalizedCardImageAcceptedVortal",
+            "id": "666",
+            "name": "personalizedCardImageAcceptedVortal",
             "sourceGroup": "CARDPAINTING",
             "sourceSap": "personalizedCardImageAcceptedVortal",
             "index": 5
         }, {
-            "eventId": "70",
-            "eventName": "Awaria_MING_Platnosci_Karty",
+            "id": "70",
+            "name": "Awaria_MING_Platnosci_Karty",
             "sourceGroup": "MDM",
             "sourceSap": "Awaria_MING_Platnosci_Karty",
             "index": 6
         }, {
-            "eventId": "18",
-            "eventName": "batchACA15dniBrakSrodkowPZSZCampaign",
+            "id": "18",
+            "name": "batchACA15dniBrakSrodkowPZSZCampaign",
             "sourceGroup": "MDM",
             "sourceSap": "batchACA15dniBrakSrodkowPZSZCampaign",
             "index": 7
         }, {
-            "eventId": "9",
-            "eventName": "batchAntychurnFollowUp1",
+            "id": "9",
+            "name": "batchAntychurnFollowUp1",
             "sourceGroup": "MDM",
             "sourceSap": "batchAntychurnFollowUp1",
             "index": 8

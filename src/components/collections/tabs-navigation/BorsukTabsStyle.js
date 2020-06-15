@@ -58,6 +58,10 @@ export const BorsukTabsStyle = css`
         --borsuk-navbar-padding-top: 10px;
     }
 
+    :host([equaltabs]) paper-tab {
+        width: 50%;
+    }
+
 /* do wyrypania */
     .toolbar-list {
         display: block;

@@ -30,7 +30,7 @@ import { installRouter } from 'pwa-helpers/router.js';
 import { store } from '../../../redux/store.js';
 
 // załadowanie kreatorów akcji.
-import { navigate } from '../../../redux/actions/cesuboffer.js';
+// import { navigate } from '../../../redux/actions/cesuboffer.js';
 import { setClickAction } from '../../../redux/actions/customevents.js';
 
 export class BorsukTabs extends connect(store)(LitElement) {
@@ -58,6 +58,8 @@ export class BorsukTabs extends connect(store)(LitElement) {
      `;
   }
 
+/* <a href="/${i.tabPageId}?${i.tabSlotId}"></a> */
+
   get tabsHeaderTemplate() {
     return html`
       <paper-tabs id="contentTabs" selected="${this.selected}" attr-for-selected="page" scrollable="" no-bar="">
@@ -65,8 +67,7 @@ export class BorsukTabs extends connect(store)(LitElement) {
         ${Object.keys(this.tabsList).map((key) => {
             const i = this.tabsList[key];
             return html`
-              <a href="/${i.tabPageId}?${i.tabSlotId}">
-                <paper-tab page="${i.tabPageId}" ?selected="${this._page === i.tabPageId}" @tap="${(event) => { this.changeTabClick(event, i.tabPageId) } }">
+                <paper-tab page="${i.tabPageId}" ?selected="${this.activePage === i.tabPageId}" @tap="${(event) => { this.changeTabClick(event, i.tabPageId, i.tabSlotId) } }">
                   <div class="tabsWrapper">
                     <div id="tabNav" class="tabsNav">
                       <!-- <div><iron-icon icon="info"></iron-icon></div> -->
@@ -85,7 +86,6 @@ export class BorsukTabs extends connect(store)(LitElement) {
                     </div>
                   </div>
                 </paper-tab>
-              </a>                            
             `;
         })}
 
@@ -94,12 +94,17 @@ export class BorsukTabs extends connect(store)(LitElement) {
   }
 
   firstUpdated() {
-    installRouter((location) => store.dispatch(navigate(location.pathname, location.search)));
+    // installRouter((location) => store.dispatch(navigate(location.pathname, location.search)));
   }
 
   updated(changedProperties) {
+    // console.log('##################### BorsukTabs (updated) - activePage is:');
+    // console.log(this.activePage);
+
     changedProperties.forEach((oldValue, propName) => {
-      // console.log(`${propName} changed. oldValue: ${oldValue}`);
+      // console.log('------------- TABS changed params -----------------');
+      // console.log(`${propName} changed. oldValue: `);
+      // console.log(oldValue);
       if (propName == 'tabsList') {
         // console.log(this.tabsList);
         // console.log('slot is: '+this._slot);
@@ -117,12 +122,14 @@ export class BorsukTabs extends connect(store)(LitElement) {
     }
   }
 
-  changeTabClick(event, page) {
+  changeTabClick(event, page, slot) {
     if ((event.target.getAttribute('data-action') != 'closing') && (page != this._page)) {
       let eventParams = Object.assign({pageId: page});
       setTimeout(() => {
         store.dispatch(setClickAction(changeTabAction, eventParams));
       }, 200);
+
+      this.dispatchEvent(new CustomEvent('change-tab', {detail: {pageId: page, slotId: slot}}));
     }
   }
 
@@ -135,8 +142,6 @@ export class BorsukTabs extends connect(store)(LitElement) {
   }
 
   stateChanged(state) {
-    this._page = state.cesuboffer.page;
-    this._slot = state.cesuboffer.slot;
   }
 
 }

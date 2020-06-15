@@ -32,7 +32,7 @@ import { store } from '../redux/store.js';
 import { navigate } from '../redux/actions/cesuboffer.js';
 
 // podłączenie reducer-a.
-import cesuboffer, { cesubofferTabsSelector } from '../redux/reducers/cesuboffer.js';
+import cesuboffer, { cesubofferTabsSelector, getActivePage, getActiveSlot } from '../redux/reducers/cesuboffer.js';
 // store.addReducers({
 //     cesuboffer
 // });
@@ -57,7 +57,7 @@ export class BorsukContent extends connect(store)(LitElement) {
 
     get tabsContent() {
         return html`
-            <borsuk-tabs .tabsList="${this.cesubofferTabsList}">
+            <borsuk-tabs .tabsList="${this.cesubofferTabsList}" .activePage="${this._page}" @change-tab=${this.changeTab}>
                 <borsuk-welcome class="page" ?active="${this._slot === 'S00'}" .page=${this._page}></borsuk-welcome>
                 <borsuk-suboffer-form class="page" ?active="${this._slot === 'S01'}" .page=${this._page}></borsuk-suboffer-form>
                 <borsuk-version-form class="page" ?active="${this._slot === 'S02'}" .page=${this._page}></borsuk-version-form>
@@ -83,6 +83,9 @@ export class BorsukContent extends connect(store)(LitElement) {
     }
 
     firstUpdated() {
+        setTimeout(() => {
+            store.dispatch(navigate(this._page, this._slot));
+          }, 1000);
     }
 
     updated(changedProps) {
@@ -96,10 +99,17 @@ export class BorsukContent extends connect(store)(LitElement) {
         }
     }
 
+    changeTab(event) {
+        // console.log(event.detail);
+        store.dispatch(navigate(event.detail.pageId, event.detail.slotId));
+    }
+
     stateChanged(state) {
         if (this.cesubofferTabsList !== cesubofferTabsSelector(state)) { this.cesubofferTabsList = cesubofferTabsSelector(state); }
-        this._page = state.cesuboffer.page;
-        this._slot = state.cesuboffer.slot;
+        // if (this._page !== getActivePageFromFlag(state)) { this._page = getActivePageFromFlag(state); }
+        // if (this._slot !== getActiveSlotFromFlag(state)) { this._slot = getActiveSlotFromFlag(state); }
+        this._page = getActivePage(state);
+        this._slot = getActiveSlot(state)
     }
 
 }

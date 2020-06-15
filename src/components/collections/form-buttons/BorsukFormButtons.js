@@ -32,6 +32,9 @@ import { store } from '../../../redux/store.js';
 // załadowanie kreatorów akcji.
 import { setClickAction } from '../../../redux/actions/customevents.js';
 
+// podłączenie reducer-a.
+import cesuboffer, { getActivePage } from '../../../redux/reducers/cesuboffer.js';
+
 export class BorsukFormButtons extends connect(store)(LitElement) {
     static get styles() {
         return [BorsukFormButtonsStyle];
@@ -88,7 +91,7 @@ export class BorsukFormButtons extends connect(store)(LitElement) {
     }
 
     stateChanged(state) {
-        this._page = state.cesuboffer.page;
+        this._page = getActivePage(state);
     }
 
 }

@@ -39,7 +39,7 @@ import { store } from '../redux/store.js';
 import { setClickAction } from '../redux/actions/customevents.js';
 
 import customevents, { actionClickSelector, actionParamSelector } from '../redux/reducers/customevents.js';
-import { cesubofferPageReselector } from '../redux/reducers/cesuboffer.js';
+import { cesubofferPageReselector, getActivePage, getActiveSlot } from '../redux/reducers/cesuboffer.js';
 
 export class BorsukSubofferForm extends connect(store)(LitElement) {
     static get styles() {
@@ -68,17 +68,12 @@ export class BorsukSubofferForm extends connect(store)(LitElement) {
                     <!-- {{sdetail.sdStatusId}} -->
                 </div>
             </div>
-            <borsuk-suboffer-input-form id="subofferInputForm"
-                                        .icategoryDict="${JSON.stringify(this.categoryDict)}"
-                                        .iproductGroupDict="${this.productGroupDict}"
-                                        .ieventsDict="${JSON.stringify(this.eventsDict)}"
-                                        .isubOfferDetails="${JSON.stringify(this.subOfferDetails)}">
-            </borsuk-suboffer-input-form>
+            <borsuk-suboffer-input-form id="subofferInputForm"></borsuk-suboffer-input-form>
         `;
     }
 
     get navigationTamplete() {
-        return html`${this.formButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}" .subofferId="${this._page}"></borsuk-form-buttons>`)}`;
+        return html`${this.formButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
     }
 
     static get properties() {
@@ -152,12 +147,15 @@ export class BorsukSubofferForm extends connect(store)(LitElement) {
 
     stateChanged(state) {
         if (actionClickSelector(state) === validateSubofferAction) { this.validateSuboffer(state, this._page); }
-        this._page = state.cesuboffer.page;
-        this._slot = state.cesuboffer.slot;
+        this._page = getActivePage(state);
+        this._slot = getActiveSlot(state);
     }
 
     validateSuboffer(state, param) {
         // IF validation OK
+
+        console.log('******************* walidacje ***************');
+        console.log(cesubofferPageReselector(state));
         let formInfo = [];
         for(let i = 0; i < Object.keys(cesubofferPageReselector(state)).length; i++){
             formInfo.push({ subofferName: cesubofferPageReselector(state)[i].subofferName, 

@@ -2,7 +2,7 @@
 
 import { LitElement, html, css } from 'lit-element';
 
-export const BorsukVersionFormStyle = css`
+export const BorsukChannelsSectionStyle = css`
     .inputFrame {
         padding: 20px 5px;
     }
@@ -37,4 +37,11 @@ export const BorsukVersionFormStyle = css`
         grid-column: span 1 / auto;
     }
 
+    .subpage {
+          display: none;
+        }
+
+    .subpage[active] {
+        display: block;
+    }
 `;

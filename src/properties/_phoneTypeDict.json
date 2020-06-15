@@ -1,0 +1,13 @@
+{
+    "phoneTypeDict": [
+        {
+            "id": "1",
+            "name": "Autoryzacyjny",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "Z kartoteki",
+            "index": 1
+        }
+    ]
+}

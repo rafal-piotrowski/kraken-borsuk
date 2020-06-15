@@ -1,0 +1,65 @@
+{
+    "ceChannelTabs": [
+        {
+            "tabPageId": "18451",
+            "parentPageId": "1845",
+            "tabSlotId": "S11",
+            "tabTitle": "PUSH",
+            "tabSubtitle": "",
+            "channelActive": true,
+            "tabIndex": 1,
+            "tabClose": false,
+            "tabActive": true
+        },{
+            "tabPageId": "18452",
+            "parentPageId": "1845",
+            "tabSlotId": "S12",
+            "tabTitle": "SMS",
+            "tabSubtitle": "",
+            "channelActive": true,
+            "tabIndex": 2,
+            "tabClose": false,
+            "tabActive": false
+        },{
+            "tabPageId": "18453",
+            "parentPageId": "1845",
+            "tabSlotId": "S13",
+            "tabTitle": "Wiadomość",
+            "tabSubtitle": "",
+            "channelActive": false,
+            "tabIndex": 3,
+            "tabClose": false,
+            "tabActive": false
+        },{
+            "tabPageId": "-11",
+            "parentPageId": "-1",
+            "tabSlotId": "S11",
+            "tabTitle": "PUSH",
+            "tabSubtitle": "",
+            "channelActive": false,
+            "tabIndex": 1,
+            "tabClose": false,
+            "tabActive": false
+        },{
+            "tabPageId": "-12",
+            "parentPageId": "-1",
+            "tabSlotId": "S12",
+            "tabTitle": "SMS",
+            "tabSubtitle": "",
+            "channelActive": false,
+            "tabIndex": 2,
+            "tabClose": false,
+            "tabActive": true
+        },{
+            "tabPageId": "-13",
+            "parentPageId": "-1",
+            "tabSlotId": "S13",
+            "tabTitle": "Wiadomość",
+            "tabSubtitle": "",
+            "channelActive": true,
+            "tabIndex": 3,
+            "tabClose": false,
+            "tabActive": false
+        }
+    ]
+}

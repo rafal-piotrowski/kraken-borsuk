@@ -1,0 +1,29 @@
+{
+    "messageGroupDict": [
+        {
+            "id": "1",
+            "name": "Nie grupować wiadomości",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "Komunikaty monity",
+            "index": 1
+        },{
+            "id": "3",
+            "name": "Monitoring",
+            "index": 2
+        },{
+            "id": "4",
+            "name": "Obejście",
+            "index": 3
+        },{
+            "id": "5",
+            "name": "P2P przelew na telefon",
+            "index": 4
+        },{
+            "id": "6",
+            "name": "Test grupowanie",
+            "index": 5
+        }
+    ]
+}

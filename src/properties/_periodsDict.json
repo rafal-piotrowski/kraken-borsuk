@@ -1,0 +1,13 @@
+{
+    "periodsDict": [
+        {
+            "id": "1",
+            "name": "cały tydzień",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "dni robocze",
+            "index": 1
+        }
+    ]
+}

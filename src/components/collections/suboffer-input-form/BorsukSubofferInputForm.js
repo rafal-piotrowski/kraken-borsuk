@@ -117,13 +117,13 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
                                     selected-item-label=${i.categoryId} required
                                     error-message=${titles.get('errorMessageRequiredField')}>
                         
-                                    <paper-listbox id="categoryId" slot="dropdown-content" selected="${Object.values(this.categoryDict).findIndex(p => p.categoryId === i.categoryId)}">
+                                    <paper-listbox id="categoryId" slot="dropdown-content" selected="${Object.values(this.categoryDict).findIndex(p => p.id === i.categoryId)}">
 
                                         ${this.categoryDict ? html`
                                             ${Object.keys(this.categoryDict).map((subkey) => {
                                                 const j = this.categoryDict[subkey];
                                                 return html`
-                                                    <paper-item>${j.categoryName}</paper-item>
+                                                    <paper-item>${j.name}</paper-item>
                                                 `})
                                         }` : html`` }
 
@@ -140,13 +140,13 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
                                     @iron-select=${() => this.productGroupChanged('groupId')}
                                     selected-item-label=${i.groupId}>
                                 
-                                    <paper-listbox id="groupId" slot="dropdown-content" selected="${Object.values(this.productGroupDict).findIndex(p => p.groupId === i.groupId)}">
+                                    <paper-listbox id="groupId" slot="dropdown-content" selected="${Object.values(this.productGroupDict).findIndex(p => p.id === i.groupId)}">
 
                                         ${this.productGroupDict ? html`
                                             ${Object.keys(this.productGroupDict).map((subkey) => {
                                                 const j = this.productGroupDict[subkey];
                                                 return html`
-                                                    <paper-item>${j.groupName}</paper-item>
+                                                    <paper-item>${j.name}</paper-item>
                                                 `})
                                         }` : html`` }
 
@@ -155,18 +155,17 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
                             </div>
 
                             <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
-                                    <paper-input
-                                        type="text"
-                                        label=${titles.get('subofferEventLabel')}
-                                        id="eventId"
-                                        class="br-input inputFormSize90"
-                                        allowed-pattern="[]"
-                                        @focus="${this.chooseEventFromDict}"
-                                        error-message=${titles.get('errorMessageRequiredField')}
-                                        value="${(i.eventId) ? this.eventsDict[Object.values(this.eventsDict).findIndex(p => p.eventId === i.eventId)].eventName : ''}"
-                                        required>
-                                    </paper-input>
-
+                                <paper-input
+                                    type="text"
+                                    label=${titles.get('subofferEventLabel')}
+                                    id="eventId"
+                                    class="br-input inputFormSize90"
+                                    allowed-pattern="[]"
+                                    @focus="${this.chooseEventFromDict}"
+                                    error-message=${titles.get('errorMessageRequiredField')}
+                                    value="${(i.eventId) ? this.eventsDict[Object.values(this.eventsDict).findIndex(p => p.id === i.eventId)].name : ''}"
+                                    required>
+                                </paper-input>
                             </div>
                     `})}
                 </div>
@@ -183,16 +182,16 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
     }
 
     productGroupChanged(param) {
-        store.dispatch(changeFormValue(this._page, param, this.productGroupDict[this.shadowRoot.getElementById(param).selected].groupId));
+        store.dispatch(changeFormValue(this._page, param, this.productGroupDict[this.shadowRoot.getElementById(param).selected].id));
     }
 
     categoryChanged(param) {
-        store.dispatch(changeFormValue(this._page, param, this.categoryDict[this.shadowRoot.getElementById(param).selected].categoryId));
+        store.dispatch(changeFormValue(this._page, param, this.categoryDict[this.shadowRoot.getElementById(param).selected].id));
     }
 
     confirmModal(event) {
         const chosenEvent = JSON.parse(event.detail.chosenEvent);
-        store.dispatch(changeFormValue(this._page, 'eventId', chosenEvent.event.eventId));
+        store.dispatch(changeFormValue(this._page, 'eventId', chosenEvent.event.id));
     }
 
     stateChanged(state) {

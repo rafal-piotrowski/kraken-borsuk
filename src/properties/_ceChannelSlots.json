@@ -1,0 +1,63 @@
+{
+    "ceChannelSlots": [
+        {
+            "tabPageId": "18451",
+            "parentPageId": "1845",
+            "tabSlotId": "S11",
+            "content": "treść wysyłanego pusha ...",
+            "actionId": "12",
+            "inLink": "link wewnętrzny",
+            "outLink": "link zewnętrzny",
+            "sendPeriodId": "1",
+            "sendFrom": "8",
+            "sendTo": "21"
+        },{
+            "tabPageId": "18452",
+            "parentPageId": "1845",
+            "tabSlotId": "S12",
+            "content": "treść wysyłanego smsa ...",
+            "phoneTypeId": "1",
+            "sendPeriodId": "2",
+            "sendFrom": "8",
+            "sendTo": "21"
+        },{
+            "tabPageId": "18453",
+            "parentPageId": "1845",
+            "tabSlotId": "S13",
+            "content": "treść wiadomości ...",
+            "title": "wiadomość testowa",
+            "groupId": "2",
+            "eventId": "70",
+            "expire": 1
+        },{
+            "tabPageId": "-11",
+            "parentPageId": "-1",
+            "tabSlotId": "S11",
+            "content": "treść wysyłanego pusha ...",
+            "actionId": "24",
+            "inLink": "link wewnętrzny",
+            "outLink": "link zewnętrzny",
+            "sendPeriodId": "1",
+            "sendFrom": "10",
+            "sendTo": "15"
+        },{
+            "tabPageId": "-12",
+            "parentPageId": "-1",
+            "tabSlotId": "S12",
+            "content": "treść wysyłanego smsa ...",
+            "phoneTypeId": "1",
+            "sendPeriodId": "2",
+            "sendFrom": "8",
+            "sendTo": "21"
+        },{
+            "tabPageId": "-13",
+            "parentPageId": "-1",
+            "tabSlotId": "S13",
+            "content": "treść wiadomości ...",
+            "title": "nowa wiadomość testowa",
+            "groupId": "1",
+            "eventId": "666",
+            "expire": 1
+        }
+    ]
+}
