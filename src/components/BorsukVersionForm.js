@@ -157,8 +157,6 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
     }
 
     validateVersion(state, param) {
-        console.log(cesubofferPageReselector(state));
-        console.log(ceChannelsSlotReselector(state));
         // IF validation OK
         let formInfo = [];
         let pushInfo = [];

@@ -36,6 +36,20 @@ export const removeVersionAction = 'removeVersion';
 export const copyVersionAction = 'copyVersion';
 export const approveVersionAction = 'approveVersion';
 
+// akcje rich text edytora
+export const textBoldAction = 'textBold';
+export const textItalicAction = 'textItalic';
+export const textUnderlineAction = 'textUnderline';
+export const textColorAction = 'textColor';
+export const textUndoAction = 'undoAction';
+export const textRedoAction = 'redoAction';
+export const textAlignLeftAction = 'alignLeftAction';
+export const textAlignRightAction = 'alignRightAction';
+export const textAlignCenterAction = 'alignCenterAction';
+export const textAlignJustifyAction = 'alignJustifyAction';
+export const textListOrderedAction = 'listOrderedAction';
+export const textListBulletAction = 'listBulletAction';
+
 actions.set('closeTabAction', closeTabAction);
 actions.set('changeTabAction', changeTabAction);
 actions.set('buttonClickAction', buttonClickAction);
@@ -60,3 +74,15 @@ actions.set('approveVersionAction', approveVersionAction);
 actions.set('filterOpenAction', filterOpenAction);
 actions.set('filterConfirmAction', filterConfirmAction);
 actions.set('filterSelectResultAction', filterSelectResultAction);
+actions.set('textBoldAction', textBoldAction);
+actions.set('textItalicAction', textItalicAction);
+actions.set('textUnderlineAction', textUnderlineAction);
+actions.set('textColorAction', textColorAction);
+actions.set('textUndoAction', textUndoAction);
+actions.set('textRedoAction', textRedoAction);
+actions.set('textAlignLeftAction', textAlignLeftAction);
+actions.set('textAlignRightAction', textAlignRightAction);
+actions.set('textAlignCenterAction', textAlignCenterAction);
+actions.set('textAlignJustifyAction', textAlignJustifyAction);
+actions.set('textListOrderedAction', textListOrderedAction);
+actions.set('textListBulletAction', textListBulletAction);

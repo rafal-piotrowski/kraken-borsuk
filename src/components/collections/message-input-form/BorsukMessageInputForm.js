@@ -20,6 +20,7 @@ import '@polymer/paper-item/paper-item';
 import '@polymer/paper-listbox/paper-listbox';
 import '../../packages/borsuk-button.js';
 import '../../collections/borsuk-events-modal.js';
+import '../../borsuk-editor.js';
 
 import { events } from '../../../properties/events.js';
 import { titles } from '../../../properties/titles.js';
@@ -134,19 +135,8 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
                                 <paper-tooltip  id="eventRemoveButton-tooltip" for="eventRemoveButton">${tooltips.get('removeMessageEventTooltip')}</paper-tooltip>
                             </div>
 
-                            <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
-                                <paper-input
-                                    label=${titles.get('messageContentLabel')}
-                                    rows=4
-                                    class="br-input inputFormSize90"
-                                    id="formMessageText"
-                                    @change=${() => this.messageInputChanged('formMessageText')}
-                                    value=${i.content}
-                                    required
-                                    char-counter
-                                    maxlength=160
-                                    error-message="">
-                                </paper-input>
+                            <div class="inputGrid inputFrame formSpanGrid12 formMessageBorder formBottomShadow">
+                                <borsuk-editor></borsuk-editor>
                             </div>
                         `})}
                     </div>
@@ -159,6 +149,19 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
             </iron-form>
         `;
     }
+
+/* <paper-input
+    label=${titles.get('messageContentLabel')}
+    rows=4
+    class="br-input inputFormSize90"
+    id="formMessageText"
+    @change=${() => this.messageInputChanged('formMessageText')}
+    value=${i.content}
+    required
+    char-counter
+    maxlength=160
+    error-message="">
+</paper-input> */
 
     static get properties() {
         return {

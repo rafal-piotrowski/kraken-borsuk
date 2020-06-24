@@ -102,6 +102,10 @@ export const BorsukMessageInputFormStyle = css`
         background: var(--ing-8percent-black-color);
     }
 
+    .formMessageBorder {
+        border: 1px solid var(--ing-8percent-black-color);
+    }
+
     .errorBorder {
         border: 1px solid var(--ing-minus-color);
         border-radius: 5px 5px 5px 5px;

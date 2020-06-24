@@ -20,3 +20,16 @@ export { default as borsukChevronDown } from './borsuk-chevron-down/borsuk-chevr
 export { default as borsukChevronUp } from './borsuk-chevron-up/borsuk-chevron-up.js';
 export { default as borsukDoubleChevronDown } from './borsuk-dchevron-down/borsuk-dchevron-down.js';
 export { default as borsukDoubleChevronUp } from './borsuk-dchevron-up/borsuk-dchevron-up.js';
+export { default as borsukTypographyBold } from './borsuk-typography-bold/borsuk-typography-bold.js';
+export { default as borsukTypographyItalic } from './borsuk-typography-italic/borsuk-typography-italic.js';
+export { default as borsukTypographyUnderline } from './borsuk-typography-underline/borsuk-typography-underline.js';
+export { default as borsukTypographyColor } from './borsuk-typography-color/borsuk-typography-color.js';
+
+export { default as borsukTypographyUndo } from './borsuk-typography-undo/borsuk-typography-undo.js';
+export { default as borsukTypographyRedo } from './borsuk-typography-redo/borsuk-typography-redo.js';
+export { default as borsukTypographyAlignLeft } from './borsuk-typography-align-left/borsuk-typography-align-left.js';
+export { default as borsukTypographyAlignRight } from './borsuk-typography-align-right/borsuk-typography-align-right.js';
+export { default as borsukTypographyAlignCenter } from './borsuk-typography-align-center/borsuk-typography-align-center.js';
+export { default as borsukTypographyAlignJustify } from './borsuk-typography-align-justify/borsuk-typography-align-justify.js';
+export { default as borsukTypographyListOrdered } from './borsuk-typography-list-ordered/borsuk-typography-list-ordered.js';
+export { default as borsukTypographyListBullet } from './borsuk-typography-list-bullet/borsuk-typography-list-bullet.js';

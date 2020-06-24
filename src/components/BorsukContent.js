@@ -83,19 +83,26 @@ export class BorsukContent extends connect(store)(LitElement) {
     }
 
     firstUpdated() {
-        setTimeout(() => {
-            store.dispatch(navigate(this._page, this._slot));
-          }, 1000);
+        // setTimeout(() => {
+        //     store.dispatch(navigate(this._page, this._slot));
+        //   }, 1000);
     }
 
     updated(changedProps) {
         if (changedProps.has('_page')) {
+
             const pageTitle = this.appTitle + ' - ' + this._page;
             updateMetadata({
                 title: pageTitle,
                 description: pageTitle
                 // This object also takes an image property, that points to an img src.
             });
+        }
+
+        if (changedProps.has('_slot')) {
+            setTimeout(() => {
+                    store.dispatch(navigate(this._page, this._slot));
+                  }, 1000);
         }
     }
 
