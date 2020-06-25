@@ -77,10 +77,11 @@ export class BorsukSidebar extends connect(store)(LitElement) {
                 const i = this.sidebarSubtypes[key];
                 return html`
                     ${i.show? html`
-                            <borsuk-sidebar-collapse class="toFilterExpand" .title="${i.text}" .top="${true}">
+                            <borsuk-sidebar-collapse id="subofferCollapse" class="toFilterExpand" .title="${i.text}" .top="${true}">
                                 <div class="content">
                                     ${Object.keys(this.sidebarSubnames)
                                     .filter((subkey) => { return this.sidebarSubnames[subkey].subtypeId === i.subtypeId })
+                                    .filter((subkey) => { return this.sidebarSubnames[subkey].text.toUpperCase().indexOf(this.filterText.toUpperCase()) !== -1 })
                                     .map((subkey) => {
                                         const j = this.sidebarSubnames[subkey];
                                         return html`
@@ -116,7 +117,7 @@ export class BorsukSidebar extends connect(store)(LitElement) {
     get filterTemplate() {
         return html`
             <div id="sidebarFilter" class="sidebarFilter">
-                <paper-input id="lightFinderInput" type="text" label="filtruj suboferty..." class="br-input" value="${this.filterText}">
+                <paper-input id="lightFinderInput" type="text" label="filtruj suboferty..." class="br-input" value="${this.filterText}" @keyup=${this.refreshFilter}>
                 </paper-input>
 
                 <borsuk-button icon reverse id="filterButton" class="fab ing" @click="${this.openFilter}">
@@ -147,7 +148,13 @@ export class BorsukSidebar extends connect(store)(LitElement) {
     }
 
     refreshFilter() {
-
+        if (this.shadowRoot.querySelector('#subofferCollapse').getAttribute('opened') === null) {
+            this.shadowRoot.querySelector('#subofferCollapse').setAttribute('opened', ''); 
+            setTimeout(() => {
+                this.shadowRoot.querySelector('#lightFinderInput').focus();
+            }, 200);
+        }
+        this.filterText = this.shadowRoot.querySelector('#lightFinderInput').value;
     }
 
     stateChanged(state) {
@@ -157,7 +164,7 @@ export class BorsukSidebar extends connect(store)(LitElement) {
 
     static get properties() {
         return {
-            filterText: { observer: 'refreshFilter' },
+            filterText: { type: String },
             svlExpandStatus: { type: Boolean, attribute: false, reflect: true },
             svlSubofferName: { type: String },
             _suboffer_name: String,

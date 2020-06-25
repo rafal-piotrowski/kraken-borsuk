@@ -42,7 +42,7 @@ import { setClickAction } from '../redux/actions/customevents.js';
 
 // podłączenie reducer-a.
 import customevents, { actionClickSelector, actionParamSelector } from '../redux/reducers/customevents.js';
-import { cesubofferPageReselector, ceChannelsSlotReselector, getActivePage, getActiveSlot, getActiveChannelTabs } from '../redux/reducers/cesuboffer.js';
+import { cesubofferPageReselector, ceChannelsSlotReselector, ceChannelsPageReselector, getActivePage, getActiveSlot, getActiveChannelTabs } from '../redux/reducers/cesuboffer.js';
 
 export class BorsukVersionForm extends connect(store)(LitElement) {
     static get styles() {
@@ -162,35 +162,54 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
         let pushInfo = [];
         let smsInfo = [];
         let messageInfo = [];
+        let pushActiveFlg = false;
+        let smsActiveFlg = false;
+        let messageActiveFlg = false;
+
         for(let i = 0; i < Object.keys(cesubofferPageReselector(state)).length; i++){
             formInfo.push({ versionName: cesubofferPageReselector(state)[i].versionName, 
                             pushAndSms: cesubofferPageReselector(state)[i].pushAndSms
                         });
         }
 
+        for(let i = 0; i < Object.keys(ceChannelsPageReselector(state)).length; i++){
+            if (ceChannelsPageReselector(state)[i].tabSlotId === 'S11') { pushActiveFlg = ceChannelsPageReselector(state)[i].channelActive }
+            if (ceChannelsPageReselector(state)[i].tabSlotId === 'S12') { smsActiveFlg = ceChannelsPageReselector(state)[i].channelActive }
+            if (ceChannelsPageReselector(state)[i].tabSlotId === 'S13') { messageActiveFlg = ceChannelsPageReselector(state)[i].channelActive }
+        }
+
         for(let i = 0; i < Object.keys(ceChannelsSlotReselector(state)).length; i++){
             if (ceChannelsSlotReselector(state)[i].tabSlotId === 'S11') {
-                pushInfo.push({ content: ceChannelsSlotReselector(state)[i].content, 
-                                inLink: ceChannelsSlotReselector(state)[i].inLink,
-                                outLink: ceChannelsSlotReselector(state)[i].outLink,
-                                sendFrom: ceChannelsSlotReselector(state)[i].sendFrom,
-                                sendTo: ceChannelsSlotReselector(state)[i].sendTo,
-                                sendPeriodId: ceChannelsSlotReselector(state)[i].sendPeriodId
-                            });
+                if (pushActiveFlg) {
+                    pushInfo.push({ channelActive: pushActiveFlg,
+                                    content: ceChannelsSlotReselector(state)[i].content, 
+                                    inLink: ceChannelsSlotReselector(state)[i].inLink,
+                                    outLink: ceChannelsSlotReselector(state)[i].outLink,
+                                    sendFrom: ceChannelsSlotReselector(state)[i].sendFrom,
+                                    sendTo: ceChannelsSlotReselector(state)[i].sendTo,
+                                    sendPeriodId: ceChannelsSlotReselector(state)[i].sendPeriodId
+                                });
+                } else { pushInfo.push({ channelActive: pushActiveFlg }); }
             } else if (ceChannelsSlotReselector(state)[i].tabSlotId === 'S12') {
-                smsInfo.push({ content: ceChannelsSlotReselector(state)[i].content, 
-                                phoneTypeId: ceChannelsSlotReselector(state)[i].phoneTypeId,
-                                sendFrom: ceChannelsSlotReselector(state)[i].sendFrom,
-                                sendTo: ceChannelsSlotReselector(state)[i].sendTo,
-                                sendPeriodId: ceChannelsSlotReselector(state)[i].sendPeriodId
-                });
+                if (smsActiveFlg) {
+                    smsInfo.push({ channelActive: smsActiveFlg,
+                                    content: ceChannelsSlotReselector(state)[i].content, 
+                                    phoneTypeId: ceChannelsSlotReselector(state)[i].phoneTypeId,
+                                    sendFrom: ceChannelsSlotReselector(state)[i].sendFrom,
+                                    sendTo: ceChannelsSlotReselector(state)[i].sendTo,
+                                    sendPeriodId: ceChannelsSlotReselector(state)[i].sendPeriodId
+                    });
+                } else { smsInfo.push({ channelActive: smsActiveFlg }); }
             } else if (ceChannelsSlotReselector(state)[i].tabSlotId === 'S13') {
-                messageInfo.push({ content: ceChannelsSlotReselector(state)[i].content, 
-                                eventId: ceChannelsSlotReselector(state)[i].eventId,
-                                expire: ceChannelsSlotReselector(state)[i].expire,
-                                groupId: ceChannelsSlotReselector(state)[i].groupId,
-                                title: ceChannelsSlotReselector(state)[i].title
-                });
+                if (messageActiveFlg) {
+                    messageInfo.push({ channelActive: messageActiveFlg,
+                                    content: ceChannelsSlotReselector(state)[i].content, 
+                                    eventId: ceChannelsSlotReselector(state)[i].eventId,
+                                    expire: ceChannelsSlotReselector(state)[i].expire,
+                                    groupId: ceChannelsSlotReselector(state)[i].groupId,
+                                    title: ceChannelsSlotReselector(state)[i].title
+                    });
+                } else { messageInfo.push({ channelActive: messageActiveFlg }); }
             }
         }
         

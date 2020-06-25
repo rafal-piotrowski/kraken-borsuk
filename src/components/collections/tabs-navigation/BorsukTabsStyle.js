@@ -254,4 +254,8 @@ export const BorsukTabsStyle = css`
         color: var(--ing-indigo-color);
     }
 
+    .activeInfoBadge {
+        --paper-badge-background: var(--ing-leaf-color);
+    }
+
 `;

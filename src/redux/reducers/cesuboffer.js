@@ -244,6 +244,13 @@ export const ceChannelsSlotReselector = createSelector(
     }
   )
 
+export const ceChannelsPageReselector = createSelector(
+    [ ceChannelTabsSelector, getActivePage ],
+    (cechnltabs, page) => {
+        return Object.values(cechnltabs).filter(chnltab => chnltab.parentPageId === page);
+    }
+  )
+
 export const getChannelContentFlg = createSelector(
     [getActiveChannelTabs, getActivePage],
     (cechnltabs, page) => {

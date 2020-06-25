@@ -1,3 +1,4 @@
+/* eslint-disable lit/no-useless-template-literals */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable import/order */
 /* eslint-disable no-useless-constructor */
@@ -29,7 +30,7 @@ export class BorsukChannelsSection extends connect(store)(LitElement) {
 
     render() {
         return html`
-            <borsuk-tabs equaltabs .tabsList="${this.ceChannelTabsList}" .activePage="${this._subpage}" @change-tab=${this.changeTab}>
+            <borsuk-tabs equaltabs .tabsList="${this.ceChannelTabsList}" .activePage="${this._subpage}" .badgeStatus=${true} @change-tab=${this.changeTab}>
                 <borsuk-push-input-form class="subpage" ?active="${this._subslot === 'S11'}" .page=${this._subpage}></borsuk-push-input-form>
                 <borsuk-sms-input-form class="subpage" ?active="${this._subslot === 'S12'}" .page=${this._subpage}></borsuk-sms-input-form>
                 <borsuk-message-input-form class="subpage" ?active="${this._subslot === 'S13'}" .page=${this._subpage}></borsuk-message-input-form>

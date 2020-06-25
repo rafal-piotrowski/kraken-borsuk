@@ -12,12 +12,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/no-extraneous-dependencies */
 import { LitElement, html, css } from 'lit-element';
+import { nothing } from 'lit-html';
 import { BorsukTabsStyle } from './BorsukTabsStyle.js';
 import '@polymer/paper-tabs/paper-tabs';
 import '@polymer/paper-tabs/paper-tab';
 import '@polymer/paper-tooltip/paper-tooltip';
 import '@polymer/iron-icons/iron-icons';
 import '@polymer/iron-icon/iron-icon';
+import '@polymer/paper-badge/paper-badge';
 import '../../packages/borsuk-button.js';
 
 import { closeTabAction, changeTabAction } from '../../../properties/actions.js';
@@ -58,8 +60,6 @@ export class BorsukTabs extends connect(store)(LitElement) {
      `;
   }
 
-/* <a href="/${i.tabPageId}?${i.tabSlotId}"></a> */
-
   get tabsHeaderTemplate() {
     return html`
       <paper-tabs id="contentTabs" selected="${this.selected}" attr-for-selected="page" scrollable="" no-bar="">
@@ -70,7 +70,11 @@ export class BorsukTabs extends connect(store)(LitElement) {
                 <paper-tab page="${i.tabPageId}" ?selected="${this.activePage === i.tabPageId}" @tap="${(event) => { this.changeTabClick(event, i.tabPageId, i.tabSlotId) } }">
                   <div class="tabsWrapper">
                     <div id="tabNav" class="tabsNav">
-                      <!-- <div><iron-icon icon="info"></iron-icon></div> -->
+
+                      ${this.badgeStatus ? html`
+                        ${i.channelActive ? html`<paper-badge label="A" class="activeInfoBadge"></paper-badge>` : nothing}
+                      ` : nothing}
+
                       <div id="tabName" class="tabName">
                         ${i.tabTitle}
                         <p class="subTitleTab">${i.tabSubtitle}</p>
