@@ -24,11 +24,12 @@ import { saveSubofferAction, removeSubofferAction, copySubofferAction,
     addVersionAction, publishTestAction, publishProdAction, validateVersionAction,
     saveVersionAction, removeVersionAction, copyVersionAction, approveVersionAction } from '../properties/actions.js';
 
-import '@vaadin/vaadin-progress-bar/vaadin-progress-bar';
+// import '@vaadin/vaadin-progress-bar/vaadin-progress-bar';
 import './collections/borsuk-form-buttons.js';
 import './collections/borsuk-preloader.js'
 import './collections/borsuk-tabs.js';
 import './borsuk-channels-section.js';
+import './collections/borsuk-version-status.js';
 
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -59,20 +60,43 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
 
     get versionFormTemplate() {
         return html`
+            ${this.headerTemplate}
+            ${this.formInputTemplate}
+            ${this.channelsTemplate}
+        `;
+    }
+
+    get headerTemplate() {
+        return html`
             <div class="formGrid formGrid2 inputFrame">
-                <div class="gridButtons formGrid6">
-                    ${this.navigationTamplete}
-                </div>
-
-                <div class="rightProgressBar formSpanGrid1">
-                    <span id="progress-value" class="progressBarValue">opublikowana na produkcji</span>
-                    <!-- {{sdetail.sdStatusLabel}} -->
-                    <vaadin-progress-bar id="progress-bar-custom-bounds" min="0" max="5" value="4"></vaadin-progress-bar>
-                    <!-- {{sdetail.sdStatusId}} -->
-                </div>
+                ${this.navigationTamplete}
+                ${this.statusTemplate}
             </div>
-            <borsuk-version-input-form id="versionInputForm"></borsuk-version-input-form>
+        `;
+    }
 
+    get navigationTamplete() {
+        return html`
+            <div class="gridButtons formGrid6">
+                ${this.formButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}
+            </div>
+        `;
+    }
+
+    get statusTemplate() {
+        return html`
+            <div class="rightProgressBar formSpanGrid1">
+                <borsuk-version-status></borsuk-version-status>
+            </div>
+        `;
+    }
+
+    get formInputTemplate() {
+        return html`<borsuk-version-input-form id="versionInputForm"></borsuk-version-input-form>`;
+    }
+
+    get channelsTemplate() {
+        return html`
             <div class="flexWindows">
                 <div class="container-fluid">
                     <div id="tabsVerForm" class="card card-nav-tabs text-center">
@@ -83,10 +107,6 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
                 </div>
             </div>
         `;
-    }
-
-    get navigationTamplete() {
-        return html`${this.formButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
     }
 
     static get properties() {
@@ -157,6 +177,7 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
     }
 
     validateVersion(state, param) {
+
         // IF validation OK
         let formInfo = [];
         let pushInfo = [];

@@ -25,9 +25,9 @@ import { borsukAddSuboffer, borsukAddVersion, borsukApprove, borsukCopySuboffer,
 import { saveSubofferAction, validateSubofferAction, removeSubofferAction, copySubofferAction, 
     addVersionAction, publishTestAction, publishProdAction } from '../properties/actions.js';
 
-import '@vaadin/vaadin-progress-bar/vaadin-progress-bar';
 import './collections/borsuk-form-buttons.js';
 import './collections/borsuk-preloader.js'
+import './collections/borsuk-suboffer-status.js';
 
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -56,24 +56,38 @@ export class BorsukSubofferForm extends connect(store)(LitElement) {
 
     get subofferFormTemplate() {
         return html`
-            <div class="formGrid formGrid2 inputFrame">
-                <div class="gridButtons formGrid6">
-                    ${this.navigationTamplete}
-                </div>
+            ${this.headerTemplate}
+            ${this.formInputTemplate}
+        `;
+    }
 
-                <div class="rightProgressBar formSpanGrid1">
-                    <span id="progress-value" class="progressBarValue">trwa publikacja na TEST</span>
-                    <!-- {{sdetail.sdStatusLabel}} -->
-                    <vaadin-progress-bar id="progress-bar-custom-bounds" min="0" max="5" value="4" indeterminate></vaadin-progress-bar>
-                    <!-- {{sdetail.sdStatusId}} -->
-                </div>
+    get headerTemplate() {
+        return html`
+            <div class="formGrid formGrid2 inputFrame">
+                ${this.navigationTamplete}
+                ${this.statusTemplate}
             </div>
-            <borsuk-suboffer-input-form id="subofferInputForm"></borsuk-suboffer-input-form>
         `;
     }
 
     get navigationTamplete() {
-        return html`${this.formButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
+        return html`
+            <div class="gridButtons formGrid6">
+                ${this.formButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}
+            </div>
+        `;
+    }
+
+    get statusTemplate() {
+        return html`
+            <div class="rightProgressBar formSpanGrid1">
+                <borsuk-suboffer-status></borsuk-suboffer-status>
+            </div>
+        `;
+    }
+
+    get formInputTemplate() {
+        return html`<borsuk-suboffer-input-form id="subofferInputForm"></borsuk-suboffer-input-form>`;
     }
 
     static get properties() {

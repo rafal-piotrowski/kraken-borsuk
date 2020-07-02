@@ -6,7 +6,8 @@
             "subofferName": "suboferta batchBMawaria...",
             "versionName": "wersja_191007_JR",
             "pushAndSms": "bothChannels",
-            "statusPub": 2
+            "status": 2,
+            "statusDesc": "zaakceptowana"
         },{
             "tabPageId": "5002",
             "tabSlotId": "S01",
@@ -14,14 +15,16 @@
             "groupId": "123",
             "categoryId": "2",
             "eventId": "666",
-            "statusPub": 4
+            "status": 2,
+            "statusDesc": "opublikowano na teście"
         },{
             "tabPageId": "-1",
             "tabSlotId": "S02",
             "subofferName": "suboferta batchBMawaria...",
             "versionName": "NOWA WERSJA",
             "pushAndSms": "pushChannel",
-            "statusPub": 0
+            "status": 1,
+            "statusDesc": "w przygotowaniu"
         },{
             "tabPageId": "-2",
             "tabSlotId": "S01",
@@ -29,7 +32,8 @@
             "groupId": "",
             "categoryId": "",
             "eventId": "",
-            "statusPub": 0
+            "status": 6,
+            "statusDesc": "błędna publikacja na produkcji"
         }
     ]
 }

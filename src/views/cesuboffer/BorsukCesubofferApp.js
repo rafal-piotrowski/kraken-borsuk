@@ -45,7 +45,7 @@ import { store } from '../../redux/store.js';
 // załadowanie kreatorów akcji.
 // getUserInfo do wywalenia po wrzuceniu do projektu.
 import { getUserInfo } from '../../redux/actions/menu.js';
-import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSlots, getSidebarTypes, getSidebarNames, getSearchResults, navigate } from '../../redux/actions/cesuboffer.js';
+import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSlots, getSidebarTypes, getSidebarNames, getSearchResults, navigate, changeStatus } from '../../redux/actions/cesuboffer.js';
 import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict } from '../../redux/actions/dictionaries.js';
 import { setClickAction } from '../../redux/actions/customevents.js';
 
@@ -237,6 +237,10 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
     // metoda wymuszająca aktywność taba
     _forceActivePage(page, slot) {
         store.dispatch(navigate(page, slot));
+    }
+
+    _changeStatus(tabPageId, status, statusDesc) {
+        store.dispatch(changeStatus(tabPageId, status, statusDesc));
     }
 
     stateChanged(state) {

@@ -1,3 +1,7 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-template-curly-in-string */
+/* eslint-disable no-plusplus */
 /* eslint-disable prefer-template */
 /* eslint-disable prefer-const */
 /* eslint-disable prefer-object-spread */
@@ -77,7 +81,7 @@ export class BorsukSidebar extends connect(store)(LitElement) {
                 const i = this.sidebarSubtypes[key];
                 return html`
                     ${i.show? html`
-                            <borsuk-sidebar-collapse id="subofferCollapse" class="toFilterExpand" .title="${i.text}" .top="${true}">
+                            <borsuk-sidebar-collapse id="collapse_${i.subtypeId}" class="toFilterExpand" .title="${i.text}" .top="${true}" @click=${() => {this.isCollapsed("collapse_"+i.subtypeId)}}>
                                 <div class="content">
                                     ${Object.keys(this.sidebarSubnames)
                                     .filter((subkey) => { return this.sidebarSubnames[subkey].subtypeId === i.subtypeId })
@@ -91,7 +95,7 @@ export class BorsukSidebar extends connect(store)(LitElement) {
                                                         <div class="subcard-header header-flex">
                                                             <button id="notrigger" class="mb-1" @click="${(event) => { this.editSuboffer(event, j.subnameId) } }">
                                                                 <div class="titleNav">
-                                                                    <div>${this.getTitle(j.text)}</div>
+                                                                    <div class="overflowEllipsis">${j.text}</div>
                                                                 </div>
                                                             </button>
                                                         </div>
@@ -117,7 +121,12 @@ export class BorsukSidebar extends connect(store)(LitElement) {
     get filterTemplate() {
         return html`
             <div id="sidebarFilter" class="sidebarFilter">
-                <paper-input id="lightFinderInput" type="text" label="filtruj suboferty..." class="br-input" value="${this.filterText}" @keyup=${this.refreshFilter}>
+                <paper-input id="lightFinderInput" 
+                            type="text" 
+                            label="filtruj suboferty..." 
+                            class="br-input" 
+                            value="${this.filterText}" 
+                            @keyup=${this.refreshFilter}>
                 </paper-input>
 
                 <borsuk-button icon reverse id="filterButton" class="fab ing" @click="${this.openFilter}">
@@ -147,13 +156,29 @@ export class BorsukSidebar extends connect(store)(LitElement) {
         this.shadowRoot.querySelector('#searchToast').toggle();
     }
 
+    isCollapsed(eventId) {
+        console.log(eventId);
+        if (this.shadowRoot.querySelector("#"+eventId).getAttribute('opened') === null) {
+            this.shadowRoot.querySelector("#"+eventId).setAttribute('opened', '');
+        } else {
+            this.shadowRoot.querySelector("#"+eventId).removeAttribute('opened');
+            this.allCollapseFlg = false;
+        }
+    }
+
     refreshFilter() {
-        if (this.shadowRoot.querySelector('#subofferCollapse').getAttribute('opened') === null) {
-            this.shadowRoot.querySelector('#subofferCollapse').setAttribute('opened', ''); 
+        if (!this.allCollapseFlg) {
+            let attribute = this.shadowRoot.querySelectorAll('.toFilterExpand');
+            for (let i=0; i < attribute.length; i++) {
+                attribute[i].setAttribute('opened', ''); 
+            }
+            this.allCollapseFlg = true;
+
             setTimeout(() => {
                 this.shadowRoot.querySelector('#lightFinderInput').focus();
-            }, 200);
+            }, 100); 
         }
+        
         this.filterText = this.shadowRoot.querySelector('#lightFinderInput').value;
     }
 
@@ -172,7 +197,8 @@ export class BorsukSidebar extends connect(store)(LitElement) {
             _suboffer_sourcesap: String,
             _suboffer_status: String,
             sidebarSubtypes: { type: Array },
-            sidebarSubnames: { type: Array }
+            sidebarSubnames: { type: Array },
+            allCollapseFlg: { type: Boolean }
         };
     }
 
@@ -182,6 +208,7 @@ export class BorsukSidebar extends connect(store)(LitElement) {
         this.svlExpandStatus = false;
         this.sidebarSubtypes = [];
         this.sidebarSubnames = [];
+        this.allCollapseFlg = false;
     }
 
     firstUpdated() {

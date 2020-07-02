@@ -20,7 +20,9 @@ import {
     GET_SIDEBAR_NAMES,
     GET_SEARCH_RESULTS,
     CHANGE_FORM_VALUE,
-    CHANGE_CHANNEL_ACTIVE_FLG
+    CHANGE_CHANNEL_ACTIVE_FLG,
+    UPDATE_STATUS_VAL,
+    UPDATE_STATUS_DESC
 } from '../actions/cesuboffer.js';
 
 import { createSelector } from 'reselect';
@@ -161,6 +163,18 @@ const cesuboffer = (state = INITIAL_STATE, action) => {
             return { 
                 ...state, 
                 cechnltabs: Object.keys(state.cechnltabs).map((key) => state.cechnltabs[key].tabPageId === action.tabPageId ? { ...state.cechnltabs[key], channelActive: action.nValue } : state.cechnltabs[key]) 
+            }
+
+        case UPDATE_STATUS_VAL:
+            return { 
+                ...state,
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], status: action.statusVal } : state.cesubslots[key])
+            }
+
+        case UPDATE_STATUS_DESC:
+            return { 
+                ...state,
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], statusDesc: action.statusDesc } : state.cesubslots[key])
             }
 
         default:

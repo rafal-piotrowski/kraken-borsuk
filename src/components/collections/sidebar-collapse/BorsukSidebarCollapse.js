@@ -32,10 +32,10 @@ export class BorsukSidebarCollapse extends LitElement {
                                 ${this.top? html`
                                     ${this.opened? html`
                                         <!-- <iron-icon class="btn-icon-collapse" icon="borsuk:borsuk-chevron-up"></iron-icon> -->
-                                        <iron-icon class="btn-icon-collapse" icon="arrow-drop-up"></iron-icon>
+                                        <iron-icon class="btn-icon-collapse" icon="arrow-drop-down"></iron-icon>
                                     ` : html`
                                         <!-- <iron-icon class="btn-icon-collapse" icon="borsuk:borsuk-chevron-down"></iron-icon> -->
-                                        <iron-icon class="btn-icon-collapse" icon="arrow-drop-down"></iron-icon>
+                                        <iron-icon class="btn-icon-collapse" icon="arrow-drop-up"></iron-icon>
                                     `}
                                 ` : html`
                                     <paper-tooltip id="notrigger_tooltip" for="notrigger" animation_delay="500" animation-entry="scale-up-animation" animation-exit="scale-down-animation">

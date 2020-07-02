@@ -20,6 +20,8 @@ export const GET_SIDEBAR_NAMES = 'GET_SIDEBAR_NAMES';
 export const GET_SEARCH_RESULTS = 'GET_SEARCH_RESULTS';
 export const CHANGE_FORM_VALUE = 'CHANGE_FORM_VALUE';
 export const CHANGE_CHANNEL_ACTIVE_FLG = 'CHANGE_CHANNEL_ACTIVE_FLG';
+export const UPDATE_STATUS_VAL = 'UPDATE_STATUS_VAL';
+export const UPDATE_STATUS_DESC = 'UPDATE_STATUS_DESC';
 
 export const navigate = (path, search) => (dispatch) => {
 
@@ -229,5 +231,24 @@ export const changeChannelActiveFlg = (tabPageId, nValue) => {
     type: CHANGE_CHANNEL_ACTIVE_FLG,
     tabPageId,
     nValue
+  };
+};
+
+export const changeStatus = (tabPageId, statusVal, statusDesc) => (dispatch) => {
+  dispatch(changeStatusVal(tabPageId, statusVal));
+  dispatch(changeStatusDesc(tabPageId, statusDesc));
+}
+
+const changeStatusVal = (tabPageId, statusVal) => {
+  return {
+    type: UPDATE_STATUS_VAL,
+    tabPageId, statusVal
+  };
+};
+
+const changeStatusDesc = (tabPageId, statusDesc) => {
+  return {
+    type: UPDATE_STATUS_DESC,
+    tabPageId, statusDesc
   };
 };

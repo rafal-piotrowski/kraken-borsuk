@@ -178,13 +178,13 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
     }
 
     firstUpdated() {
-        this.formPhoneTypeEl.addEventListener('value-changed', function (e) {
-            if(e.detail.value) this.smsDetails.phoneType = this.resolveIndexOfPhoneTypeName(e.detail.value);
-        }.bind(this), false);
+        // this.formPhoneTypeEl.addEventListener('value-changed', function (e) {
+        //     if(e.detail.value) this.smsDetails.phoneType = this.resolveIndexOfPhoneTypeName(e.detail.value);
+        // }.bind(this), false);
        
-        this.formSendPeriodEl.addEventListener('value-changed', function (e) {
-            this.smsDetails.sendPeriod = e.detail.value;
-        }.bind(this), false);
+        // this.formSendPeriodEl.addEventListener('value-changed', function (e) {
+        //     this.smsDetails.sendPeriod = e.detail.value;
+        // }.bind(this), false);
     }
 
     shouldUpdate() {

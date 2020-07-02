@@ -44,4 +44,10 @@ export const BorsukSidebarStyle = css`
         margin: 10px;
     }
 
+    .overflowEllipsis {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
 `;

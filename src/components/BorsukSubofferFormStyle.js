@@ -30,7 +30,7 @@ export const BorsukSubofferFormStyle = css`
         display: grid;
         justify-items: left;
         align-items: left;
-        padding: 10px;
+        /* padding: 10px; */
     }
 
     .formSpanGrid1 {

@@ -24,7 +24,6 @@ export { default as borsukTypographyBold } from './borsuk-typography-bold/borsuk
 export { default as borsukTypographyItalic } from './borsuk-typography-italic/borsuk-typography-italic.js';
 export { default as borsukTypographyUnderline } from './borsuk-typography-underline/borsuk-typography-underline.js';
 export { default as borsukTypographyColor } from './borsuk-typography-color/borsuk-typography-color.js';
-
 export { default as borsukTypographyUndo } from './borsuk-typography-undo/borsuk-typography-undo.js';
 export { default as borsukTypographyRedo } from './borsuk-typography-redo/borsuk-typography-redo.js';
 export { default as borsukTypographyAlignLeft } from './borsuk-typography-align-left/borsuk-typography-align-left.js';
@@ -33,3 +32,4 @@ export { default as borsukTypographyAlignCenter } from './borsuk-typography-alig
 export { default as borsukTypographyAlignJustify } from './borsuk-typography-align-justify/borsuk-typography-align-justify.js';
 export { default as borsukTypographyListOrdered } from './borsuk-typography-list-ordered/borsuk-typography-list-ordered.js';
 export { default as borsukTypographyListBullet } from './borsuk-typography-list-bullet/borsuk-typography-list-bullet.js';
+export { default as borsukCheckmark } from './borsuk-checkmark/borsuk-checkmark.js';
