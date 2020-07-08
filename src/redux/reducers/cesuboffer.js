@@ -159,6 +159,11 @@ const cesuboffer = (state = INITIAL_STATE, action) => {
                 return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], sendTo: action.nValue } : state.cechnlslots[key]) }
             }
 
+            // text editor
+            if (action.sParam === 'editor') {
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], content: action.nValue } : state.cechnlslots[key]) }
+            }
+
         case CHANGE_CHANNEL_ACTIVE_FLG:
             return { 
                 ...state, 

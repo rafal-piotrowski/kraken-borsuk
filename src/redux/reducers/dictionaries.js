@@ -5,7 +5,9 @@ import {
     GET_PUSH_ACTION_DICT,
     GET_PERIODS_DICT,
     GET_PHONE_TYPE_DICT,
-    GET_MESSAGE_GROUP_DICT
+    GET_MESSAGE_GROUP_DICT,
+    GET_RESPONSE_CODES_DICT,
+    GET_CONTENT_PARAMS_DICT
   } from '../actions/dictionaries.js';
 
   const INITIAL_STATE = {
@@ -15,7 +17,9 @@ import {
     pushactdict: {},
     periodsdict: {},
     phonetypedict: {},
-    msggrpdict: {}
+    msggrpdict: {},
+    rescodesdict: {},
+    conpardict: {}
 };
 
 const dictionaries = (state = INITIAL_STATE, action) => {
@@ -55,6 +59,16 @@ const dictionaries = (state = INITIAL_STATE, action) => {
                 ...state,
                 msggrpdict: action.msggrpdict
             }
+        case GET_RESPONSE_CODES_DICT:
+            return {
+                ...state,
+                rescodesdict: action.rescodesdict
+            }
+        case GET_CONTENT_PARAMS_DICT:
+            return {
+                ...state,
+                conpardict: action.conpardict
+            }
         default:
             return state;
     }
@@ -69,3 +83,5 @@ export const dictPushActionSelector = state => state.dictionaries.pushactdict;
 export const dictPeriodsSelector = state => state.dictionaries.periodsdict;
 export const dictPhoneTypeSelector = state => state.dictionaries.phonetypedict;
 export const dictMessageGroupSelector = state => state.dictionaries.msggrpdict;
+export const dictResponseCodesSelector = state => state.dictionaries.rescodesdict;
+export const dictContentParamsSelector = state => state.dictionaries.conpardict;

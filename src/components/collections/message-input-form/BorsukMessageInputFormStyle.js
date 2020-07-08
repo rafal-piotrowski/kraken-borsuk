@@ -160,4 +160,8 @@ export const BorsukMessageInputFormStyle = css`
         color: white;
         box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(96, 166, 218, 0.4);
     }
+
+    .editor-component {
+        width: 100%;
+    }
 `;

@@ -17,6 +17,14 @@ export const BorsukIconStyle = css`
         fill: #349651;
     }
 
+    :host([noactive]) {
+        fill: #d9d9d9;
+    }
+
+    :host([pressed]) {
+        fill: #349651;
+    }
+
     :host:first-child {
         margin-left: 0;
     }

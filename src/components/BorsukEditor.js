@@ -25,17 +25,27 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { LitElement, html, css } from 'lit-element';
+import { render } from 'lit-html';
 import { BorsukEditorStyle } from './BorsukEditorStyle.js';
+// import { BorsukEditorIngStyle } from './BorsukEditorIngStyle.js';
 import { borsukTypographyBold, borsukTypographyItalic, borsukTypographyUnderline, borsukTypographyColor,
         borsukTypographyUndo, borsukTypographyRedo, borsukTypographyAlignLeft, borsukTypographyAlignRight,
-        borsukTypographyAlignCenter, borsukTypographyAlignJustify, borsukTypographyListOrdered, borsukTypographyListBullet } from '../icons/icons.js';
+        borsukTypographyAlignCenter, borsukTypographyAlignJustify, borsukTypographyListOrdered, borsukTypographyListBullet,
+        borsukFormatParagraph, borsukFormatHeader, borsukFormatDiv, borsukSourceHtml,
+        borsukEmbedAttachment, borsukEmbedImage, borsukEmbedParam, borsukNonBreakingSpace } from '../icons/icons.js';
 
 import  { actions } from '../properties/actions.js';
 
 import './packages/borsuk-button.js';
 import './packages/borsuk-icon.js';
 import './collections/borsuk-form-buttons.js';
+import './collections/borsuk-colors-toast.js';
+import './collections/borsuk-header-toast.js';
+import './collections/borsuk-link-toast.js';
+import './collections/borsuk-param-toast.js';
 import '../helpers/quillRegisterBlots.js';
+
+// import 'html2json';
 
 import { tooltips } from '../properties/tooltips.js';
 
@@ -47,32 +57,49 @@ import { store } from '../redux/store.js';
 
 // podłączenie reducer-a.
 import customevents, { actionClickSelector, actionParamSelector } from '../redux/reducers/customevents.js';
+import { getActivePage, getActiveSlot, getActiveChannelTabs, ceChannelSlotsReselector } from '../redux/reducers/cesuboffer.js';
+
+// const navTypographyTamplete = (typoButtons) => html`${typoButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
 
 export class BorsukEditor extends connect(store)(LitElement) {
     static get styles() {
-        return [BorsukEditorStyle];
+        return [BorsukEditorStyle,
+        css`
+        `];
     }
 
     render() {
-
         return html`
+            <link rel='stylesheet' href='/src/styles/styles-production-ing.css'>
             <link rel='stylesheet' href='http://cdn.quilljs.com/1.3.6/quill.snow.css'>
-            <!-- <link rel='stylesheet' href='https://cdn.quilljs.com/1.0.0-beta.4/quill.css'> -->
-     
-            <div id="tooltip-controls" class="flexbuttons">
-                <div id="editor-history">${this.navHistoryTamplete}</div>
-                <div id="editor-typography">${this.navTypographyTamplete}</div>
-                <div id="editor-align">${this.navAlignTamplete}</div>
-                <div id="editor-list">${this.navListTamplete}</div>
-            </div>
 
-            <div id="inputTitle" class="inputTitle"><span>Treść wiadomości</span></div>
-            <div id="editorWrapper" class="ing-new-theme">
-                <div class="messages-container">
-                    <div id="editor" class="msg_content">
+            <div class="editor-container">
+                <div id="tooltip-controls" class="flexbuttons">
+                    <div id="editor-history">${this.navHistoryTamplete}</div>
+                    <div id="editor-typography">${this.navTypographyTamplete}</div>
+                    <div id="editor-align">${this.navAlignTamplete}</div>
+                    <div id="editor-list">${this.navListTamplete}</div>
+                </div>
+
+                <div id="sidebar-controls" class="flexbuttons">
+                    <div id="editor-format">${this.navFormatTamplete}</div>
+                    <div id="editor-embed">${this.navEmbedTamplete}</div>
+                    <div id="editor-source">${this.navSourceTamplete}</div>
+                </div>
+
+                <div id="inputTitle" class="inputTitle"><span>Treść wiadomości:</span></div>
+                <div id="editorWrapper" class="ing-new-theme">
+                    <div class="messages-container">
+                        <div id="editor" class="msg_content">
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <borsuk-colors-toast id="colorsToast" @ev-confirm-color-chosen=${this.confirmColor}></borsuk-colors-toast>
+            <borsuk-header-toast id="headerToast" @ev-confirm-header-chosen=${this.confirmHeader}></borsuk-header-toast>
+            <borsuk-link-toast id="linkToast" @ev-confirm-link-chosen=${this.confirmLink}></borsuk-link-toast>
+            <borsuk-param-toast id="paramToast" @ev-confirm-param-chosen=${this.confirmParam}></borsuk-param-toast>
         `;
     }
 
@@ -92,125 +119,121 @@ export class BorsukEditor extends connect(store)(LitElement) {
         return html`${this.listButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
     }
 
-    static get properties() {
-        return {
-            typoButtons: { type: Array },
-            histButtons: { type: Array },
-            listButtons: { type: Array },
-            alignButtons: { type: Array },
-        };
+    get navFormatTamplete() {
+        return html`${this.formatButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
     }
 
-    constructor() {
-        super();
-        this.contextRoot = '';
+    get navEmbedTamplete() {
+        return html`${this.embedButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
+    }
 
-        this.histButtons = [{
-                buttonId: actions.get('textUndoAction'),  // definicja z actions
-                buttonTooltip: 'Cofnij',
-                buttonIcon: borsukTypographyUndo,
-                buttonActive: true
-            },{
-                buttonId: actions.get('textRedoAction'),
-                buttonTooltip: 'Ponów',
-                buttonIcon: borsukTypographyRedo,
-                buttonActive: true
-            }];
-
-            this.typoButtons = [{
-                buttonId: actions.get('textBoldAction'),
-                buttonTooltip: 'Pogrubione',
-                buttonIcon: borsukTypographyBold,
-                buttonActive: true
-            },{
-                buttonId: actions.get('textItalicAction'),
-                buttonTooltip: 'Kursywa',
-                buttonIcon: borsukTypographyItalic,
-                buttonActive: true
-            },{
-                buttonId: actions.get('textUnderlineAction'),
-                buttonTooltip: 'Podkreślenie',
-                buttonIcon: borsukTypographyUnderline,
-                buttonActive: true
-            },{
-                buttonId: actions.get('textColorAction'),
-                buttonTooltip: 'Zmień kolor',
-                buttonIcon: borsukTypographyColor,
-                buttonActive: false
-            }];
-
-            this.alignButtons = [{
-                buttonId: actions.get('textAlignLeftAction'),
-                buttonTooltip: 'Do lewej',
-                buttonIcon: borsukTypographyAlignLeft,
-                buttonActive: true
-            },{
-                buttonId: actions.get('textAlignRightAction'),
-                buttonTooltip: 'Do prawej',
-                buttonIcon: borsukTypographyAlignRight,
-                buttonActive: true
-            },{
-                buttonId: actions.get('textAlignCenterAction'),
-                buttonTooltip: 'Wyśrodkuj',
-                buttonIcon: borsukTypographyAlignCenter,
-                buttonActive: true
-            },{
-                buttonId: actions.get('textAlignJustifyAction'),
-                buttonTooltip: 'Wyjustuj',
-                buttonIcon: borsukTypographyAlignJustify,
-                buttonActive: true
-            }];
-
-            this.listButtons = [{
-                buttonId: actions.get('textListOrderedAction'),
-                buttonTooltip: 'Numerowanie',
-                buttonIcon: borsukTypographyListOrdered,
-                buttonActive: true
-            },{
-                buttonId: actions.get('textListBulletAction'),
-                buttonTooltip: 'Lista',
-                buttonIcon: borsukTypographyListBullet,
-                buttonActive: true
-            }];
-
+    get navSourceTamplete() {
+        return html`${this.sourceButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
     }
 
     firstUpdated() {
-            this.initEditor();
+        this.initEditor();
     }
 
-    initEditor(){
+    initEditor() {
         let container = this.shadowRoot.querySelector("#editor");
         this.editor = new Quill(container);
 
-        // this.editor.on('editor-change', (eventName, ...args) => {
-        //     console.log('i am in ON event');
-        //     console.log(this.editor.getSelection());
-        //     console.log(this.editor.selection);
-        //     if (eventName === 'text-change') {
-        //         console.log('text change');
-        //       } else if (eventName === 'selection-change') {
-        //         console.log('selection change');
-        //       }
-        //           });
+        this.editor.on('editor-change', (eventName, ...args) => {
+            if (eventName === 'text-change') {
+                this.textChanged();
+                // console.log('text change');
+            } else if (eventName === 'selection-change') {
+                // console.log('selection change');
+                // this.selectionChange();
+            }
+        });
     }
 
     stateChanged(state) {
-        if (actionClickSelector(state) === actions.get('textBoldAction')) { this.boldAction(); }
-        if (actionClickSelector(state) === actions.get('textItalicAction')) { this.italicAction(); }
-        if (actionClickSelector(state) === actions.get('textUnderlineAction')) { this.underlineAction(); }
-        if (actionClickSelector(state) === actions.get('textColorAction')) { this.colorAction(); }
-        if (actionClickSelector(state) === actions.get('textUndoAction')) { this.undoAction(); }
-        if (actionClickSelector(state) === actions.get('textRedoAction')) { this.redoAction(); }
-        if (actionClickSelector(state) === actions.get('textAlignLeftAction')) { this.alignLeftAction(); }
-        if (actionClickSelector(state) === actions.get('textAlignRightAction')) { this.alignRightAction(); }
-        if (actionClickSelector(state) === actions.get('textAlignCenterAction')) { this.alignCenterAction(); }
-        if (actionClickSelector(state) === actions.get('textAlignJustifyAction')) { this.alignJustifyAction(); }
-        if (actionClickSelector(state) === actions.get('textListOrderedAction')) { this.listOrderedAction(); }
-        if (actionClickSelector(state) === actions.get('textListBulletAction')) { this.listBulletAction(); }
 
-        // this._page = getActivePage(state);
-        // this._slot = getActiveSlot(state);
+        this._page = getActivePage(state);
+        this._slot = getActiveSlot(state);
+
+        if (this._subpage !== Object.values(getActiveChannelTabs(state)).filter(key => key.parentPageId === this._page)[0].tabPageId) {
+                this._subpage = Object.values(getActiveChannelTabs(state)).filter(key => key.parentPageId === this._page)[0].tabPageId;
+                this._subslot = Object.values(getActiveChannelTabs(state)).filter(key => key.parentPageId === this._page)[0].tabSlotId;
+            if (this._subslot === 'S13') {
+                if (this.channelDetails !== ceChannelSlotsReselector(state)) { 
+                    this.channelDetails = ceChannelSlotsReselector(state);
+                    if (!this.editor) {
+                        setTimeout(() => {
+                            this.loadContentMessages(Object.values(this.channelDetails)[0].content);
+                        }, 1000);
+                    } 
+                    else if (this._subslot === 'S13') {
+                        this.loadContentMessages(Object.values(this.channelDetails)[0].content);
+                    }
+                }
+            }
+        }
+
+        if (this.clickAction !== actionClickSelector(state)) {
+            this.clickAction = actionClickSelector(state);
+        
+            if (this.clickAction === actions.get('textBoldAction')) { this.boldAction(); }
+            if (this.clickAction === actions.get('textItalicAction')) { this.italicAction(); }
+            if (this.clickAction === actions.get('textUnderlineAction')) { this.underlineAction(); }
+            if (this.clickAction === actions.get('textColorAction')) { this.colorAction(); }
+            if (this.clickAction === actions.get('textUndoAction')) { this.undoAction(); }
+            if (this.clickAction === actions.get('textRedoAction')) { this.redoAction(); }
+            if (this.clickAction === actions.get('textAlignLeftAction')) { this.alignLeftAction(); }
+            if (this.clickAction === actions.get('textAlignRightAction')) { this.alignRightAction(); }
+            if (this.clickAction === actions.get('textAlignCenterAction')) { this.alignCenterAction(); }
+            if (this.clickAction === actions.get('textAlignJustifyAction')) { this.alignJustifyAction(); }
+            if (this.clickAction === actions.get('textListOrderedAction')) { this.listOrderedAction(); }
+            if (this.clickAction === actions.get('textListBulletAction')) { this.listBulletAction(); }
+
+            if (this.clickAction === actions.get('formatParagraphAction')) { this.paragraphAction(); }
+            if (this.clickAction === actions.get('formatHeaderAction')) { this.headerAction(); }
+            if (this.clickAction === actions.get('formatDivAction')) { this.divAction(); }
+            if (this.clickAction === actions.get('embedAttachmentAction')) { this.linkAction(); }
+            if (this.clickAction === actions.get('embedImageAction')) { this.newAction(); }
+            if (this.clickAction === actions.get('embedParamAction')) { this.paramAction(); }
+            if (this.clickAction === actions.get('nonBreakingSpaceAction')) { this.nbspAction(); }
+            if (this.clickAction === actions.get('sourceHtmlAction')) { this.htmlAction(); }
+        }
+    }
+
+    newAction() {
+        console.log('... in progress');
+    }
+
+    textChanged() {
+        this.changedText = JSON.stringify(html2json(this.editor.root.innerHTML));
+        this.dispatchEvent(new CustomEvent('ev-confirm-text-change', { detail: { textChanged: this.changedText } }));
+    }
+
+    selectionChange() {
+
+        // Dla potomnych:
+        // W tym miejscu ma być renderowanie przycisków edytora w zależności od stylu zaznaczonego tekstu
+        // (np. jeżeli tekst jest pogrubiony to przerenderuj przycisk bold z kolorem oznaczającym wciśnięty przycisk)
+
+        // Propozycja implementacji:
+        // Komponent rodzica wywołujący borsuk-editor przy firstUpdate zasila store definicją buttonów dla danego slotu (inna dla messages i push)
+        // selectionChange aktualizuje store, przełączenie taba kanalowego (lub event blur na edytorze) zeruje wartości
+
+        let format = this.editor.getFormat(this.editor.getSelection().index,this.editor.getSelection().length); 
+        if (format.bold === true) { 
+            // this.typoButtons[0].buttonPressed = true; 
+            // this.typoButtons[0].buttonActive = false;
+            // (this.selectionChangeFlg) ? this.selectionChangeFlg = false : this.selectionChangeFlg = true;
+            // this.requestUpdate('navTypographyTamplete', this.typoButtons);
+            // render(navTypographyTamplete(this.typoButtons), document.body);
+        } else { 
+            // this.typoButtons[0].buttonPressed = false; 
+            // this.typoButtons[0].buttonActive = true;
+            // (this.selectionChangeFlg) ? this.selectionChangeFlg = false : this.selectionChangeFlg = true;
+        }
+
+        // if (format.italic === true) { this.typoButtons[1].buttonPressed = true } else { this.typoButtons[1].buttonPressed = false }
+        // if (format.boruline === 'text-decoration: underline') { this.typoButtons[2].buttonPressed = true } else { this.typoButtons[2].buttonPressed = false }
     }
 
     boldAction() {
@@ -241,6 +264,77 @@ export class BorsukEditor extends connect(store)(LitElement) {
                 }
             }
         }
+    }
+
+    colorAction() {
+        this.shadowRoot.getElementById("colorsToast").openToast();
+    }
+
+    confirmColor(event) {
+        this.editor.format('color', event.detail.chosenColor);
+    }
+
+    headerAction() {
+        this.shadowRoot.getElementById("headerToast").openToast();
+    }
+
+    confirmHeader(event) {
+        let range = this.editor.getSelection();
+        console.log(range);
+        if (range) { (event.detail.chosenHeader) ? this.editor.format('header', event.detail.chosenHeader) : this.editor.removeFormat(range.index,1); }
+    }
+
+    divAction() {
+        let range = this.editor.getSelection();
+        if (range) { this.editor.format('bordiv', true); }
+    }
+
+    paragraphAction() {
+        let range = this.editor.getSelection();
+
+        if (range) {
+            let selectionFormat = this.editor.getFormat(range.index,1);
+            if (selectionFormat.bordiv === true || selectionFormat.header > 0) {
+                this.editor.removeFormat(range.index,0);
+            }
+        }
+    }
+
+    linkAction() {
+        this.shadowRoot.getElementById("linkToast").openToast();
+    }
+
+    confirmLink(event) {
+        console.log('jestem w confirmLink, wartość w event powinna być pusta: ');
+        console.log(event.detail);
+    }
+
+    paramAction() {
+        let range = this.editor.getSelection();
+        this.shadowRoot.getElementById("paramToast").openToast(range.index);
+    }
+
+    confirmParam(event) {
+        console.log(event.detail);
+        
+        let parameter = '[(${'+event.detail.chosenParam.name+'})]';
+
+        console.log(parameter.length);
+        this.editor.setSelection(event.detail.position, 0);
+        this.editor.insertText(event.detail.position, parameter);
+        this.editor.setSelection(event.detail.position + parameter.length, Quill.sources.SILENT);
+    }
+
+    nbspAction() {
+        // &nbsp - twarda spacja
+        this.quillSpecialSign('\xA0');
+    }
+
+    quillSpecialSign(value) {
+        let range = this.editor.getSelection();
+        console.log(range);
+        this.editor.insertText(range.index, value);
+        this.editor.setSelection(range.index + 1, Quill.sources.SILENT);
     }
 
     undoAction() {
@@ -281,6 +375,200 @@ export class BorsukEditor extends connect(store)(LitElement) {
             let bullet = this.editor.getFormat(range.index,1).list;
             this.editor.format('list', (bullet === 'bullet') ? '' : 'bullet');
         }
+    }
+
+    handleKeypress(event) {
+        if (event.keyCode === 32 && event.ctrlKey && event.shiftKey) {
+            this.nbspAction();
+        }
+    }
+
+    loadContentMessages(jsonData) {
+        if (jsonData) {
+            this.editor.root.innerHTML = json2html(JSON.parse(jsonData));
+        } else {
+            this.editor.root.innerHTML = "";
+        }
+    }
+
+    htmlAction() {
+        this.editorContent = JSON.stringify(html2json(this.editor.root.innerHTML));
+        console.log(this.editorContent);
+    }
+
+    // natomiast ponizej przyklad wysylka tresci z edytora na backend
+    // metoda powinna byc w validateVersion
+    // this.editorContent = JSON.stringify(html2json(this.editor.root.innerHTML));
+
+    static get properties() {
+        return {
+            typoButtons: { type: Array },
+            histButtons: { type: Array },
+            listButtons: { type: Array },
+            alignButtons: { type: Array },
+            formatButtons: { type: Array },
+            embedButtons: { type: Array },
+            sourceButtons: { type: Array },
+            selectionChangeFlg: { type: Boolean },
+            _page: { type: String },
+            _slot: { type: String },
+            _tabSlotId: { type: String },
+            channelDetails: { type: Object },
+            clickAction: { type: String }
+        };
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('keydown', this.keypressListener);
+    }
+
+    disconnectedCallback() {
+        document.removeEventListener('keydown', this.keypressListener);
+        super.disconnectedCallback();
+    }
+
+    constructor() {
+        super();
+        this.keypressListener = this.handleKeypress.bind(this);
+        this.channelDetails = {};
+        this.contextRoot = '';
+        this.selectionChangeFlg = false;
+        this.clickAction = '';
+
+        this.histButtons = [{
+                buttonId: actions.get('textUndoAction'),  // definicja z actions
+                buttonTooltip: 'Cofnij',
+                buttonIcon: borsukTypographyUndo,
+                buttonActive: true,
+                buttonPressed: false
+            },{
+                buttonId: actions.get('textRedoAction'),
+                buttonTooltip: 'Ponów',
+                buttonIcon: borsukTypographyRedo,
+                buttonActive: true,
+                buttonPressed: false
+            }];
+
+            this.typoButtons = [{
+                buttonId: actions.get('textBoldAction'),
+                buttonTooltip: 'Pogrubione',
+                buttonIcon: borsukTypographyBold,
+                buttonActive: true,
+                buttonPressed: false
+            },{
+                buttonId: actions.get('textItalicAction'),
+                buttonTooltip: 'Kursywa',
+                buttonIcon: borsukTypographyItalic,
+                buttonActive: true,
+                buttonPressed: false
+            },{
+                buttonId: actions.get('textUnderlineAction'),
+                buttonTooltip: 'Podkreślenie',
+                buttonIcon: borsukTypographyUnderline,
+                buttonActive: true,
+                buttonPressed: false
+            },{
+                buttonId: actions.get('textColorAction'),
+                buttonTooltip: 'Zmień kolor',
+                buttonIcon: borsukTypographyColor,
+                buttonActive: true,
+                buttonPressed: false
+            }];
+
+            this.alignButtons = [{
+                buttonId: actions.get('textAlignLeftAction'),
+                buttonTooltip: 'Do lewej',
+                buttonIcon: borsukTypographyAlignLeft,
+                buttonActive: true,
+                buttonPressed: false
+            },{
+                buttonId: actions.get('textAlignRightAction'),
+                buttonTooltip: 'Do prawej',
+                buttonIcon: borsukTypographyAlignRight,
+                buttonActive: true,
+                buttonPressed: false
+            },{
+                buttonId: actions.get('textAlignCenterAction'),
+                buttonTooltip: 'Wyśrodkuj',
+                buttonIcon: borsukTypographyAlignCenter,
+                buttonActive: true,
+                buttonPressed: false
+            },{
+                buttonId: actions.get('textAlignJustifyAction'),
+                buttonTooltip: 'Wyjustuj',
+                buttonIcon: borsukTypographyAlignJustify,
+                buttonActive: true,
+                buttonPressed: false
+            }];
+
+            this.listButtons = [{
+                buttonId: actions.get('textListOrderedAction'),
+                buttonTooltip: 'Numerowanie',
+                buttonIcon: borsukTypographyListOrdered,
+                buttonActive: true,
+                buttonPressed: false
+            },{
+                buttonId: actions.get('textListBulletAction'),
+                buttonTooltip: 'Lista',
+                buttonIcon: borsukTypographyListBullet,
+                buttonActive: true,
+                buttonPressed: false
+            }];
+
+            this.formatButtons = [{
+                buttonId: actions.get('formatParagraphAction'),
+                buttonTooltip: 'Akapit',
+                buttonIcon: borsukFormatParagraph,
+                buttonActive: true,
+                buttonPressed: false
+            },{
+                buttonId: actions.get('formatHeaderAction'),
+                buttonTooltip: 'Nagłówek',
+                buttonIcon: borsukFormatHeader,
+                buttonActive: true,
+                buttonPressed: false
+            },{
+                buttonId: actions.get('formatDivAction'),
+                buttonTooltip: 'Div',
+                buttonIcon: borsukFormatDiv,
+                buttonActive: true,
+                buttonPressed: false
+            }];
+
+            this.embedButtons = [{
+                buttonId: actions.get('embedAttachmentAction'),
+                buttonTooltip: 'Wstaw link',
+                buttonIcon: borsukEmbedAttachment,
+                buttonActive: false,
+                buttonPressed: false
+            },{
+                buttonId: actions.get('embedImageAction'),
+                buttonTooltip: 'Wstaw obrazek',
+                buttonIcon: borsukEmbedImage,
+                buttonActive: false,
+                buttonPressed: false
+            },{
+                buttonId: actions.get('embedParamAction'),
+                buttonTooltip: 'Parametr Inbound',
+                buttonIcon: borsukEmbedParam,
+                buttonActive: true,
+                buttonPressed: false
+            }];
+
+            this.sourceButtons = [{
+                buttonId: actions.get('nonBreakingSpaceAction'),
+                buttonTooltip: 'Twarda spacja (Ctrl+Shift+Space)',
+                buttonIcon: borsukNonBreakingSpace,
+                buttonActive: true,
+                buttonPressed: false
+            },{
+                buttonId: actions.get('sourceHtmlAction'),
+                buttonTooltip: 'Kod źródłowy',
+                buttonIcon: borsukSourceHtml,
+                buttonActive: false,
+                buttonPressed: false
+            }];
     }
 
     // createRenderRoot() { 

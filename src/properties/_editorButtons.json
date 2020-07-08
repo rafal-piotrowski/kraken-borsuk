@@ -1,0 +1,149 @@
+{
+    "histButtons": [
+        {
+            "buttonId": "textUndo",
+            "buttonTooltip": "Cofnij",
+            "buttonIcon": "borsukTypographyUndo",
+            "buttonActive": true,
+            "buttonPressed": false
+        },{
+            "buttonId": "textRedo",
+            "buttonTooltip": "Ponów",
+            "buttonIcon": "borsukTypographyRedo",
+            "buttonActive": true,
+            "buttonPressed": false
+        }
+    ],
+
+    "typoButtons": [
+        {
+            "buttonId": "textBold",
+            "buttonTooltip": "Pogrubione",
+            "buttonIcon": "borsukTypographyBold",
+            "buttonActive": true,
+            "buttonPressed": false
+        },{
+            "buttonId": "textItalic",
+            "buttonTooltip": "Kursywa",
+            "buttonIcon": "borsukTypographyItalic",
+            "buttonActive": true,
+            "buttonPressed": false
+        },{
+            "buttonId": "textUnderline",
+            "buttonTooltip": "Podkreślenie",
+            "buttonIcon": "borsukTypographyUnderline",
+            "buttonActive": true,
+            "buttonPressed": false
+        },{
+            "buttonId": "textColor",
+            "buttonTooltip": "Zmień kolor",
+            "buttonIcon": "borsukTypographyColor",
+            "buttonActive": true,
+            "buttonPressed": false
+        }
+    ],
+
+    "alignButtons": [
+        {
+            "buttonId": "textAlignLeft",
+            "buttonTooltip": "Do lewej",
+            "buttonIcon": "borsukTypographyAlignLeft",
+            "buttonActive": true,
+            "buttonPressed": false
+        },{
+            "buttonId": "textAlignRight",
+            "buttonTooltip": "Do prawej",
+            "buttonIcon": "borsukTypographyAlignRight",
+            "buttonActive": true,
+            "buttonPressed": false
+        },{
+            "buttonId": "textAlignCenter",
+            "buttonTooltip": "Wyśrodkuj",
+            "buttonIcon": "borsukTypographyAlignCenter",
+            "buttonActive": true,
+            "buttonPressed": false
+        },{
+            "buttonId": "textAlignJustify",
+            "buttonTooltip": "Wyjustuj",
+            "buttonIcon": "borsukTypographyAlignJustify",
+            "buttonActive": true,
+            "buttonPressed": false
+        }
+    ],
+
+    "listButtons": [
+        {
+            "buttonId": "textListOrdered",
+            "buttonTooltip": "Numerowanie",
+            "buttonIcon": "borsukTypographyListOrdered",
+            "buttonActive": true,
+            "buttonPressed": false
+        },{
+            "buttonId": "textListBullet",
+            "buttonTooltip": "Lista",
+            "buttonIcon": "borsukTypographyListBullet",
+            "buttonActive": true,
+            "buttonPressed": false
+        }
+    ],
+
+    "formatButtons": [
+        {
+            "buttonId": "formatParagraph",
+            "buttonTooltip": "Akapit",
+            "buttonIcon": "borsukFormatParagraph",
+            "buttonActive": true,
+            "buttonPressed": false
+        },{
+            "buttonId": "formatHeader",
+            "buttonTooltip": "Nagłówek",
+            "buttonIcon": "borsukFormatHeader",
+            "buttonActive": true,
+            "buttonPressed": false
+        },{
+            "buttonId": "formatDiv",
+            "buttonTooltip": "Div",
+            "buttonIcon": "borsukFormatDiv",
+            "buttonActive": true,
+            "buttonPressed": false
+        }
+    ],
+
+    "embedButtons": [
+        {
+            "buttonId": "embedAttachment",
+            "buttonTooltip": "Wstaw link",
+            "buttonIcon": "borsukEmbedAttachment",
+            "buttonActive": true,
+            "buttonPressed": false
+        },{
+            "buttonId": "embedImage",
+            "buttonTooltip": "Wstaw obrazek",
+            "buttonIcon": "borsukEmbedImage",
+            "buttonActive": true,
+            "buttonPressed": false
+        },{
+            "buttonId": "embedParam",
+            "buttonTooltip": "Parametr Inbound",
+            "buttonIcon": "borsukEmbedParam",
+            "buttonActive": true,
+            "buttonPressed": false
+        }
+    ],
+
+    "sourceButtons": [
+        {
+            "buttonId": "nonBreakingSpace",
+            "buttonTooltip": "Twarda spacja (Ctrl+Shift+Space)",
+            "buttonIcon": "borsukNonBreakingSpace",
+            "buttonActive": true,
+            "buttonPressed": false
+        },{
+            "buttonId": "sourceHtml",
+            "buttonTooltip": "Kod źródłowy",
+            "buttonIcon": "borsukSourceHtml",
+            "buttonActive": true,
+            "buttonPressed": false
+        }
+    ]
+}

@@ -33,3 +33,11 @@ export { default as borsukTypographyAlignJustify } from './borsuk-typography-ali
 export { default as borsukTypographyListOrdered } from './borsuk-typography-list-ordered/borsuk-typography-list-ordered.js';
 export { default as borsukTypographyListBullet } from './borsuk-typography-list-bullet/borsuk-typography-list-bullet.js';
 export { default as borsukCheckmark } from './borsuk-checkmark/borsuk-checkmark.js';
+export { default as borsukFormatParagraph } from './borsuk-format-paragraph/borsuk-format-paragraph.js';
+export { default as borsukFormatHeader } from './borsuk-format-header/borsuk-format-header.js';
+export { default as borsukFormatDiv } from './borsuk-format-div/borsuk-format-div.js';
+export { default as borsukSourceHtml } from './borsuk-source-html/borsuk-source-html.js';
+export { default as borsukEmbedAttachment } from './borsuk-embed-attachment/borsuk-embed-attachment.js';
+export { default as borsukEmbedImage } from './borsuk-embed-image/borsuk-embed-image.js';
+export { default as borsukEmbedParam } from './borsuk-embed-param/borsuk-embed-param.js';
+export { default as borsukNonBreakingSpace } from './borsuk-non-breaking-space/borsuk-non-breaking-space.js';

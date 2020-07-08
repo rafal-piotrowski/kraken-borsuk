@@ -2,16 +2,7 @@
 
 import { LitElement, html, css } from 'lit-element';
 
-export const BorsukEditorStyle = css`
-    @font-face {
-        font-family: 'INGMeWeb';
-        src: url('/src/fonts/INGMeWeb-Regular.eot'); /* IE9 */
-        src: url('/src/fonts/INGMeWeb-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-        url('/src/fonts/INGMeWeb-Regular.woff') format('woff'); /* Modern Browsers */
-        font-weight: normal;
-        font-style: normal;
-    }
-
+export const BorsukParamToastStyle = css`
     :host {
         font-family: INGMeWeb, Arial, sans-serif;
 
@@ -57,47 +48,78 @@ export const BorsukEditorStyle = css`
         --borsuk-navbar-padding-top: 10px;
     }
 
-    .editorWrapper {
+    #addParamToast {
+        /* top: 25% !important;
+        left: 40% !important; */
+        max-height: 400px !important;
+
+        --paper-dialog-background-color: var(--ing-8percent-black-color);
+        --paper-dialog-color: var(--ing-black-color);
+    }
+
+    .quillToastColorBody {
+        height: 325px;
+    }
+
+    .titleNav {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .filterHeader h4 {
+        padding: 0 0 10px 0;
+        margin: 0;
+    }
+
+    .vaadinParams {
+        width: 500px;
+        height: 225px;
+    }
+
+
+
+    /* .formGrid12 {
+        grid-template-columns: repeat(12, 1fr);
+    }
+
+    .formGrid {
+        display: grid;
+        grid-gap: 5px;
+    }
+
+    #headerChangeResult {
         width: 100%;
-        min-height: 200px;
+        height: 100px;
     }
 
-    .ing-new-theme .messages-container {
-        background-color: #fff;
-        padding-bottom: 2rem;
+    .inputFrame {
+        padding: 20px 5px;
     }
 
-    #editor {
-        display: block;
-        min-height: 200px;
-        width: 100%;
-        margin: 0 auto;
-        border-top: 1px solid var(--ing-8percent-black-color);
-        font-family: INGMeWeb, Arial, sans-serif;
-        font-size: 16px;
+    .inputGrid {
+        display: grid;
+        justify-items: center;
+        align-items: center;
     }
 
-    .flexbuttons {
+    .formSpanGrid12 {
+        grid-column: span 12 / auto;
+    } */
+
+
+    .quillToastButtons {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 10px;
+        margin: 20px 0;
     }
 
-    #editor-typography, #editor-history, #editor-align, #editor-format, #editor-embed {
-        padding: 0 25px;
-        border-right: 1px solid var(--ing-15percent-black-color);
+    .inputFormSize90 {
+        width: 90%;
     }
 
-    #editor-list, #editor-source {
-        padding: 0 25px;
+    borsuk-button {
+        margin: 0 5px;
     }
-
-    #sidebar-controls {
-        padding-bottom: 15px;
-    }
-
-    .editor-container {
-        width: 100%;
-    }
-`;
+`

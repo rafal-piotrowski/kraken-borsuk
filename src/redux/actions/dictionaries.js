@@ -7,6 +7,8 @@ export const GET_PUSH_ACTION_DICT = 'GET_PUSH_ACTION_DICT';
 export const GET_PERIODS_DICT = 'GET_PERIODS_DICT';
 export const GET_PHONE_TYPE_DICT = 'GET_PHONE_TYPE_DICT';
 export const GET_MESSAGE_GROUP_DICT = 'GET_MESSAGE_GROUP_DICT';
+export const GET_RESPONSE_CODES_DICT = 'GET_RESPONSE_CODES_DICT';
+export const GET_CONTENT_PARAMS_DICT = 'GET_CONTENT_PARAMS_DICT';
 
 export const getProductGroupDict = (results) => (dispatch) => {
     const prdgrpdict = results.reduce((obj, option) => {
@@ -89,5 +91,29 @@ export const getEventsDict = (results) => (dispatch) => {
     dispatch({
       type: GET_MESSAGE_GROUP_DICT,
       msggrpdict
+    });
+  };
+
+  export const getResponseCodesDict = (results) => (dispatch) => {
+    const rescodesdict = results.reduce((obj, option) => {
+      obj[option.index] = option
+      return obj
+    }, {});
+  
+    dispatch({
+      type: GET_RESPONSE_CODES_DICT,
+      rescodesdict
+    });
+  };
+
+  export const getContentParamsDict = (results) => (dispatch) => {
+    const conpardict = results.reduce((obj, option) => {
+      obj[option.index] = option
+      return obj
+    }, {});
+  
+    dispatch({
+      type: GET_CONTENT_PARAMS_DICT,
+      conpardict
     });
   };

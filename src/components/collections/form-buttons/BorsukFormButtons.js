@@ -61,7 +61,7 @@ export class BorsukFormButtons extends connect(store)(LitElement) {
     get buttonActiveTemplate() {
         return html`
             <borsuk-button smicon animate id="${this.valuesButton.buttonId}Button" class="btn-icon-animated btn-icon-ing" @click=${this.clickAction}>
-                <borsuk-icon .svg=${this.valuesButton.buttonIcon}></borsuk-icon>
+                <borsuk-icon ?pressed="${this.valuesButton.buttonPressed === true}" .svg=${this.valuesButton.buttonIcon}></borsuk-icon>
             </borsuk-button>
         `;
     }
@@ -69,7 +69,7 @@ export class BorsukFormButtons extends connect(store)(LitElement) {
     get buttonDisabledTemplate() {
         return html`
             <borsuk-button smicon animate disable id="${this.valuesButton.buttonId}Button" class="btn-icon-animated btn-icon-ing">
-                <borsuk-icon .svg=${this.valuesButton.buttonIcon}></borsuk-icon>
+                <borsuk-icon noactive .svg=${this.valuesButton.buttonIcon}></borsuk-icon>
             </borsuk-button>
         `;
     }

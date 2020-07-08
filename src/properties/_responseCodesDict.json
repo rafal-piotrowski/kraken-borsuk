@@ -1,0 +1,17 @@
+{
+    "responseCodesDict": [
+        {
+            "id": "1",
+            "name": "Y",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "N",
+            "index": 1
+        },{
+            "id": "3",
+            "name": "L",
+            "index": 2
+        }
+    ]
+}

@@ -136,7 +136,7 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
                             </div>
 
                             <div class="inputGrid inputFrame formSpanGrid12 formMessageBorder formBottomShadow">
-                                <borsuk-editor></borsuk-editor>
+                                <borsuk-editor class="editor-component" @ev-confirm-text-change=${this.editorTextChanged}></borsuk-editor>
                             </div>
                         `})}
                     </div>
@@ -211,6 +211,13 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
             this._subslot = Object.values(getActiveChannelTabs(state)).filter(key => key.parentPageId === this._page)[0].tabSlotId;
         }
         
+    }
+
+    editorTextChanged(event) {
+        // console.log('___ jestem w input message, subpage to: '+this._subpage);
+        // console.log('natomiast zawartosc edytora w postaci json jest następująca: ');
+        // console.log(event.detail.textChanged);
+        store.dispatch(changeFormValue(this._subpage, 'editor', event.detail.textChanged));
     }
 
     messageInputChanged(param) {

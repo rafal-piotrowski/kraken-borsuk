@@ -125,6 +125,17 @@ export const BorsukButtonStyle = css`
         min-width: 5px;
     }
 
+/* kolor ma być ustawiony w borsuk-icon, jako fill: lightgrey */
+
+    :host([noanime]) {
+        fill: var(--ing-15percent-black-color) !important;
+        display: inline-block;
+        width: 48px !important;
+        height: 48px !important;
+        border-radius: 50%;
+        position: relative;
+    }
+
     :host([animate]) {
         color: orange;
         display: inline-block;

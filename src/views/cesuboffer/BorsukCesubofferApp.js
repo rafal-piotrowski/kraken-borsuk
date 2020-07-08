@@ -46,7 +46,8 @@ import { store } from '../../redux/store.js';
 // getUserInfo do wywalenia po wrzuceniu do projektu.
 import { getUserInfo } from '../../redux/actions/menu.js';
 import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSlots, getSidebarTypes, getSidebarNames, getSearchResults, navigate, changeStatus } from '../../redux/actions/cesuboffer.js';
-import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict } from '../../redux/actions/dictionaries.js';
+import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict, 
+        getResponseCodesDict, getContentParamsDict } from '../../redux/actions/dictionaries.js';
 import { setClickAction } from '../../redux/actions/customevents.js';
 
 // podłączenie reducer-a.
@@ -147,6 +148,8 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         this._setPeriodsDict();
         this._setPhoneTypeDict();
         this._setMessageGroupDict();
+        this._setResponseCodesDict();
+        this._setContentParamsDict();
 
         // to tylko test wymuszenia aktywności taba
         // setTimeout(() => {
@@ -232,6 +235,16 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
     _setMessageGroupDict(jsonData) {
         if (jsonData) { store.dispatch(getMessageGroupDict(jsonData.messageGroupDict)); } 
         else { loadJSON('/src/properties/_messageGroupDict.json').then(data => { store.dispatch(getMessageGroupDict(data.messageGroupDict)); }) }
+    }
+
+    _setResponseCodesDict(jsonData) {
+        if (jsonData) { store.dispatch(getResponseCodesDict(jsonData.responseCodesDict)); } 
+        else { loadJSON('/src/properties/_responseCodesDict.json').then(data => { store.dispatch(getResponseCodesDict(data.responseCodesDict)); }) }
+    }
+
+    _setContentParamsDict(jsonData) {
+        if (jsonData) { store.dispatch(getContentParamsDict(jsonData.contentParamsDict)); } 
+        else { loadJSON('/src/properties/_contentParamsDict.json').then(data => { store.dispatch(getContentParamsDict(data.contentParamsDict)); }) }
     }
 
     // metoda wymuszająca aktywność taba

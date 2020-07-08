@@ -143,7 +143,7 @@ export class BorsukSidebar extends connect(store)(LitElement) {
     }
 
     editSuboffer(event, suboffer) {
-        let eventParams = Object.assign({subofferId: suboffer});
+        let eventParams = Object.assign({nodeId: suboffer});
         store.dispatch(setClickAction(editSubofferAction, eventParams));
       }
 

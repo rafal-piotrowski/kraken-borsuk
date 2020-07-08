@@ -1,0 +1,2 @@
+export default tag =>
+  tag`<svg viewBox="0 0 54 54" focusable="false"><text style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:26.20700455px;line-height:1.25;font-family:'ING Me';letter-spacing:0px;word-spacing:0px;stroke:none;stroke-width:1.63793778" x="1.7743493" y="21.314949" transform="scale(0.74984164,1.3336149)"><tspan x="1.7743493" y="21.314949" style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'ING Me';stroke-width:1.63793778">&lt;/&gt;</tspan></text></svg>`;

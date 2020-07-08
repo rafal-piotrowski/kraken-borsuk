@@ -1,0 +1,25 @@
+{
+    "contentParamsDict": [
+        {
+            "id": "1",
+            "name": "M_LDMDAT",
+            "paramDesc": "LDM: Data spotkania",
+            "index": 0
+        },{
+            "id": "4",
+            "name": "M_LDMPLA",
+            "paramDesc": "LDM: Miejsce spotkania",
+            "index": 1
+        },{
+            "id": "24",
+            "name": "WIEK",
+            "paramDesc": "WIEK",
+            "index": 2
+        },{
+            "id": "42",
+            "name": "WOLACZ",
+            "paramDesc": "WOLACZ",
+            "index": 3
+        }
+    ]
+}
