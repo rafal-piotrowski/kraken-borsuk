@@ -140,7 +140,7 @@ export const BorsukLinkToastStyle = css`
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 10px 0;
+        margin: 30px 0;
     }
 
     .inputFormSize90 {
@@ -154,4 +154,47 @@ export const BorsukLinkToastStyle = css`
     .displayNone {
         display: none;
     }
+
+    .toolbar-list {
+        /* display: none; */
+    }
+
+    .toolbar-list > a {
+        display: inline-block;
+        color: var(--ing-black-color);
+        text-decoration: none;
+        line-height: 30px;
+        padding: 4px 24px;
+    }
+
+    .toolbar-list > a[selected] {
+        color: var(--ing-fuchsia-color);
+        border-bottom: 4px solid var(--ing-fuchsia-color);
+    }
+
+    main {
+        display: block;
+    }
+
+    .main-toast-content {
+        padding-top: 64px;
+        min-height: 375px;
+        border-bottom: 1px solid var(--ing-fuchsia-color);
+        box-shadow: 0px 5px 5px -5px var(--ing-fuchsia-color);
+    }
+
+    .toastpage {
+        display: none;
+    }
+
+    .toastpage[active] {
+        display: grid;
+    }
+
+    /* .btn-borsuk {
+        font-size: 1.4rem !important;
+        line-height: 3.8rem !important;
+        height: 4rem !important;
+    } */
+
 `

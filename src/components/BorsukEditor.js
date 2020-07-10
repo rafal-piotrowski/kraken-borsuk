@@ -1,3 +1,7 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-lonely-if */
+/* eslint-disable eqeqeq */
+/* eslint-disable dot-notation */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-restricted-globals */
@@ -72,6 +76,30 @@ export class BorsukEditor extends connect(store)(LitElement) {
         return html`
             <link rel='stylesheet' href='/src/styles/styles-production-ing.css'>
             <link rel='stylesheet' href='http://cdn.quilljs.com/1.3.6/quill.snow.css'>
+            <style>
+                .ing-new-theme p {
+                    font-size: 1.2em !important;
+                }
+
+                .ing-new-theme .link {
+                    font-size: 1.2em !important;
+                    line-height: 1em !important;
+                }
+
+                .ing-new-theme .btn {
+                    font-size: 1.2em !important;
+                    height: 2.4em !important;
+                    line-height: 2.4em !important;
+                    margin-top: 0.8em !important;
+                    margin-bottom: 0.8em !important;
+                    text-transform: none !important;
+                    border: 1px solid #FF6200 !important;
+                }
+
+                .ing-new-theme .btn:hover {
+                    box-shadow: none !important;
+                }
+            </style>
 
             <div class="editor-container">
                 <div id="tooltip-controls" class="flexbuttons">
@@ -301,12 +329,101 @@ export class BorsukEditor extends connect(store)(LitElement) {
     }
 
     linkAction() {
-        this.shadowRoot.getElementById("linkToast").openToast();
+        let range = this.editor.getSelection();
+        let attribs = {};
+
+        if (range) {
+            let [leaf, offset] = this.editor.getLeaf(range.index);
+            if (leaf) {
+                attribs["linkText"] = leaf.text;
+                let selection = this.editor.getContents(range.index - offset, leaf.domNode.length);
+                if (selection.ops[0].attributes) {
+                    if (selection.ops[0].attributes.borlink) {
+
+                        console.log(selection.ops[0].attributes.borlink);
+
+                        attribs["selection"] = selection;
+
+                        // attribs["linkTitle"] = (selection.ops[0].attributes.borlink["title"]) ? selection.ops[0].attributes.borlink["title"] : '';
+                        // attribs["toastOutLink"] = (selection.ops[0].attributes.borlink["data-ext-action"]) ? selection.ops[0].attributes.borlink["data-ext-action"] : '';
+                        // attribs["toastInLink"] = (selection.ops[0].attributes.borlink["data-off-action"]) ? selection.ops[0].attributes.borlink["data-off-action"] : '';
+                        // attribs["actionCode"] = (selection.ops[0].attributes.borlink["data-int-action"] &&
+                        //     selection.ops[0].attributes.borlink["data-int-action"] !== 'GO-TO-SHOWDMFILE') ? selection.ops[0].attributes.borlink["data-int-action"] : '';
+                        
+                        // attribs["toastAttachLink"] = (selection.ops[0].attributes.borlink["data-int-actparams"]) ? selection.ops[0].attributes.borlink["data-int-actparams"] : '';
+                        // attribs["responseCode"] = (selection.ops[0].attributes.borlink["data-inb-res"]) ? selection.ops[0].attributes.borlink["data-inb-res"] : '';
+                        
+                        // attribs["newWindowCheckbox"] = (selection.ops[0].attributes.borlink["target"]) ? true : false;
+
+                        // if (selection.ops[0].attributes.borlink["class"] === "btn btn-primary") {
+                        //     attribs["buttonRadioGroup"] = 'primaryButton';
+                        // } else {
+                        //     if (selection.ops[0].attributes.borlink["class"] === "btn btn-default") {
+                        //         attribs["buttonRadioGroup"] = 'standardButton';
+                        //     } else {
+                        //         if (selection.ops[0].attributes.borlink["class"] == "link") {
+                        //             attribs["buttonRadioGroup"] = 'linkButton';
+                        //         } else {
+                        //             attribs["buttonRadioGroup"] = 'noButton';
+                        //         }
+                        //     }
+                        // }
+                        // attribs["linkRadioGroup"] = ((selection.ops[0].attributes.borlink["data-off-action"]) ? 'inLink' :
+                        //     ((selection.ops[0].attributes.borlink["data-int-actparams"]) ? 'attachLink' :
+                        //         ((selection.ops[0].attributes.borlink["data-int-action"]) ? 'actionLink' : 'outLink')));
+                    }
+
+                }
+            }
+
+            let customSelection = this.editor.getContents(range.index, range.length);
+            if (customSelection.ops.length > 1) {
+                dialogWindow.openDialog('A', "Zaznaczono zbyt duży zakres danych","","");
+            } else {
+                if (customSelection.ops.length == 1) {
+                    attribs["selectionLinkText"] = (customSelection.ops[0].insert) ? this.editor.getText(range.index, range.length) : '';
+                }
+
+                console.log('Jestem w borsuk-editor i wywoluje openToast, zawartość tablicy attribs:');
+                console.log(attribs);
+                
+                console.log('oraz zawartosc customselection ops');
+                console.log(customSelection.ops);
+                this.shadowRoot.getElementById("linkToast").openToast(attribs);
+            }
+        }
+
     }
 
     confirmLink(event) {
-        console.log('jestem w confirmLink, wartość w event powinna być pusta: ');
-        console.log(event.detail);
+        let range = this.editor.getSelection(true);
+        
+        console.log('Jestem w confirmLink, range is:');
+        console.log(range);
+
+        if (range) {
+            let selection = this.editor.getContents(range.index, range.length);
+            let [leaf, offset] = this.editor.getLeaf(range.index);
+
+            console.log('zawartosc selection ops:');
+            console.log(selection.ops);
+
+            if (selection.ops.length === 0) {
+                this.editor.deleteText(range.index - offset, leaf.domNode.length);
+                this.editor.insertText(range.index - offset, event.detail.chosenLink.text, {
+                    'borlink': event.detail.chosenLink
+                }, Quill.sources.USER);
+            } else {
+                this.editor.deleteText(range.index, range.length);
+                this.editor.insertText(range.index, event.detail.chosenLink.text, {
+                    'borlink': event.detail.chosenLink
+                }, Quill.sources.USER);
+            }
+        } else {
+            this.editor.insertText(range.index, event.detail.chosenLink.text, {
+                'borlink': event.detail.chosenLink
+            }, Quill.sources.USER);
+        }
     }
 
     paramAction() {
@@ -315,11 +432,8 @@ export class BorsukEditor extends connect(store)(LitElement) {
     }
 
     confirmParam(event) {
-        console.log(event.detail);
-        
         let parameter = '[(${'+event.detail.chosenParam.name+'})]';
 
-        console.log(parameter.length);
         this.editor.setSelection(event.detail.position, 0);
         this.editor.insertText(event.detail.position, parameter);
         this.editor.setSelection(event.detail.position + parameter.length, Quill.sources.SILENT);
@@ -540,7 +654,7 @@ export class BorsukEditor extends connect(store)(LitElement) {
                 buttonId: actions.get('embedAttachmentAction'),
                 buttonTooltip: 'Wstaw link',
                 buttonIcon: borsukEmbedAttachment,
-                buttonActive: false,
+                buttonActive: true,
                 buttonPressed: false
             },{
                 buttonId: actions.get('embedImageAction'),
