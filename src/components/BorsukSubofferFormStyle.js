@@ -36,4 +36,9 @@ export const BorsukSubofferFormStyle = css`
     .formSpanGrid1 {
         grid-column: span 1 / auto;
     }
+
+    .flexWindows {
+        display: flex;
+        justify-content: space-between;
+    }
 `;

@@ -22,6 +22,8 @@ export const CHANGE_FORM_VALUE = 'CHANGE_FORM_VALUE';
 export const CHANGE_CHANNEL_ACTIVE_FLG = 'CHANGE_CHANNEL_ACTIVE_FLG';
 export const UPDATE_STATUS_VAL = 'UPDATE_STATUS_VAL';
 export const UPDATE_STATUS_DESC = 'UPDATE_STATUS_DESC';
+export const GET_VERSIONS_LIST = 'GET_VERSIONS_LIST';
+export const GET_PUBLICATIONS_LIST = 'GET_PUBLICATIONS_LIST';
 
 export const navigate = (path, search) => (dispatch) => {
 
@@ -251,4 +253,28 @@ const changeStatusDesc = (tabPageId, statusDesc) => {
     type: UPDATE_STATUS_DESC,
     tabPageId, statusDesc
   };
+};
+
+export const getVersionsList = (ceVersionsList) => (dispatch) => {
+  const ceverslist = ceVersionsList.reduce((obj, option) => {
+    obj[option.versionId] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_VERSIONS_LIST,
+    ceverslist
+  });
+};
+
+export const getPublicationsList = (cePublicationsList) => (dispatch) => {
+  const cepubslist = cePublicationsList.reduce((obj, option) => {
+    obj[option.intervalId] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_PUBLICATIONS_LIST,
+    cepubslist
+  });
 };

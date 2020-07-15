@@ -27,6 +27,7 @@ export const cancelModalEvent = 'evCancelModal';
 // eventy cyklu tworzenia subofert i wersji
 export const addSubofferEvent = 'evAddSuboffer';
 export const editSubofferEvent = 'evEditSuboffer';
+export const editVersionEvent = 'evEditVersion';
 export const saveSubofferEvent = 'evSaveSuboffer';
 export const removeSubofferEvent = 'evRemoveSuboffer';
 export const copySubofferEvent = 'evCopySuboffer';
@@ -37,6 +38,11 @@ export const saveVersionEvent = 'evSaveVersion';
 export const removeVersionEvent = 'evRemoveVersion';
 export const copyVersionEvent = 'evCopyVersion';
 export const approveVersionEvent = 'evApproveVersion';
+
+// eventy schedulera
+export const addScheduleEvent = 'evAddScheduleVersion';
+export const editScheduleEvent = 'evEditScheduleVersion';
+export const removeScheduleEvent = 'evRemoveScheduleVersion';
 
 events.set('closeTabEvent', closeTabEvent);
 events.set('changeTabEvent', changeTabEvent);
@@ -49,6 +55,7 @@ events.set('confirmModalEvent', confirmModalEvent);
 events.set('cancelModalEvent', cancelModalEvent);
 events.set('addSubofferEvent', addSubofferEvent);
 events.set('editSubofferEvent', editSubofferEvent);
+events.set('editVersionEvent', editVersionEvent);
 events.set('saveSubofferEvent', saveSubofferEvent);
 events.set('removeSubofferEvent', removeSubofferEvent);
 events.set('copySubofferEvent', copySubofferEvent);
@@ -62,3 +69,6 @@ events.set('approveVersionEvent', approveVersionEvent);
 events.set('filterOpenEvent', filterOpenEvent);
 events.set('filterConfirmEvent', filterConfirmEvent);
 events.set('filterSelectResultEvent', filterSelectResultEvent);
+events.set('addScheduleEvent', addScheduleEvent);
+events.set('editScheduleEvent', editScheduleEvent);
+events.set('removeScheduleEvent', removeScheduleEvent);

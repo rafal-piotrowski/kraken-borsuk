@@ -60,7 +60,7 @@ export const BorsukToggleCollapseStyle = css`
     }
 
     .formFilter {
-        padding: 15px 25px 25px 25px;
+        /* padding: 15px 25px 25px 25px; */
         /* background-color: #f8f8f8; */
         /* border-bottom: 1px solid var(--ing-15percent-black-color); */
     }

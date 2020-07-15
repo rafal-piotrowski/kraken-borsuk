@@ -28,6 +28,7 @@ import { saveSubofferAction, validateSubofferAction, removeSubofferAction, copyS
 import './collections/borsuk-form-buttons.js';
 import './collections/borsuk-preloader.js'
 import './collections/borsuk-suboffer-status.js';
+import './collections/borsuk-versions-list.js';
 
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -58,6 +59,7 @@ export class BorsukSubofferForm extends connect(store)(LitElement) {
         return html`
             ${this.headerTemplate}
             ${this.formInputTemplate}
+            ${this.versionsListTemplate}
         `;
     }
 
@@ -88,6 +90,10 @@ export class BorsukSubofferForm extends connect(store)(LitElement) {
 
     get formInputTemplate() {
         return html`<borsuk-suboffer-input-form id="subofferInputForm"></borsuk-suboffer-input-form>`;
+    }
+
+    get versionsListTemplate() {
+        return html`<borsuk-versions-list id="scheduleWindows" class="flexWindows"></borsuk-versions-list>`;
     }
 
     static get properties() {

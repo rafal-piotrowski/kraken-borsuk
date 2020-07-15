@@ -62,6 +62,10 @@ export const BorsukTabsStyle = css`
         width: 50%;
     }
 
+    :host([equaltabs]) .container-fluid {
+        width: 100%;
+    }
+
 /* do wyrypania */
     .toolbar-list {
         display: block;

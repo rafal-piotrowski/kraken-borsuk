@@ -22,7 +22,9 @@ import {
     CHANGE_FORM_VALUE,
     CHANGE_CHANNEL_ACTIVE_FLG,
     UPDATE_STATUS_VAL,
-    UPDATE_STATUS_DESC
+    UPDATE_STATUS_DESC,
+    GET_VERSIONS_LIST,
+    GET_PUBLICATIONS_LIST
 } from '../actions/cesuboffer.js';
 
 import { createSelector } from 'reselect';
@@ -36,7 +38,9 @@ const INITIAL_STATE = {
     cechnlslots: {},
     cesubtypes: {},
     cesubnames: {},
-    searchresults: {}
+    searchresults: {},
+    ceverslist: {},
+    cepubslist: {}
 };
   
 const cesuboffer = (state = INITIAL_STATE, action) => {
@@ -71,6 +75,16 @@ const cesuboffer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 cesubslots: action.cesubslots
+            };
+        case GET_VERSIONS_LIST:
+            return {
+                ...state,
+                ceverslist: action.ceverslist
+            };
+        case GET_PUBLICATIONS_LIST:
+            return {
+                ...state,
+                cepubslist: action.cepubslist
             };
         case GET_CE_CHANNEL_TABS:
             return {
@@ -199,6 +213,8 @@ export const ceChannelSlotsSelector = state => state.cesuboffer.cechnlslots;
 export const cesubofferTypesSelector = state => state.cesuboffer.cesubtypes;
 export const cesubofferNamesSelector = state => state.cesuboffer.cesubnames;
 export const ceSearchResultsSelector = state => state.cesuboffer.searchresults;
+export const ceVersionsListSelector = state => state.cesuboffer.ceverslist;
+export const cePublicationsListSelector = state => state.cesuboffer.cepubslist;
 
 export const getActivePage = createSelector(
     [ cesubofferTabsSelector ],
@@ -232,6 +248,13 @@ export const cesubofferPageReselector = createSelector(
     [ cesubofferSlotsSelector, getActivePage ],
     (cesubslots, page) => {
         return Object.values(cesubslots).filter(subslot => subslot.tabPageId === page);
+    }
+  )
+
+export const ceVersionsListReselector = createSelector(
+    [ ceVersionsListSelector, getActivePage ],
+    (ceverslist, page) => {
+        return Object.values(ceverslist).filter(version => version.tabPageId === page);
     }
   )
 

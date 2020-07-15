@@ -1,0 +1,20 @@
+{
+    "cePublicationsList": [
+        {
+            "versionId": "1845021",
+            "intervalId": "102",
+            "intervalStart": "2019-11-01",
+            "intervalEnd": "2019-11-30"
+        }, {
+            "versionId": "1845021",
+            "intervalId": "103",
+            "intervalStart": "2019-12-01",
+            "intervalEnd": "2019-12-15"
+        }, {
+            "versionId": "1845121",
+            "intervalId": "115",
+            "intervalStart": "2019-11-20",
+            "intervalEnd": "2020-01-30"
+        }
+    ]
+}

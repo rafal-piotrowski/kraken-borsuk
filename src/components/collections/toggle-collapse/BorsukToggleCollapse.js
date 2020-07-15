@@ -24,11 +24,6 @@ export class BorsukToggleCollapse extends LitElement {
         return [BorsukToggleCollapseStyle];
     }
 
-
-    // <borsuk-button smicon id="hideFilter" class="btn-icon-animated btn-icon-ing" @click="${this.toggle}" aria-expanded="${this.opened}" aria-controls="collapse">
-    //                             <borsuk-icon .svg=${borsukDoubleChevronDown}></borsuk-icon>
-    //                         </borsuk-button>
-
     render() {
         return html`
             <div class="formFilter">

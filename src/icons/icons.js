@@ -41,3 +41,8 @@ export { default as borsukEmbedAttachment } from './borsuk-embed-attachment/bors
 export { default as borsukEmbedImage } from './borsuk-embed-image/borsuk-embed-image.js';
 export { default as borsukEmbedParam } from './borsuk-embed-param/borsuk-embed-param.js';
 export { default as borsukNonBreakingSpace } from './borsuk-non-breaking-space/borsuk-non-breaking-space.js';
+export { default as borsukClose } from './borsuk-close/borsuk-close.js';
+export { default as borsukDone } from './borsuk-done/borsuk-done.js';
+export { default as borsukMinusSign } from './borsuk-minus-sign/borsuk-minus-sign.js';
+export { default as borsukPlusSign } from './borsuk-plus-sign/borsuk-plus-sign.js';
+export { default as borsukSchedule } from './borsuk-schedule/borsuk-schedule.js';

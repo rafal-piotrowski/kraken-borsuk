@@ -1,0 +1,53 @@
+{
+    "ceVersionsList": [
+        {
+            "tabPageId": "5002",
+            "subofferId": "184502",
+            "versionId": "1845021",
+            "versionName": "wersja_191007_JR",
+            "versionStatus": "0",
+            "versionStartDate": null,
+            "versionEndDate": null
+        },{
+            "tabPageId": "5002",
+            "subofferId": "184502",
+            "versionId": "1845121",
+            "versionName": "wersja_121217_JT",
+            "versionStatus": "1",
+            "versionStartDate": null,
+            "versionEndDate": null
+        },{
+            "tabPageId": "5002",
+            "subofferId": "184502",
+            "versionId": "1845022",
+            "versionName": "wersja_trzecia",
+            "versionStatus": "1",
+            "versionStartDate": null,
+            "versionEndDate": null
+        },{
+            "tabPageId": "5002",
+            "subofferId": "184502",
+            "versionId": "1845122",
+            "versionName": "bardzo_dlugonazwowa_wersja_czwarta",
+            "versionStatus": "0",
+            "versionStartDate": null,
+            "versionEndDate": null
+        },{
+            "tabPageId": "5002",
+            "subofferId": "184502",
+            "versionId": "1845023",
+            "versionName": "wersja_piata",
+            "versionStatus": "1",
+            "versionStartDate": null,
+            "versionEndDate": null
+        },{
+            "tabPageId": "5002",
+            "subofferId": "184502",
+            "versionId": "1845123",
+            "versionName": "wersja_szosta",
+            "versionStatus": "0",
+            "versionStartDate": null,
+            "versionEndDate": null
+        }
+    ]
+}

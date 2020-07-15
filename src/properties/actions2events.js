@@ -12,6 +12,7 @@ actions2events.set(actions.get('infoAction'),               events.get('infoEven
 actions2events.set(actions.get('logoutAction'),             events.get('logoutEvent'));
 actions2events.set(actions.get('addSubofferAction'),        events.get('addSubofferEvent'));
 actions2events.set(actions.get('editSubofferAction'),       events.get('editSubofferEvent'));
+actions2events.set(actions.get('editVersionAction'),        events.get('editVersionEvent'));
 actions2events.set(actions.get('saveSubofferAction'),       events.get('saveSubofferEvent'));
 actions2events.set(actions.get('removeSubofferAction'),     events.get('removeSubofferEvent'));
 actions2events.set(actions.get('copySubofferAction'),       events.get('copySubofferEvent'));
@@ -25,3 +26,6 @@ actions2events.set(actions.get('approveVersionAction'),     events.get('approveV
 actions2events.set(actions.get('filterOpenAction'),         events.get('filterOpenEvent'));
 actions2events.set(actions.get('filterConfirmAction'),      events.get('filterConfirmEvent'));
 actions2events.set(actions.get('filterSelectResultAction'), events.get('filterSelectResultEvent'));
+actions2events.set(actions.get('addScheduleAction'),        events.get('addScheduleEvent'));
+actions2events.set(actions.get('editScheduleAction'),       events.get('editScheduleEvent'));
+actions2events.set(actions.get('removeScheduleAction'),     events.get('removeScheduleEvent'));

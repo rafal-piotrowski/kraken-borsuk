@@ -45,7 +45,8 @@ import { store } from '../../redux/store.js';
 // załadowanie kreatorów akcji.
 // getUserInfo do wywalenia po wrzuceniu do projektu.
 import { getUserInfo } from '../../redux/actions/menu.js';
-import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSlots, getSidebarTypes, getSidebarNames, getSearchResults, navigate, changeStatus } from '../../redux/actions/cesuboffer.js';
+import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSlots, getSidebarTypes, getSidebarNames, getSearchResults, 
+        navigate, changeStatus, getVersionsList, getPublicationsList } from '../../redux/actions/cesuboffer.js';
 import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict, 
         getResponseCodesDict, getContentParamsDict } from '../../redux/actions/dictionaries.js';
 import { setClickAction } from '../../redux/actions/customevents.js';
@@ -139,6 +140,8 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         this._setCeChannelSlots();
         this._setSidebarSubtypes();
         this._setSidebarSubnames();
+        this._setVersionsList();
+        this._setPublicationsList();
 
         // ładowanie słowników
         this._setProductGroupDict();
@@ -193,6 +196,17 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
     _setSidebarSubnames(jsonData) {
         if (jsonData) { store.dispatch(getSidebarNames(jsonData.sidebarSubnames)); } 
         else { loadJSON('/src/properties/_sidebarSubnames.json').then(data => { store.dispatch(getSidebarNames(data.sidebarSubnames)); }) }
+    }
+
+    // metody do zasilenia publikacji wersji
+    _setVersionsList(jsonData) {
+        if (jsonData) { store.dispatch(getVersionsList(jsonData.ceVersionsList)); } 
+        else { loadJSON('/src/properties/_ceVersionsList.json').then(data => { store.dispatch(getVersionsList(data.ceVersionsList)); }) }
+    }
+
+    _setPublicationsList(jsonData) {
+        if (jsonData) { store.dispatch(getPublicationsList(jsonData.cePublicationsList)); } 
+        else { loadJSON('/src/properties/_cePublicationsList.json').then(data => { store.dispatch(getPublicationsList(data.cePublicationsList)); }) }
     }
 
     // metoda do zasilenia filtra

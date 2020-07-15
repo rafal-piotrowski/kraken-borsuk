@@ -268,9 +268,6 @@ export class BorsukLinkToast extends connect(store)(LitElement) {
     }
 
     openToast(startattribs) {
-        console.log('Jestem w borsuk-toast w openToast, zawartość tablicy attribs:');
-        console.log(startattribs);
-
         let linkText = this.shadowRoot.querySelector('#linkText');
         let linkTitle = this.shadowRoot.querySelector('#linkTitle');
         let toastOutLink = this.shadowRoot.querySelector('#toastOutLink');
@@ -337,17 +334,6 @@ export class BorsukLinkToast extends connect(store)(LitElement) {
                 linkText.value = startattribs["selectionLinkText"];
             }
         }
-
-        // toastActionLink.contentElement.set('selected', this.resolveIndexOfActionName(actionCode));
-        // toastResponseCode.contentElement.set('selected', this.resolveIndexOfResponseName(responseCode));
-        // newWindowCheckbox.selected = (selection.ops[0].attributes.borlink["target"]) ? true : false;
-        // buttonRadioGroup.selected = 'primaryButton';
-        // linkRadioGroup.selected = attribs;
-
-        // attribs["linkRadioGroup"] = ((toastInLink.value) ? 'inLink' :
-        //                     ((toastAttachLink.value) ? 'attachLink' :
-        //                         ((inputActionLink.value) ? 'actionLink' : 'outLink')));
-
         this.shadowRoot.getElementById("addLinkToast").open();
     }
 

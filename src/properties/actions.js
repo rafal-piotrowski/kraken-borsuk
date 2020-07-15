@@ -23,6 +23,7 @@ export const filterSelectResultAction = 'filterSelectResult';
 // akcje cyklu tworzenia subofert i wersji
 export const addSubofferAction = 'addSuboffer';
 export const editSubofferAction = 'editSuboffer';
+export const editVersionAction = 'editVersion';
 export const saveSubofferAction = 'saveSuboffer';
 export const validateSubofferAction = 'validateSuboffer';   // akcja bez mapowania w actions2events
 export const removeSubofferAction = 'removeSuboffer';
@@ -35,6 +36,11 @@ export const validateVersionAction = 'validateVersion';     // akcja bez mapowan
 export const removeVersionAction = 'removeVersion';
 export const copyVersionAction = 'copyVersion';
 export const approveVersionAction = 'approveVersion';
+
+// akcje schedulera
+export const addScheduleAction = 'addScheduleVersion';
+export const editScheduleAction = 'editScheduleVersion';
+export const removeScheduleAction = 'removeScheduleVersion';
 
 // akcje rich text edytora
 export const textBoldAction = 'textBold';
@@ -67,6 +73,7 @@ actions.set('infoAction', infoAction);
 actions.set('logoutAction', logoutAction);
 actions.set('addSubofferAction', addSubofferAction);
 actions.set('editSubofferAction', editSubofferAction);
+actions.set('editVersionAction', editVersionAction);
 actions.set('saveSubofferAction', saveSubofferAction);
 actions.set('validateSubofferAction', validateSubofferAction);
 actions.set('removeSubofferAction', removeSubofferAction);
@@ -102,3 +109,6 @@ actions.set('embedImageAction', embedImageAction);
 actions.set('embedParamAction', embedParamAction);
 actions.set('nonBreakingSpaceAction', nonBreakingSpaceAction);
 actions.set('sourceHtmlAction', sourceHtmlAction);
+actions.set('addScheduleAction', addScheduleAction);
+actions.set('editScheduleAction', editScheduleAction);
+actions.set('removeScheduleAction', removeScheduleAction);
