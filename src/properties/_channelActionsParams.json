@@ -1,0 +1,37 @@
+{
+    "channelActionsParams": [
+        {
+            "tabPageId": "18451",
+            "parentPageId": "1845",
+            "tabSlotId": "S11",
+            "paramId": "1",
+            "paramName": "p_href",
+            "paramValue": "to pewnie p_href",
+            "index": 0
+        },{
+            "tabPageId": "18451",
+            "parentPageId": "1845",
+            "tabSlotId": "S11",
+            "paramId": "4",
+            "paramName": "p_offerid",
+            "paramValue": "to pewnie p_offerid",
+            "index": 1
+        },{
+            "tabPageId": "18451",
+            "parentPageId": "1845",
+            "tabSlotId": "S11",
+            "paramId": "24",
+            "paramName": "p_path",
+            "paramValue": "to pewnie p_path",
+            "index": 2
+        },{
+            "tabPageId": "-11",
+            "parentPageId": "-1",
+            "tabSlotId": "S11",
+            "paramId": "42",
+            "paramName": "p_pushtag",
+            "paramValue": "to pewnie p_pushtag",
+            "index": 3
+        }
+    ]
+}

@@ -24,7 +24,9 @@ import {
     UPDATE_STATUS_VAL,
     UPDATE_STATUS_DESC,
     GET_VERSIONS_LIST,
-    GET_PUBLICATIONS_LIST
+    GET_SCHEDULES_LIST,
+    GET_CHANNEL_ACTIONS_PARAMS,
+    ADD_CHANNEL_ACTIONS_PARAM
 } from '../actions/cesuboffer.js';
 
 import { createSelector } from 'reselect';
@@ -40,7 +42,8 @@ const INITIAL_STATE = {
     cesubnames: {},
     searchresults: {},
     ceverslist: {},
-    cepubslist: {}
+    ceschlist: {},
+    chnactparams: {}
 };
   
 const cesuboffer = (state = INITIAL_STATE, action) => {
@@ -81,10 +84,22 @@ const cesuboffer = (state = INITIAL_STATE, action) => {
                 ...state,
                 ceverslist: action.ceverslist
             };
-        case GET_PUBLICATIONS_LIST:
+        case GET_SCHEDULES_LIST:
             return {
                 ...state,
-                cepubslist: action.cepubslist
+                ceschlist: action.ceschlist
+            };
+        case GET_CHANNEL_ACTIONS_PARAMS:
+            return {
+                ...state,
+                chnactparams: action.chnactparams
+            };
+        case ADD_CHANNEL_ACTIONS_PARAM:
+            return {
+                ...state,
+                chnactparams: action.chnactparam
+                // chnactparams: [ ...state.chnactparams, action.chnactparams ]
+                // chnactparams: { ... state.chnactparams + action.chnactparams }
             };
         case GET_CE_CHANNEL_TABS:
             return {
@@ -214,7 +229,8 @@ export const cesubofferTypesSelector = state => state.cesuboffer.cesubtypes;
 export const cesubofferNamesSelector = state => state.cesuboffer.cesubnames;
 export const ceSearchResultsSelector = state => state.cesuboffer.searchresults;
 export const ceVersionsListSelector = state => state.cesuboffer.ceverslist;
-export const cePublicationsListSelector = state => state.cesuboffer.cepubslist;
+export const ceSchedulesListSelector = state => state.cesuboffer.ceschlist;
+export const ceChnActParamsSelector = state => state.cesuboffer.chnactparams;
 
 export const getActivePage = createSelector(
     [ cesubofferTabsSelector ],
@@ -297,5 +313,12 @@ export const getChannelContentFlg = createSelector(
     [getActiveChannelTabs, getActivePage],
     (cechnltabs, page) => {
         return Object.values(cechnltabs).filter(subtab => subtab.tabActive === true && subtab.parentPageId === page)[0].channelActive;
+    }
+)
+
+export const ceChnActParamsReselector = createSelector(
+    [ ceChnActParamsSelector, getActivePage],
+    (chnactparams, page) => {
+        return Object.values(chnactparams).filter(subparam => subparam.parentPageId === page);
     }
 )

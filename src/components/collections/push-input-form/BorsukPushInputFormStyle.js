@@ -102,6 +102,13 @@ export const BorsukPushInputFormStyle = css`
         background: var(--ing-8percent-black-color);
     }
 
+    .formMessBorder {
+        border: 1px solid var(--ing-sky-color);
+        border-radius: 5px 5px 5px 5px;
+        -moz-border-radius: 5px 5px 5px 5px;
+        -webkit-border-radius: 5px 5px 5px 5px;
+    }
+
     .errorBorder {
         border: 1px solid var(--ing-minus-color);
         border-radius: 5px 5px 5px 5px;
@@ -165,5 +172,20 @@ export const BorsukPushInputFormStyle = css`
 
     #inputForActionParam, #inputForActionValue, #buttonForAddAction {
         padding-bottom: 10px;
+    }
+
+    .inputsNoVisible {
+        visibility: hidden;
+        height: 0px;
+    }
+
+    .inputsVisible {
+        visibility: visible;
+    }
+
+    .vaadinParamGrid {
+        display: grid;
+        justify-items: right;
+        align-items: center;
     }
 `;

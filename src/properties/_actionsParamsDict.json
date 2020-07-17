@@ -1,0 +1,30 @@
+{
+    "actionsParamsDict": [
+        {
+            "id": "1",
+            "name": "p_href",
+            "visibleFlg": true,
+            "index": 0
+        },{
+            "id": "4",
+            "name": "p_offerid",
+            "visibleFlg": true,
+            "index": 1
+        },{
+            "id": "24",
+            "name": "p_path",
+            "visibleFlg": true,
+            "index": 2
+        },{
+            "id": "42",
+            "name": "p_pushtag",
+            "visibleFlg": true,
+            "index": 3
+        },{
+            "id": "666",
+            "name": "p_novisible",
+            "visibleFlg": false,
+            "index": 4
+        }
+    ]
+}

@@ -23,7 +23,9 @@ export const CHANGE_CHANNEL_ACTIVE_FLG = 'CHANGE_CHANNEL_ACTIVE_FLG';
 export const UPDATE_STATUS_VAL = 'UPDATE_STATUS_VAL';
 export const UPDATE_STATUS_DESC = 'UPDATE_STATUS_DESC';
 export const GET_VERSIONS_LIST = 'GET_VERSIONS_LIST';
-export const GET_PUBLICATIONS_LIST = 'GET_PUBLICATIONS_LIST';
+export const GET_SCHEDULES_LIST = 'GET_SCHEDULES_LIST';
+export const GET_CHANNEL_ACTIONS_PARAMS = 'GET_CHANNEL_ACTIONS_PARAMS';
+export const ADD_CHANNEL_ACTIONS_PARAM = 'ADD_CHANNEL_ACTIONS_PARAM';
 
 export const navigate = (path, search) => (dispatch) => {
 
@@ -267,14 +269,38 @@ export const getVersionsList = (ceVersionsList) => (dispatch) => {
   });
 };
 
-export const getPublicationsList = (cePublicationsList) => (dispatch) => {
-  const cepubslist = cePublicationsList.reduce((obj, option) => {
+export const getSchedulesList = (ceSchedulesList) => (dispatch) => {
+  const ceschlist = ceSchedulesList.reduce((obj, option) => {
     obj[option.intervalId] = option
     return obj
   }, {});
 
   dispatch({
-    type: GET_PUBLICATIONS_LIST,
-    cepubslist
+    type: GET_SCHEDULES_LIST,
+    ceschlist
+  });
+};
+
+export const getChannelActionsParams = (channelActionsParams) => (dispatch) => {
+  const chnactparams = channelActionsParams.reduce((obj, option) => {
+    obj[option.index] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_CHANNEL_ACTIONS_PARAMS,
+    chnactparams
+  });
+};
+
+export const addChanelActionsParam = (channelActionsParam) => (dispatch) => {
+  const chnactparam = channelActionsParam.reduce((obj, option) => {
+    obj[option.index] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: ADD_CHANNEL_ACTIONS_PARAM,
+    chnactparam
   });
 };

@@ -9,6 +9,8 @@ export const GET_PHONE_TYPE_DICT = 'GET_PHONE_TYPE_DICT';
 export const GET_MESSAGE_GROUP_DICT = 'GET_MESSAGE_GROUP_DICT';
 export const GET_RESPONSE_CODES_DICT = 'GET_RESPONSE_CODES_DICT';
 export const GET_CONTENT_PARAMS_DICT = 'GET_CONTENT_PARAMS_DICT';
+export const GET_ACTIONS_PARAMS_DICT = 'GET_ACTIONS_PARAMS_DICT';
+export const UPDATE_ACTPARAMS_VISIBLE = 'UPDATE_ACTPARAMS_VISIBLE';
 
 export const getProductGroupDict = (results) => (dispatch) => {
     const prdgrpdict = results.reduce((obj, option) => {
@@ -117,3 +119,22 @@ export const getEventsDict = (results) => (dispatch) => {
       conpardict
     });
   };
+
+  export const getActionsParamsDict = (results) => (dispatch) => {
+    const actpardict = results.reduce((obj, option) => {
+      obj[option.index] = option
+      return obj
+    }, {});
+  
+    dispatch({
+      type: GET_ACTIONS_PARAMS_DICT,
+      actpardict
+    });
+  };
+
+export const updateActparamsVisible = (paramId, paramStatus) => {
+  return {
+    type: UPDATE_ACTPARAMS_VISIBLE,
+    paramId, paramStatus
+  };
+};

@@ -1,3 +1,5 @@
+/* eslint-disable prefer-object-spread */
+/* eslint-disable object-shorthand */
 /* eslint-disable arrow-body-style */
 /* eslint-disable one-var */
 /* eslint-disable no-var */
@@ -54,7 +56,7 @@ import { store } from '../../../redux/store.js';
 // załadowanie kreatorów akcji.
 import { setClickAction } from '../../../redux/actions/customevents.js';
 
-import { ceVersionsListReselector, ceVersionsListSelector, cePublicationsListSelector } from '../../../redux/reducers/cesuboffer.js';
+import { ceVersionsListReselector, ceVersionsListSelector, ceSchedulesListSelector } from '../../../redux/reducers/cesuboffer.js';
 
 export class BorsukVersionsList extends connect(store)(LitElement) {
 
@@ -467,7 +469,7 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
 
     stateChanged(state) {
         if (this.versionsData !== ceVersionsListReselector(state)) { this.versionsData = ceVersionsListReselector(state); }
-        if (this.pubsData !== cePublicationsListSelector(state)) { this.pubsData = cePublicationsListSelector(state); }
+        if (this.pubsData !== ceSchedulesListSelector(state)) { this.pubsData = ceSchedulesListSelector(state); }
         
         this._page = state.cesuboffer.page;
         // this._slot = state.cesuboffer.slot;

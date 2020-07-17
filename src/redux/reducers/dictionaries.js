@@ -7,7 +7,9 @@ import {
     GET_PHONE_TYPE_DICT,
     GET_MESSAGE_GROUP_DICT,
     GET_RESPONSE_CODES_DICT,
-    GET_CONTENT_PARAMS_DICT
+    GET_CONTENT_PARAMS_DICT,
+    GET_ACTIONS_PARAMS_DICT,
+    UPDATE_ACTPARAMS_VISIBLE
   } from '../actions/dictionaries.js';
 
   const INITIAL_STATE = {
@@ -19,7 +21,8 @@ import {
     phonetypedict: {},
     msggrpdict: {},
     rescodesdict: {},
-    conpardict: {}
+    conpardict: {},
+    actpardict: {}
 };
 
 const dictionaries = (state = INITIAL_STATE, action) => {
@@ -69,6 +72,16 @@ const dictionaries = (state = INITIAL_STATE, action) => {
                 ...state,
                 conpardict: action.conpardict
             }
+        case GET_ACTIONS_PARAMS_DICT:
+            return {
+                ...state,
+                actpardict: action.actpardict
+            }
+        case UPDATE_ACTPARAMS_VISIBLE:
+            return {
+                ...state,
+                actpardict: Object.keys(state.actpardict).map((key) => state.actpardict[key].id === action.paramId ? { ...state.actpardict[key], visibleFlg: action.paramStatus } : { ...state.actpardict[key] })
+            };
         default:
             return state;
     }
@@ -85,3 +98,4 @@ export const dictPhoneTypeSelector = state => state.dictionaries.phonetypedict;
 export const dictMessageGroupSelector = state => state.dictionaries.msggrpdict;
 export const dictResponseCodesSelector = state => state.dictionaries.rescodesdict;
 export const dictContentParamsSelector = state => state.dictionaries.conpardict;
+export const dictActionsParamsSelector = state => state.dictionaries.actpardict;

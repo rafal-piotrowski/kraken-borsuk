@@ -43,7 +43,8 @@ import { setClickAction } from '../redux/actions/customevents.js';
 
 // podłączenie reducer-a.
 import customevents, { actionClickSelector, actionParamSelector } from '../redux/reducers/customevents.js';
-import { cesubofferPageReselector, ceChannelsSlotReselector, ceChannelsPageReselector, getActivePage, getActiveSlot, getActiveChannelTabs } from '../redux/reducers/cesuboffer.js';
+import { cesubofferPageReselector, ceChannelsSlotReselector, ceChannelsPageReselector, ceChnActParamsReselector, 
+        getActivePage, getActiveSlot, getActiveChannelTabs } from '../redux/reducers/cesuboffer.js';
 
 export class BorsukVersionForm extends connect(store)(LitElement) {
     static get styles() {
@@ -183,14 +184,24 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
         let pushInfo = [];
         let smsInfo = [];
         let messageInfo = [];
+        let actionsParamInfo =[];
         let pushActiveFlg = false;
         let smsActiveFlg = false;
         let messageActiveFlg = false;
+
+        console.log(ceChnActParamsReselector(state));
 
         for(let i = 0; i < Object.keys(cesubofferPageReselector(state)).length; i++){
             formInfo.push({ versionName: cesubofferPageReselector(state)[i].versionName, 
                             pushAndSms: cesubofferPageReselector(state)[i].pushAndSms
                         });
+        }
+
+        for(let i = 0; i < Object.keys(ceChnActParamsReselector(state)).length; i++){
+            actionsParamInfo.push({
+                paramName: ceChnActParamsReselector(state)[i].paramName,
+                paramValue: ceChnActParamsReselector(state)[i].paramValue
+            });
         }
 
         for(let i = 0; i < Object.keys(ceChannelsPageReselector(state)).length; i++){
@@ -208,7 +219,8 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
                                     outLink: ceChannelsSlotReselector(state)[i].outLink,
                                     sendFrom: ceChannelsSlotReselector(state)[i].sendFrom,
                                     sendTo: ceChannelsSlotReselector(state)[i].sendTo,
-                                    sendPeriodId: ceChannelsSlotReselector(state)[i].sendPeriodId
+                                    sendPeriodId: ceChannelsSlotReselector(state)[i].sendPeriodId,
+                                    actionParams: actionsParamInfo
                                 });
                 } else { pushInfo.push({ channelActive: pushActiveFlg }); }
             } else if (ceChannelsSlotReselector(state)[i].tabSlotId === 'S12') {

@@ -46,9 +46,9 @@ import { store } from '../../redux/store.js';
 // getUserInfo do wywalenia po wrzuceniu do projektu.
 import { getUserInfo } from '../../redux/actions/menu.js';
 import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSlots, getSidebarTypes, getSidebarNames, getSearchResults, 
-        navigate, changeStatus, getVersionsList, getPublicationsList } from '../../redux/actions/cesuboffer.js';
+        navigate, changeStatus, getVersionsList, getSchedulesList, getChannelActionsParams } from '../../redux/actions/cesuboffer.js';
 import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict, 
-        getResponseCodesDict, getContentParamsDict } from '../../redux/actions/dictionaries.js';
+        getResponseCodesDict, getContentParamsDict, getActionsParamsDict } from '../../redux/actions/dictionaries.js';
 import { setClickAction } from '../../redux/actions/customevents.js';
 
 // podłączenie reducer-a.
@@ -141,7 +141,8 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         this._setSidebarSubtypes();
         this._setSidebarSubnames();
         this._setVersionsList();
-        this._setPublicationsList();
+        this._setSchedulesList();
+        this._setChannelActionsParams();
 
         // ładowanie słowników
         this._setProductGroupDict();
@@ -153,6 +154,7 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         this._setMessageGroupDict();
         this._setResponseCodesDict();
         this._setContentParamsDict();
+        this._setActionsParamsDict();
 
         // to tylko test wymuszenia aktywności taba
         // setTimeout(() => {
@@ -187,6 +189,11 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         else { loadJSON('/src/properties/_ceChannelSlots.json').then(data => { store.dispatch(getCeChannelSlots(data.ceChannelSlots)); }) }
     }
 
+    _setChannelActionsParams(jsonData) {
+        if (jsonData) { store.dispatch(getChannelActionsParams(jsonData.channelActionsParams)); } 
+        else { loadJSON('/src/properties/_channelActionsParams.json').then(data => { store.dispatch(getChannelActionsParams(data.channelActionsParams)); }) }
+    }
+
     // metody do zasilenia drzewa subofert
     _setSidebarSubtypes(jsonData) {
         if (jsonData) { store.dispatch(getSidebarTypes(jsonData.sidebarSubtypes)); } 
@@ -204,9 +211,9 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         else { loadJSON('/src/properties/_ceVersionsList.json').then(data => { store.dispatch(getVersionsList(data.ceVersionsList)); }) }
     }
 
-    _setPublicationsList(jsonData) {
-        if (jsonData) { store.dispatch(getPublicationsList(jsonData.cePublicationsList)); } 
-        else { loadJSON('/src/properties/_cePublicationsList.json').then(data => { store.dispatch(getPublicationsList(data.cePublicationsList)); }) }
+    _setSchedulesList(jsonData) {
+        if (jsonData) { store.dispatch(getSchedulesList(jsonData.ceSchedulesList)); } 
+        else { loadJSON('/src/properties/_ceSchedulesList.json').then(data => { store.dispatch(getSchedulesList(data.ceSchedulesList)); }) }
     }
 
     // metoda do zasilenia filtra
@@ -259,6 +266,11 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
     _setContentParamsDict(jsonData) {
         if (jsonData) { store.dispatch(getContentParamsDict(jsonData.contentParamsDict)); } 
         else { loadJSON('/src/properties/_contentParamsDict.json').then(data => { store.dispatch(getContentParamsDict(data.contentParamsDict)); }) }
+    }
+
+    _setActionsParamsDict(jsonData) {
+        if (jsonData) { store.dispatch(getActionsParamsDict(jsonData.actionsParamsDict)); } 
+        else { loadJSON('/src/properties/_actionsParamsDict.json').then(data => { store.dispatch(getActionsParamsDict(data.actionsParamsDict)); }) }
     }
 
     // metoda wymuszająca aktywność taba
