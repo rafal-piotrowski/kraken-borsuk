@@ -188,4 +188,12 @@ export const BorsukPushInputFormStyle = css`
         justify-items: right;
         align-items: center;
     }
+
+    .editor-component {
+        width: 100%;
+    }
+    
+    .formMessageBorder {
+        border: 1px solid var(--ing-8percent-black-color);
+    }
 `;

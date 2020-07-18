@@ -29,7 +29,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { LitElement, html, css } from 'lit-element';
-import { render } from 'lit-html';
+import { render, nothing } from 'lit-html';
 import { BorsukEditorStyle } from './BorsukEditorStyle.js';
 // import { BorsukEditorIngStyle } from './BorsukEditorIngStyle.js';
 import { borsukTypographyBold, borsukTypographyItalic, borsukTypographyUnderline, borsukTypographyColor,
@@ -132,31 +132,31 @@ export class BorsukEditor extends connect(store)(LitElement) {
     }
 
     get navHistoryTamplete() {
-        return html`${this.histButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
+        return html`${this.histButtons ? html`${this.histButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}` : nothing }`;
     }
 
     get navTypographyTamplete() {
-        return html`${this.typoButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
+        return html`${this.typoButtons ? html`${this.typoButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}` : nothing }`;
     }
 
     get navAlignTamplete() {
-        return html`${this.alignButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
+        return html`${this.alignButtons ? html`${this.alignButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}` : nothing }`;
     }
 
     get navListTamplete() {
-        return html`${this.listButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
+        return html`${this.listButtons ? html`${this.listButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}` : nothing }`;
     }
 
     get navFormatTamplete() {
-        return html`${this.formatButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
+        return html`${this.formatButtons ? html`${this.formatButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}` : nothing }`;
     }
 
     get navEmbedTamplete() {
-        return html`${this.embedButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
+        return html`${this.embedButtons ? html`${this.embedButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}` : nothing }`;
     }
 
     get navSourceTamplete() {
-        return html`${this.sourceButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}`;
+        return html`${this.sourceButtons ? html`${this.sourceButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}` : nothing }`;
     }
 
     firstUpdated() {
@@ -187,17 +187,12 @@ export class BorsukEditor extends connect(store)(LitElement) {
             if (this._subpage !== Object.values(getActiveChannelTabs(state)).filter(key => key.parentPageId === this._page)[0].tabPageId) {
                     this._subpage = Object.values(getActiveChannelTabs(state)).filter(key => key.parentPageId === this._page)[0].tabPageId;
                     this._subslot = Object.values(getActiveChannelTabs(state)).filter(key => key.parentPageId === this._page)[0].tabSlotId;
-                if (this._subslot === 'S13') {
+                if (this._subslot === 'S13' || this._subslot === 'S11') {
                     if (this.channelDetails !== ceChannelSlotsReselector(state)) { 
                         this.channelDetails = ceChannelSlotsReselector(state);
-                        if (!this.editor) {
-                            setTimeout(() => {
-                                this.loadContentMessages(Object.values(this.channelDetails)[0].content);
-                            }, 1000);
-                        } 
-                        else if (this._subslot === 'S13') {
-                            this.loadContentMessages(Object.values(this.channelDetails)[0].content);
-                        }
+                        setTimeout(() => {
+                            this.loadContentMessages(Object.values(this.channelDetails)[0].content, (this._subslot === 'S13') ? true : false);
+                        }, (!this.editor) ? 1000 : 0);
                     }
                 }
             }
@@ -235,7 +230,7 @@ export class BorsukEditor extends connect(store)(LitElement) {
     }
 
     textChanged() {
-        this.changedText = JSON.stringify(html2json(this.editor.root.innerHTML));
+        this.changedText = (this._subslot === 'S13') ? JSON.stringify(html2json(this.editor.root.innerHTML)) : this.editor.getText();
         this.dispatchEvent(new CustomEvent('ev-confirm-text-change', { detail: { textChanged: this.changedText } }));
     }
 
@@ -455,11 +450,11 @@ export class BorsukEditor extends connect(store)(LitElement) {
         }
     }
 
-    loadContentMessages(jsonData) {
-        if (jsonData) {
-            this.editor.root.innerHTML = json2html(JSON.parse(jsonData));
+    loadContentMessages(content, jsonFlg) {
+        if (jsonFlg) {
+            this.editor.root.innerHTML = json2html(JSON.parse(content));
         } else {
-            this.editor.root.innerHTML = "";
+            this.editor.root.innerHTML = content;
         }
     }
 
@@ -474,13 +469,6 @@ export class BorsukEditor extends connect(store)(LitElement) {
 
     static get properties() {
         return {
-            typoButtons: { type: Array },
-            histButtons: { type: Array },
-            listButtons: { type: Array },
-            alignButtons: { type: Array },
-            formatButtons: { type: Array },
-            embedButtons: { type: Array },
-            sourceButtons: { type: Array },
             selectionChangeFlg: { type: Boolean },
             _page: { type: String },
             _slot: { type: String },
@@ -507,140 +495,6 @@ export class BorsukEditor extends connect(store)(LitElement) {
         this.contextRoot = '';
         this.selectionChangeFlg = false;
         this.clickAction = '';
-
-        this.histButtons = [{
-                buttonId: actions.get('textUndoAction'),  // definicja z actions
-                buttonTooltip: 'Cofnij',
-                buttonIcon: borsukTypographyUndo,
-                buttonActive: true,
-                buttonPressed: false
-            },{
-                buttonId: actions.get('textRedoAction'),
-                buttonTooltip: 'Ponów',
-                buttonIcon: borsukTypographyRedo,
-                buttonActive: true,
-                buttonPressed: false
-            }];
-
-            this.typoButtons = [{
-                buttonId: actions.get('textBoldAction'),
-                buttonTooltip: 'Pogrubione',
-                buttonIcon: borsukTypographyBold,
-                buttonActive: true,
-                buttonPressed: false
-            },{
-                buttonId: actions.get('textItalicAction'),
-                buttonTooltip: 'Kursywa',
-                buttonIcon: borsukTypographyItalic,
-                buttonActive: true,
-                buttonPressed: false
-            },{
-                buttonId: actions.get('textUnderlineAction'),
-                buttonTooltip: 'Podkreślenie',
-                buttonIcon: borsukTypographyUnderline,
-                buttonActive: true,
-                buttonPressed: false
-            },{
-                buttonId: actions.get('textColorAction'),
-                buttonTooltip: 'Zmień kolor',
-                buttonIcon: borsukTypographyColor,
-                buttonActive: true,
-                buttonPressed: false
-            }];
-
-            this.alignButtons = [{
-                buttonId: actions.get('textAlignLeftAction'),
-                buttonTooltip: 'Do lewej',
-                buttonIcon: borsukTypographyAlignLeft,
-                buttonActive: true,
-                buttonPressed: false
-            },{
-                buttonId: actions.get('textAlignRightAction'),
-                buttonTooltip: 'Do prawej',
-                buttonIcon: borsukTypographyAlignRight,
-                buttonActive: true,
-                buttonPressed: false
-            },{
-                buttonId: actions.get('textAlignCenterAction'),
-                buttonTooltip: 'Wyśrodkuj',
-                buttonIcon: borsukTypographyAlignCenter,
-                buttonActive: true,
-                buttonPressed: false
-            },{
-                buttonId: actions.get('textAlignJustifyAction'),
-                buttonTooltip: 'Wyjustuj',
-                buttonIcon: borsukTypographyAlignJustify,
-                buttonActive: true,
-                buttonPressed: false
-            }];
-
-            this.listButtons = [{
-                buttonId: actions.get('textListOrderedAction'),
-                buttonTooltip: 'Numerowanie',
-                buttonIcon: borsukTypographyListOrdered,
-                buttonActive: true,
-                buttonPressed: false
-            },{
-                buttonId: actions.get('textListBulletAction'),
-                buttonTooltip: 'Lista',
-                buttonIcon: borsukTypographyListBullet,
-                buttonActive: true,
-                buttonPressed: false
-            }];
-
-            this.formatButtons = [{
-                buttonId: actions.get('formatParagraphAction'),
-                buttonTooltip: 'Akapit',
-                buttonIcon: borsukFormatParagraph,
-                buttonActive: true,
-                buttonPressed: false
-            },{
-                buttonId: actions.get('formatHeaderAction'),
-                buttonTooltip: 'Nagłówek',
-                buttonIcon: borsukFormatHeader,
-                buttonActive: true,
-                buttonPressed: false
-            },{
-                buttonId: actions.get('formatDivAction'),
-                buttonTooltip: 'Div',
-                buttonIcon: borsukFormatDiv,
-                buttonActive: true,
-                buttonPressed: false
-            }];
-
-            this.embedButtons = [{
-                buttonId: actions.get('embedAttachmentAction'),
-                buttonTooltip: 'Wstaw link',
-                buttonIcon: borsukEmbedAttachment,
-                buttonActive: true,
-                buttonPressed: false
-            },{
-                buttonId: actions.get('embedImageAction'),
-                buttonTooltip: 'Wstaw obrazek',
-                buttonIcon: borsukEmbedImage,
-                buttonActive: false,
-                buttonPressed: false
-            },{
-                buttonId: actions.get('embedParamAction'),
-                buttonTooltip: 'Parametr Inbound',
-                buttonIcon: borsukEmbedParam,
-                buttonActive: true,
-                buttonPressed: false
-            }];
-
-            this.sourceButtons = [{
-                buttonId: actions.get('nonBreakingSpaceAction'),
-                buttonTooltip: 'Twarda spacja (Ctrl+Shift+Space)',
-                buttonIcon: borsukNonBreakingSpace,
-                buttonActive: true,
-                buttonPressed: false
-            },{
-                buttonId: actions.get('sourceHtmlAction'),
-                buttonTooltip: 'Kod źródłowy',
-                buttonIcon: borsukSourceHtml,
-                buttonActive: false,
-                buttonPressed: false
-            }];
     }
 
     // createRenderRoot() { 

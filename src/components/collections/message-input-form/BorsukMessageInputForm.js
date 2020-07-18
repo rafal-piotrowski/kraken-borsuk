@@ -22,10 +22,18 @@ import '../../packages/borsuk-button.js';
 import '../../collections/borsuk-events-modal.js';
 import '../../borsuk-editor.js';
 
+import { borsukTypographyBold, borsukTypographyItalic, borsukTypographyUnderline, borsukTypographyColor,
+    borsukTypographyUndo, borsukTypographyRedo, borsukTypographyAlignLeft, borsukTypographyAlignRight,
+    borsukTypographyAlignCenter, borsukTypographyAlignJustify, borsukTypographyListOrdered, borsukTypographyListBullet,
+    borsukFormatParagraph, borsukFormatHeader, borsukFormatDiv, borsukSourceHtml, borsukRemove,
+    borsukEmbedAttachment, borsukEmbedImage, borsukEmbedParam, borsukNonBreakingSpace } from '../../../icons/icons.js';
+
+import  { actions } from '../../../properties/actions.js'
+
 import { events } from '../../../properties/events.js';
 import { titles } from '../../../properties/titles.js';
 import { tooltips } from '../../../properties/tooltips.js';
-import { borsukRemove } from '../../../icons/icons.js';
+// import { borsukRemove } from '../../../icons/icons.js';
 
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -136,7 +144,16 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
                             </div>
 
                             <div class="inputGrid inputFrame formSpanGrid12 formMessageBorder formBottomShadow">
-                                <borsuk-editor class="editor-component" @ev-confirm-text-change=${this.editorTextChanged}></borsuk-editor>
+                                <borsuk-editor  class="editor-component" 
+                                                .sourceButtons=${this.editorSourceButtons}
+                                                .embedButtons=${this.editorEmbedButtons}
+                                                .formatButtons=${this.editorFormatButtons}
+                                                .listButtons=${this.editorListButtons}
+                                                .alignButtons=${this.editorAlignButtons}
+                                                .typoButtons=${this.editorTypoButtons}
+                                                .histButtons=${this.editorHistButtons}
+                                                @ev-confirm-text-change=${this.editorTextChanged}>
+                                </borsuk-editor>
                             </div>
                         `})}
                     </div>
@@ -150,19 +167,6 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
         `;
     }
 
-/* <paper-input
-    label=${titles.get('messageContentLabel')}
-    rows=4
-    class="br-input inputFormSize90"
-    id="formMessageText"
-    @change=${() => this.messageInputChanged('formMessageText')}
-    value=${i.content}
-    required
-    char-counter
-    maxlength=160
-    error-message="">
-</paper-input> */
-
     static get properties() {
         return {
             active: { type: Boolean },
@@ -171,7 +175,14 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
             messageDetails: { type: Object },
             groupSelected: { type: Object },
             eventsDict: { type: Array },
-            messageGroupDict: { type: Array }
+            messageGroupDict: { type: Array },
+            editorSourceButtons: { type: Array },
+            editorEmbedButtons: { type: Array },
+            editorFormatButtons: { type: Array },
+            editorListButtons: { type: Array },
+            editorAlignButtons: { type: Array },
+            editorTypoButtons: { type: Array },
+            editorHistButtons: { type: Array },
         };
     }
 
@@ -185,6 +196,140 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
         this.messageGroupDict = [];
         this.groupSelected = null;
         this.contentFlg = false;
+
+        this.editorHistButtons = [{
+            buttonId: actions.get('textUndoAction'),  // definicja z actions
+            buttonTooltip: 'Cofnij',
+            buttonIcon: borsukTypographyUndo,
+            buttonActive: true,
+            buttonPressed: false
+        },{
+            buttonId: actions.get('textRedoAction'),
+            buttonTooltip: 'Ponów',
+            buttonIcon: borsukTypographyRedo,
+            buttonActive: true,
+            buttonPressed: false
+        }];
+
+        this.editorTypoButtons = [{
+            buttonId: actions.get('textBoldAction'),
+            buttonTooltip: 'Pogrubione',
+            buttonIcon: borsukTypographyBold,
+            buttonActive: true,
+            buttonPressed: false
+        },{
+            buttonId: actions.get('textItalicAction'),
+            buttonTooltip: 'Kursywa',
+            buttonIcon: borsukTypographyItalic,
+            buttonActive: true,
+            buttonPressed: false
+        },{
+            buttonId: actions.get('textUnderlineAction'),
+            buttonTooltip: 'Podkreślenie',
+            buttonIcon: borsukTypographyUnderline,
+            buttonActive: true,
+            buttonPressed: false
+        },{
+            buttonId: actions.get('textColorAction'),
+            buttonTooltip: 'Zmień kolor',
+            buttonIcon: borsukTypographyColor,
+            buttonActive: true,
+            buttonPressed: false
+        }];
+
+        this.editorAlignButtons = [{
+            buttonId: actions.get('textAlignLeftAction'),
+            buttonTooltip: 'Do lewej',
+            buttonIcon: borsukTypographyAlignLeft,
+            buttonActive: true,
+            buttonPressed: false
+        },{
+            buttonId: actions.get('textAlignRightAction'),
+            buttonTooltip: 'Do prawej',
+            buttonIcon: borsukTypographyAlignRight,
+            buttonActive: true,
+            buttonPressed: false
+        },{
+            buttonId: actions.get('textAlignCenterAction'),
+            buttonTooltip: 'Wyśrodkuj',
+            buttonIcon: borsukTypographyAlignCenter,
+            buttonActive: true,
+            buttonPressed: false
+        },{
+            buttonId: actions.get('textAlignJustifyAction'),
+            buttonTooltip: 'Wyjustuj',
+            buttonIcon: borsukTypographyAlignJustify,
+            buttonActive: true,
+            buttonPressed: false
+        }];
+
+        this.editorListButtons = [{
+            buttonId: actions.get('textListOrderedAction'),
+            buttonTooltip: 'Numerowanie',
+            buttonIcon: borsukTypographyListOrdered,
+            buttonActive: true,
+            buttonPressed: false
+        },{
+            buttonId: actions.get('textListBulletAction'),
+            buttonTooltip: 'Lista',
+            buttonIcon: borsukTypographyListBullet,
+            buttonActive: true,
+            buttonPressed: false
+        }];
+
+        this.editorFormatButtons = [{
+            buttonId: actions.get('formatParagraphAction'),
+            buttonTooltip: 'Akapit',
+            buttonIcon: borsukFormatParagraph,
+            buttonActive: true,
+            buttonPressed: false
+        },{
+            buttonId: actions.get('formatHeaderAction'),
+            buttonTooltip: 'Nagłówek',
+            buttonIcon: borsukFormatHeader,
+            buttonActive: true,
+            buttonPressed: false
+        },{
+            buttonId: actions.get('formatDivAction'),
+            buttonTooltip: 'Div',
+            buttonIcon: borsukFormatDiv,
+            buttonActive: true,
+            buttonPressed: false
+        }];
+
+        this.editorEmbedButtons = [{
+            buttonId: actions.get('embedAttachmentAction'),
+            buttonTooltip: 'Wstaw link',
+            buttonIcon: borsukEmbedAttachment,
+            buttonActive: true,
+            buttonPressed: false
+        },{
+            buttonId: actions.get('embedImageAction'),
+            buttonTooltip: 'Wstaw obrazek',
+            buttonIcon: borsukEmbedImage,
+            buttonActive: false,
+            buttonPressed: false
+        },{
+            buttonId: actions.get('embedParamAction'),
+            buttonTooltip: 'Parametr Inbound',
+            buttonIcon: borsukEmbedParam,
+            buttonActive: true,
+            buttonPressed: false
+        }];
+
+        this.editorSourceButtons = [{
+            buttonId: actions.get('nonBreakingSpaceAction'),
+            buttonTooltip: 'Twarda spacja (Ctrl+Shift+Space)',
+            buttonIcon: borsukNonBreakingSpace,
+            buttonActive: true,
+            buttonPressed: false
+        },{
+            buttonId: actions.get('sourceHtmlAction'),
+            buttonTooltip: 'Kod źródłowy',
+            buttonIcon: borsukSourceHtml,
+            buttonActive: false,
+            buttonPressed: false
+        }];
     }
 
     firstUpdated() {

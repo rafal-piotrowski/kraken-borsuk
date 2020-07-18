@@ -25,7 +25,6 @@
 import { LitElement, html, css } from 'lit-element';
 import { render, nothing } from 'lit-html';
 import { BorsukPushInputFormStyle } from './BorsukPushInputFormStyle.js';
-import { borsukMinusSign, borsukPlusSign } from '../../../icons/icons.js';
 
 import '@polymer/iron-form/iron-form';
 import '@polymer/paper-input/paper-input';
@@ -41,6 +40,16 @@ import '@vaadin/vaadin-grid/vaadin-grid';
 
 import '../borsuk-toggle-collapse.js';
 import '../../packages/borsuk-button.js';
+import '../../borsuk-editor.js';
+
+import { borsukTypographyBold, borsukTypographyItalic, borsukTypographyUnderline, borsukTypographyColor,
+    borsukTypographyUndo, borsukTypographyRedo, borsukTypographyAlignLeft, borsukTypographyAlignRight,
+    borsukTypographyAlignCenter, borsukTypographyAlignJustify, borsukTypographyListOrdered, borsukTypographyListBullet,
+    borsukFormatParagraph, borsukFormatHeader, borsukFormatDiv, borsukSourceHtml, borsukRemove,
+    borsukEmbedAttachment, borsukEmbedImage, borsukEmbedParam, borsukNonBreakingSpace,
+    borsukMinusSign, borsukPlusSign } from '../../../icons/icons.js';
+
+import  { actions } from '../../../properties/actions.js'
 
 import { events } from '../../../properties/events.js';
 import { titles } from '../../../properties/titles.js';
@@ -80,19 +89,14 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
                     ${Object.keys(this.pushDetails).map((key) => {
                         const i = this.pushDetails[key];
                         return html`
-                            <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
-                                <paper-input
-                                    label=${titles.get('pushContentLabel')}
-                                    rows=4
-                                    class="br-input inputFormSize90"
-                                    id="formMessageText"
-                                    @change=${() => this.pushInputChanged('formMessageText')}
-                                    value=${i.content}
-                                    required
-                                    char-counter
-                                    maxlength=160
-                                    error-message="">
-                                </paper-input>
+                            <div class="inputGrid inputFrame formSpanGrid12 formMessageBorder formBottomShadow">
+                                
+                                <borsuk-editor  class="editor-component" 
+                                                id="formMessageText"
+                                                .typoButtons=${this.editorEmbedButtons}
+                                                .histButtons=${this.editorHistButtons}
+                                                @ev-confirm-text-change=${this.editorTextChanged}>
+                                </borsuk-editor>
                             </div>
 
                             <div id="actionsControler" class="inputGrid inputFrame formSpanGrid12  formGrid12 formBorder formBottomShadow">
@@ -279,7 +283,9 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
             channelActionsParams: { type: Object },
             periodsDict: { type: Array },
             pushActionDict: { type: Array },
-            actionsParamsDict: { type: Array }
+            actionsParamsDict: { type: Array },
+            editorEmbedButtons: { type: Array },
+            editorHistButtons: { type: Array },
         };
     }
 
@@ -297,6 +303,28 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
         this.contentFlg = false;
 
         this._removeParamButtonRendererBound = this.removeParamButtonRenderer.bind(this);
+
+        this.editorHistButtons = [{
+            buttonId: actions.get('textUndoAction'),  // definicja z actions
+            buttonTooltip: 'Cofnij',
+            buttonIcon: borsukTypographyUndo,
+            buttonActive: true,
+            buttonPressed: false
+        },{
+            buttonId: actions.get('textRedoAction'),
+            buttonTooltip: 'Ponów',
+            buttonIcon: borsukTypographyRedo,
+            buttonActive: true,
+            buttonPressed: false
+        }];
+
+        this.editorEmbedButtons = [{
+            buttonId: actions.get('embedParamAction'),
+            buttonTooltip: 'Parametr Inbound',
+            buttonIcon: borsukEmbedParam,
+            buttonActive: true,
+            buttonPressed: false
+        }];
     }
 
     firstUpdated() {
@@ -343,6 +371,10 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
 
         }
         
+    }
+
+    editorTextChanged(event) {
+        store.dispatch(changeFormValue(this._subpage, 'editor', event.detail.textChanged));
     }
 
     removeParamButtonRenderer(root, column, rowData) {
