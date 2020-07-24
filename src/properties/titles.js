@@ -47,13 +47,27 @@ export const pushLinkOutLabel = 'link zewnętrzny';
 export const sendPeriodLabel = 'Periodyczność wysyłki';
 export const sendFromLabel = 'czas wysyłki od:';
 export const sendToLabel = 'czas wysyłki do:';
-export const smsContentLabel = 'Tu też będzie rich text, a co';
+export const smsContentLabel = 'Treść wiadomości SMS';
 export const phoneTypeLabel = 'Typ telefonu';
 export const messageTitleLabel = 'Tytuł wiadomości';
 export const messageGroupLabel = 'Grupa wiadomości';
 export const messageExpireTimeLabel = 'Czas ważności';
 export const messageContentLabel = 'Tu niebawem będzie Rich Text';
 export const messageEventLabel = 'Event powiadomieniowy';
+
+// komunikaty bledow po walidacji pol formularzy
+export const errorMessageRequiredName = 'nazwa powinna zawierać przynajmniej 3 znaki i zaczynać się od litery lub cyfry';
+export const errorMessageRequiredField = 'wybierz pole z listy';
+export const errorMessageRequiredTime = 'wprować wartość od 0 do 23';
+export const errorMessageWrongTime = 'nieprawidłowy zakres czasu';
+export const errorMessageLinkField = 'tylko jeden link lub akcja może być wybrana';
+export const errorMessageEmptyText = 'pole nie może być puste';
+ 
+// szablony walidacji
+export const nameAllowedPattern = "[0-9a-zA-Z_]";
+export const namePattern = "^[a-zA-Z0-9]+[0-9a-zA-Z_]{2,50}";
+export const timeAllowedPattern = "[0-9]";
+export const timePattern = "^([0-9]|0[0-9]|1[0-9]|2[0-3]){0,1}$";
 
 titles.set('menuNavbarTitle', menuNavbarTitle);
 titles.set('cesubofferNavbarTitle', cesubofferNavbarTitle);
@@ -95,3 +109,13 @@ titles.set('messageExpireTimeLabel', messageExpireTimeLabel);
 titles.set('messageContentLabel', messageContentLabel);
 titles.set('messageEventLabel', messageEventLabel);
 titles.set('messageTitleLabel', messageTitleLabel);
+titles.set('errorMessageRequiredName', errorMessageRequiredName);
+titles.set('errorMessageRequiredField', errorMessageRequiredField);
+titles.set('errorMessageRequiredTime', errorMessageRequiredTime);
+titles.set('errorMessageWrongTime', errorMessageWrongTime);
+titles.set('nameAllowedPattern', nameAllowedPattern);
+titles.set('namePattern', namePattern);
+titles.set('timeAllowedPattern', timeAllowedPattern);
+titles.set('timePattern', timePattern);
+titles.set('errorMessageLinkField', errorMessageLinkField);
+titles.set('errorMessageEmptyText', errorMessageEmptyText);

@@ -1,3 +1,8 @@
+/* eslint-disable no-else-return */
+/* eslint-disable consistent-return */
+/* eslint-disable radix */
+/* eslint-disable no-plusplus */
+/* eslint-disable prefer-const */
 /* eslint-disable prefer-template */
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable func-names */
@@ -70,7 +75,8 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
                                     char-counter
                                     maxlength=160
                                     @change=${() => this.smsInputChanged('formMessageText')}
-                                    error-message=${titles.get('errorMessageRequiredField')}>
+                                    @input=${this.smsTextChange}
+                                    error-message=${titles.get('errorMessageEmptyText')}>
                                 </paper-input>
                             </div>
 
@@ -127,11 +133,11 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
                                     id="formSendFrom"
                                     class="br-input inputFormSize90 formSpanGrid4"
                                     clear-button-visible
-                                    @change=${() => this.startTimeValidate('formSendFrom')}
-                                    auto-validate
-                                    allowed-pattern="[0-9]"
-                                    pattern="^([0-9]|0[0-9]|1[0-9]|2[0-3])$"
-                                    error-message="wprować wartość od 0 do 23"
+                                    @change=${this.timeValidate}
+                                    maxlength=2
+                                    allowed-pattern=${titles.get('timeAllowedPattern')}
+                                    pattern=${titles.get('timePattern')}
+                                    error-message=${titles.get('errorMessageRequiredTime')}
                                     required>
                                 </paper-input>
 
@@ -141,11 +147,11 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
                                     id="formSendTo"
                                     class="br-input inputFormSize90 formSpanGrid4"
                                     clear-button-visible
-                                    @change=${() => this.endTimeValidate('formSendTo')}
-                                    auto-validate
-                                    allowed-pattern="[0-9]"
-                                    pattern="^([0-9]|0[0-9]|1[0-9]|2[0-3])$"
-                                    error-message="wprować wartość od 0 do 23"
+                                    @change=${this.timeValidate}
+                                    maxlength=2
+                                    allowed-pattern=${titles.get('timeAllowedPattern')}
+                                    pattern=${titles.get('timePattern')}
+                                    error-message=${titles.get('errorMessageRequiredTime')}
                                     required>
                                 </paper-input>
                             </div>
@@ -162,6 +168,8 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
         return {
             active: { type: Boolean },
             contentFlg: { type: Boolean },
+            _page: { type: String },
+            _subpage: { type: String },
             _subslot: { type: String },
             smsDetails: { type: Object },
             phoneTypeDict: { type: Array },
@@ -191,6 +199,12 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
         return this.active;
     }
 
+    updated(changedProps) {
+        if (changedProps.has('_page')) {
+            this.clearValidateStatus();
+        }
+    }
+
     stateChanged(state) {
         if (this.phoneTypeDict !== dictPhoneTypeSelector(state)) { this.phoneTypeDict = dictPhoneTypeSelector(state); }
         if (this.periodsDict !== dictPeriodsSelector(state)) { this.periodsDict = dictPeriodsSelector(state); }
@@ -207,7 +221,40 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
     }
 
     smsInputChanged(param) {
-        store.dispatch(changeFormValue(this._subpage, param, this.shadowRoot.getElementById(param).value));
+        this.shadowRoot.getElementById(param).validate();
+        if (this.shadowRoot.getElementById(param).invalid === false) {
+            store.dispatch(changeFormValue(this._subpage, param, this.shadowRoot.getElementById(param).value));
+        }
+    }
+
+    smsTextChange(event) {
+        let formMessageText = this.shadowRoot.querySelector('#formMessageText');
+        let s = formMessageText.value.split('');
+ 
+        for (let i = 0; i < s.length; i++) {
+            switch (s[i]) {
+                case '\u0104': s[i] = '\u0041'; break; // Ą
+                case '\u0106': s[i] = '\u0043'; break; // Ć
+                case '\u0118': s[i] = '\u0045'; break; // Ę
+                case '\u0141': s[i] = '\u004C'; break; // Ł
+                case '\u0143': s[i] = '\u004E'; break; // Ń
+                case '\u00D3': s[i] = '\u004F'; break; // Ó
+                case '\u015A': s[i] = '\u0053'; break; // Ś
+                case '\u017B': s[i] = '\u005A'; break; // Ż
+                case '\u0179': s[i] = '\u005A'; break; // Ź
+                case '\u0105': s[i] = '\u0061'; break; // ą
+                case '\u0107': s[i] = '\u0063'; break; // ć
+                case '\u0119': s[i] = '\u0065'; break; // ę
+                case '\u0142': s[i] = '\u006C'; break; // ł
+                case '\u0144': s[i] = '\u006E'; break; // ń
+                case '\u00F3': s[i] = '\u006F'; break; // ó
+                case '\u015B': s[i] = '\u0073'; break; // ś
+                case '\u017C': s[i] = '\u007A'; break; // ż
+                case '\u017A': s[i] = '\u007A'; break; // ź
+                default: break;
+            }
+        }
+        formMessageText.value = s.join('');
     }
 
     smsPhoneTypeChanged(param) {
@@ -218,23 +265,56 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
         store.dispatch(changeFormValue(this._subpage, param, this.periodsDict[this.shadowRoot.getElementById(param).selected].id));
     }
  
-    startTimeValidate(param) {
-        if (this.shadowRoot.getElementById(param).value >=0 && this.shadowRoot.getElementById(param).value <= 23) {
-            store.dispatch(changeFormValue(this._subpage, param, this.shadowRoot.getElementById(param).value));
-        } else {
-            console.log('BLAD');
+    timeValidate() {
+        this.shadowRoot.getElementById("formSendFrom").validate();
+        this.shadowRoot.getElementById("formSendTo").validate();
+
+        if (parseInt(this.shadowRoot.getElementById("formSendFrom").value) >= parseInt(this.shadowRoot.getElementById("formSendTo").value)) {
+            this.shadowRoot.getElementById("formSendFrom").setAttribute('error-message', titles.get('errorMessageWrongTime'));
+            this.shadowRoot.getElementById("formSendTo").setAttribute('error-message', titles.get('errorMessageWrongTime'));
+            this.shadowRoot.getElementById("formSendFrom").invalid = true;
+            this.shadowRoot.getElementById("formSendTo").invalid = true;
         }
-    }
- 
-    endTimeValidate(param) {
-        if (this.shadowRoot.getElementById(param).value >=0 && this.shadowRoot.getElementById(param).value <= 23) {
-            store.dispatch(changeFormValue(this._subpage, param, this.shadowRoot.getElementById(param).value));
-        } else {
-            console.log('BLAD');
-        }
+
+        store.dispatch(changeFormValue(this._subpage, "formSendFrom", this.shadowRoot.getElementById("formSendFrom").value));
+        store.dispatch(changeFormValue(this._subpage, "formSendTo", this.shadowRoot.getElementById("formSendTo").value));
+
     }
 
     changeToggle(event) {
         store.dispatch(changeChannelActiveFlg(this._subpage, event.detail.activeFlg));
+    }
+
+    clearValidateStatus() {
+        this.shadowRoot.getElementById("formSendFrom").invalid = false;
+        this.shadowRoot.getElementById("formSendTo").invalid = false;
+        this.shadowRoot.getElementById("formMessageText").invalid = false;
+    }
+        
+    validateForm(page) {
+        if (page === this._page) {
+
+            this.shadowRoot.getElementById("formMessageText").validate();
+
+            // _________ walidacja dat wysylki
+            this.shadowRoot.getElementById("formSendFrom").validate();
+            this.shadowRoot.getElementById("formSendTo").validate();
+
+            if (parseInt(this.shadowRoot.getElementById("formSendFrom").value) >= parseInt(this.shadowRoot.getElementById("formSendTo").value)) {
+                this.shadowRoot.getElementById("formSendFrom").setAttribute('error-message', titles.get('errorMessageWrongTime'));
+                this.shadowRoot.getElementById("formSendTo").setAttribute('error-message', titles.get('errorMessageWrongTime'));
+                this.shadowRoot.getElementById("formSendFrom").invalid = true;
+                this.shadowRoot.getElementById("formSendTo").invalid = true;
+            }
+            
+            // _________ informacja zwrotna do komponentu rodzica
+            if (this.shadowRoot.getElementById("formSendFrom").invalid === false &&
+                this.shadowRoot.getElementById("formSendTo").invalid === false &&
+                this.shadowRoot.getElementById("formMessageText").invalid === false) {
+                    return true;
+                } else {
+                    return false;
+                }
+        }
     }
 }

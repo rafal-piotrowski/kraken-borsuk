@@ -1,3 +1,7 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-else-return */
+/* eslint-disable prefer-template */
+/* eslint-disable consistent-return */
 /* eslint-disable lit/no-useless-template-literals */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable import/order */
@@ -31,9 +35,9 @@ export class BorsukChannelsSection extends connect(store)(LitElement) {
     render() {
         return html`
             <borsuk-tabs equaltabs .tabsList="${this.ceChannelTabsList}" .activePage="${this._subpage}" .badgeStatus=${true} @change-tab=${this.changeTab}>
-                <borsuk-push-input-form class="subpage" ?active="${this._subslot === 'S11'}" .page=${this._subpage}></borsuk-push-input-form>
-                <borsuk-sms-input-form class="subpage" ?active="${this._subslot === 'S12'}" .page=${this._subpage}></borsuk-sms-input-form>
-                <borsuk-message-input-form class="subpage" ?active="${this._subslot === 'S13'}" .page=${this._subpage}></borsuk-message-input-form>
+                <borsuk-push-input-form id="pushInputForm" class="subpage" ?active="${this._subslot === 'S11'}" .page=${this._subpage}></borsuk-push-input-form>
+                <borsuk-sms-input-form id="smsInputForm" class="subpage" ?active="${this._subslot === 'S12'}" .page=${this._subpage}></borsuk-sms-input-form>
+                <borsuk-message-input-form id="messageInputForm" class="subpage" ?active="${this._subslot === 'S13'}" .page=${this._subpage}></borsuk-message-input-form>
                 <borsuk-page404 class="subpage" ?active="${this._subslot === 'S404'}" .page=${this._subpage}></borsuk-page404>
             </borsuk-tabs>
         `;
@@ -43,18 +47,24 @@ export class BorsukChannelsSection extends connect(store)(LitElement) {
         return {
             active: { type: Boolean },
             _page: { type: String },
+            _subpage: { type: String },
             _slot: { type: String },
             _subslot: { type: String },
             versionFormContent: { type: String },
             formButtons: { type: Array },
             ceChannelTabsList: { type: Array },
-            _subpage: { type: String },
+            isFormPush: { type: Boolean },
+            isFormSms: { type: Boolean },
+            isFormMessage: { type: Boolean }
         };
       }
     
     constructor() {
         super();
         this.ceChannelTabsList = [];
+        this.isFormPush = false;
+        this.isFormSms = false;
+        this.isFormMessage = false;
     }
 
     firstUpdated() {
@@ -66,6 +76,12 @@ export class BorsukChannelsSection extends connect(store)(LitElement) {
                 store.dispatch(switchannel('0', this._subpage, this._subslot));
               }, 1000);
         }
+
+        if (changedProps.has('_page') || changedProps.has('_subpage')) {
+            customElements.whenDefined('borsuk-push-input-form').then(() => { this.isFormPush = true });
+            customElements.whenDefined('borsuk-sms-input-form').then(() => { this.isFormSms = true });
+            customElements.whenDefined('borsuk-message-input-form').then(() => { this.isFormMessage = true });
+        }
     }
 
     changeTab(event) {
@@ -74,6 +90,41 @@ export class BorsukChannelsSection extends connect(store)(LitElement) {
         }
     }
 
+    validateForms(page) {
+
+        if (page === this._page) {
+            let pushValidFlg = true;
+            let smsValidFlg = true;
+            let messageValidFlg = true;
+
+            for (let i=0; i < this.ceChannelTabsList.length; i++) {
+                if (this.ceChannelTabsList[i].channelActive === true) {
+                    if (this.ceChannelTabsList[i].tabSlotId === "S11") {
+                        pushValidFlg = (this.isFormPush) ? this.shadowRoot.getElementById("pushInputForm").validateForm(page) : true;
+                    } else if (this.ceChannelTabsList[i].tabSlotId === "S12") {
+                        smsValidFlg = (this.isFormSms) ? this.shadowRoot.getElementById("smsInputForm").validateForm(page) : true;
+                    } else if (this.ceChannelTabsList[i].tabSlotId === "S13") {
+                        messageValidFlg = (this.isFormMessage) ? this.shadowRoot.getElementById("messageInputForm").validateForm(page) : true;
+                    }
+                }
+            }
+
+            // return (pushValidFlg === true && smsValidFlg === true && messageValidFlg === true) ? true : false;
+
+            if (pushValidFlg === true && smsValidFlg === true && messageValidFlg === true) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+                
+    clearValidateStatus() {
+        if (this.isFormPush) { this.shadowRoot.getElementById("pushInputForm").clearValidateStatus() }
+        if (this.isFormSms) { this.shadowRoot.getElementById("pushInputForm").clearValidateStatus() }
+        if (this.isFormMessage) { this.shadowRoot.getElementById("pushInputForm").clearValidateStatus() }
+    }
+    
     stateChanged(state) {
         this._page = getActivePage(state);
         this._slot = getActiveSlot(state);

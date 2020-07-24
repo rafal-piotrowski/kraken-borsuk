@@ -23,12 +23,13 @@ import { borsukAddSuboffer, borsukAddVersion, borsukApprove, borsukCopySuboffer,
     borsukPublishTest, borsukPublishProd, borsukPublic, borsukChevronDown, borsukChevronUp,
     borsukRemoveSuboffer, borsukRemoveVersion, borsukSaveSuboffer, borsukSaveVersion } from '../icons/icons.js';
 import { saveSubofferAction, validateSubofferAction, removeSubofferAction, copySubofferAction, 
-    addVersionAction, publishTestAction, publishProdAction } from '../properties/actions.js';
+    addVersionAction, publishTestAction, publishProdAction, approveSubofferAction } from '../properties/actions.js';
 
 import './collections/borsuk-form-buttons.js';
 import './collections/borsuk-preloader.js'
 import './collections/borsuk-suboffer-status.js';
 import './collections/borsuk-versions-list.js';
+import './collections/borsuk-publications-list.js';
 
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -60,6 +61,7 @@ export class BorsukSubofferForm extends connect(store)(LitElement) {
             ${this.headerTemplate}
             ${this.formInputTemplate}
             ${this.versionsListTemplate}
+            ${this.publicationsListTemplate}
         `;
     }
 
@@ -94,6 +96,10 @@ export class BorsukSubofferForm extends connect(store)(LitElement) {
 
     get versionsListTemplate() {
         return html`<borsuk-versions-list id="scheduleWindows" class="flexWindows"></borsuk-versions-list>`;
+    }
+
+    get publicationsListTemplate() {
+        return html`<borsuk-publications-list id="publicationWindows" class="flexWindows"></borsuk-publications-list>`;
     }
 
     static get properties() {
@@ -171,11 +177,16 @@ export class BorsukSubofferForm extends connect(store)(LitElement) {
         this._slot = getActiveSlot(state);
     }
 
-    validateSuboffer(state, param) {
-        // IF validation OK
+    validateSuboffer(state, page) {
+        const validateStatus = this.shadowRoot.getElementById("subofferInputForm").validateForm(page);
+        if (validateStatus) {
+            this.saveSuboffer(state, page);
+        } else {
+            // tu bedzie wywolanie modala
+        }
+    }
 
-        console.log('******************* walidacje ***************');
-        console.log(cesubofferPageReselector(state));
+    saveSuboffer(state, param) {
         let formInfo = [];
         for(let i = 0; i < Object.keys(cesubofferPageReselector(state)).length; i++){
             formInfo.push({ subofferName: cesubofferPageReselector(state)[i].subofferName, 

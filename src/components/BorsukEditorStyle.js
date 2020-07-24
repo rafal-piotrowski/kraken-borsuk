@@ -100,4 +100,27 @@ export const BorsukEditorStyle = css`
     .editor-container {
         width: 100%;
     }
+
+    #inputTitle {
+        display: block;
+        padding-bottom: 15px;
+        color: var(--ing-black-color);
+        font-weight: normal;
+    }
+
+    #inputError {
+        display: none;
+    }
+
+    :host([error]) #inputError {
+        display: block;
+        padding-bottom: 15px;
+        color: var(--ing-minus-color);
+        font-weight: bold;
+        border-bottom: 1px solid var(--ing-minus-color);
+    }
+
+    :host([error]) #inputTitle {
+        display: none;
+    }
 `;

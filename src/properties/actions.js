@@ -33,6 +33,7 @@ export const publishTestAction = 'publishTest';
 export const publishProdAction = 'publishProd';
 export const saveVersionAction = 'saveVersion';
 export const validateVersionAction = 'validateVersion';     // akcja bez mapowania w actions2events
+export const approveSubofferAction = 'approveSuboffer';     // akcja bez mapowania w actions2events
 export const removeVersionAction = 'removeVersion';
 export const copyVersionAction = 'copyVersion';
 export const approveVersionAction = 'approveVersion';
@@ -83,6 +84,7 @@ actions.set('publishTestAction', publishTestAction);
 actions.set('publishProdAction', publishProdAction);
 actions.set('saveVersionAction', saveVersionAction);
 actions.set('validateVersionAction', validateVersionAction);
+actions.set('approveSubofferAction', approveSubofferAction);
 actions.set('removeVersionAction', removeVersionAction);
 actions.set('copyVersionAction', copyVersionAction);
 actions.set('approveVersionAction', approveVersionAction);

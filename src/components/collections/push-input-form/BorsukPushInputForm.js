@@ -1,3 +1,6 @@
+/* eslint-disable no-else-return */
+/* eslint-disable consistent-return */
+/* eslint-disable radix */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
 /* eslint-disable prefer-object-spread */
@@ -93,7 +96,7 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
                                 
                                 <borsuk-editor  class="editor-component" 
                                                 id="formMessageText"
-                                                .typoButtons=${this.editorEmbedButtons}
+                                                .listButtons=${this.editorEmbedButtons}
                                                 .histButtons=${this.editorHistButtons}
                                                 @ev-confirm-text-change=${this.editorTextChanged}>
                                 </borsuk-editor>
@@ -106,7 +109,7 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
                                                         label=${titles.get('pushActionGoTo')}
                                                         @iron-select=${() => this.pushActionChanged('formPushAction')}
                                                         selected-item-label="${i.actionId}"
-                                                        error-message="parametr nie został wybrany lub jest już na liście dodanych">
+                                                        error-message=${titles.get('errorMessageLinkField')}>
 
                                         <paper-listbox id="formPushAction" slot="dropdown-content" selected="${Object.values(this.pushActionDict).findIndex(p => p.id === i.actionId)}">
 
@@ -129,7 +132,7 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
                                                             label="Parametr - nazwa" 
                                                             @iron-activate=${this.onParamsMenuActivate} 
                                                             selected-item-label="{{paramSelected}}"
-                                                            error-message="parametr nie został wybrany lub jest już na liście dodanych">
+                                                            error-message=${titles.get('errorMessageLinkField')}>
                                             
                                             <paper-listbox id="formParamAction" slot="dropdown-content">
 
@@ -245,11 +248,11 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
                                     id="formSendFrom"
                                     class="br-input inputFormSize90 formSpanGrid4"
                                     clear-button-visible
-                                    @change=${() => this.startTimeValidate('formSendFrom')}
-                                    auto-validate
-                                    allowed-pattern="[0-9]"
-                                    pattern="^([0-9]|0[0-9]|1[0-9]|2[0-3])$"
-                                    error-message="wprować wartość od 0 do 23"
+                                    @change=${this.timeValidate}
+                                    maxlength=2
+                                    allowed-pattern=${titles.get('timeAllowedPattern')}
+                                    pattern=${titles.get('timePattern')}
+                                    error-message=${titles.get('errorMessageRequiredTime')}
                                     required>
                                 </paper-input>
 
@@ -259,10 +262,11 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
                                     id="formSendTo"
                                     class="br-input inputFormSize90 formSpanGrid4"
                                     clear-button-visible
-                                    @change=${() => this.endTimeValidate('formSendTo')}
-                                    allowed-pattern="[0-9]"
-                                    pattern="^([0-9]|0[0-9]|1[0-9]|2[0-3])$"
-                                    error-message="wprować wartość od 0 do 23"
+                                    @change=${this.timeValidate}
+                                    maxlength=2
+                                    allowed-pattern=${titles.get('timeAllowedPattern')}
+                                    pattern=${titles.get('timePattern')}
+                                    error-message=${titles.get('errorMessageRequiredTime')}
                                     required>
                                 </paper-input>
                             </div>
@@ -277,6 +281,7 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
         return {
             active: { type: Boolean },
             contentFlg: { type: Boolean },
+            _page: { type: String },
             _subpage: { type: String },
             _subslot: { type: String },
             pushDetails: { type: Object },
@@ -348,6 +353,10 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
         if (changedProps.has('_subpage') || changedProps.has('channelActionsParams')) {
             this.renderParamsGrid(Object.values(this.channelActionsParams).filter(param => param.tabPageId === this._subpage));
         }
+
+        if (changedProps.has('_page')) {
+            this.clearValidateStatus();
+        }
     }
 
     stateChanged(state) {
@@ -374,7 +383,12 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
     }
 
     editorTextChanged(event) {
-        store.dispatch(changeFormValue(this._subpage, 'editor', event.detail.textChanged));
+        if (this.shadowRoot.getElementById("formMessageText").getText().trim().length > 0) {
+            this.shadowRoot.getElementById("formMessageText").removeAttribute("error");
+            store.dispatch(changeFormValue(this._subpage, 'editor', event.detail.textChanged));
+        } else {
+            this.shadowRoot.getElementById("formMessageText").setAttribute("error", "");
+        }
     }
 
     removeParamButtonRenderer(root, column, rowData) {
@@ -486,20 +500,20 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
         store.dispatch(changeFormValue(this._subpage, param, this.periodsDict[this.shadowRoot.getElementById(param).selected].id));
     }
  
-    startTimeValidate(param) {
-        if (this.shadowRoot.getElementById(param).value >=0 && this.shadowRoot.getElementById(param).value <= 23) {
-            store.dispatch(changeFormValue(this._subpage, param, this.shadowRoot.getElementById(param).value));
-        } else {
-            console.log('BLAD');
+    timeValidate() {
+        this.shadowRoot.getElementById("formSendFrom").validate();
+        this.shadowRoot.getElementById("formSendTo").validate();
+
+        if (parseInt(this.shadowRoot.getElementById("formSendFrom").value) >= parseInt(this.shadowRoot.getElementById("formSendTo").value)) {
+            this.shadowRoot.getElementById("formSendFrom").setAttribute('error-message', titles.get('errorMessageWrongTime'));
+            this.shadowRoot.getElementById("formSendTo").setAttribute('error-message', titles.get('errorMessageWrongTime'));
+            this.shadowRoot.getElementById("formSendFrom").invalid = true;
+            this.shadowRoot.getElementById("formSendTo").invalid = true;
         }
-    }
- 
-    endTimeValidate(param) {
-        if (this.shadowRoot.getElementById(param).value >=0 && this.shadowRoot.getElementById(param).value <= 23) {
-            store.dispatch(changeFormValue(this._subpage, param, this.shadowRoot.getElementById(param).value));
-        } else {
-            console.log('BLAD');
-        }
+
+        store.dispatch(changeFormValue(this._subpage, "formSendFrom", this.shadowRoot.getElementById("formSendFrom").value));
+        store.dispatch(changeFormValue(this._subpage, "formSendTo", this.shadowRoot.getElementById("formSendTo").value));
+
     }
  
     validateLinksAndActions() {
@@ -508,5 +522,72 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
 
     changeToggle(event) {
         store.dispatch(changeChannelActiveFlg(this._subpage, event.detail.activeFlg));
+    }
+
+    clearValidateStatus() {
+        this.shadowRoot.getElementById("formSendFrom").invalid = false;
+        this.shadowRoot.getElementById("formSendTo").invalid = false;
+        this.shadowRoot.getElementById("formInLink").invalid = false;
+        this.shadowRoot.getElementById("formOutLink").invalid = false;
+        this.shadowRoot.getElementById("formPushActionName").invalid = false;
+    }
+        
+    validateForm(page) {
+        if (page === this._page) {
+
+            // _________ walidacja dat wysylki
+            this.shadowRoot.getElementById("formSendFrom").validate();
+            this.shadowRoot.getElementById("formSendTo").validate();
+
+            if (parseInt(this.shadowRoot.getElementById("formSendFrom").value) >= parseInt(this.shadowRoot.getElementById("formSendTo").value)) {
+                this.shadowRoot.getElementById("formSendFrom").setAttribute('error-message', titles.get('errorMessageWrongTime'));
+                this.shadowRoot.getElementById("formSendTo").setAttribute('error-message', titles.get('errorMessageWrongTime'));
+                this.shadowRoot.getElementById("formSendFrom").invalid = true;
+                this.shadowRoot.getElementById("formSendTo").invalid = true;
+            }
+
+            // __________ walidacja akcji GOTO i linkow
+            let formInLink = this.shadowRoot.getElementById("formInLink");
+            let formOutLink = this.shadowRoot.getElementById("formOutLink");
+            let formActionMenu = this.shadowRoot.getElementById("formPushActionName");
+            let actionSelected = this.pushActionDict[this.shadowRoot.getElementById('formPushAction').selected].id;
+
+            let validateActionFlg = (
+                ((formOutLink.value) ? 1 : 0) + ((formInLink.value) ? 1 : 0) + ((actionSelected !== '-1') ? 1 : 0)
+            );
+
+            if (validateActionFlg > 1) {
+                formActionMenu.invalid = true;
+                formInLink.invalid = true;
+                formOutLink.invalid = true;
+            } else {
+                formActionMenu.invalid = false;
+                formInLink.invalid = false;
+                formOutLink.invalid = false;
+            }
+
+            // _________ walidacja tresci wiadomosci
+            let invalidEditor = false;
+
+            if (this.shadowRoot.getElementById("formMessageText").getText().trim().length > 0) {
+                this.shadowRoot.getElementById("formMessageText").removeAttribute("error");
+                invalidEditor = false;
+            } else {
+                this.shadowRoot.getElementById("formMessageText").setAttribute("error", "");
+                invalidEditor = true;
+            }
+
+            // _________ informacja zwrotna do komponentu rodzica
+            if (this.shadowRoot.getElementById("formSendFrom").invalid === false &&
+                this.shadowRoot.getElementById("formSendTo").invalid === false &&
+                formActionMenu.invalid === false &&
+                formInLink.invalid === false &&
+                formOutLink.invalid === false &&
+                invalidEditor === false) {
+                    return true;
+                } else {
+                    return false;
+                }
+        }
     }
 }

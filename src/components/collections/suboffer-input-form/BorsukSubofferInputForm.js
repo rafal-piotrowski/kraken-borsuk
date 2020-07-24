@@ -1,3 +1,6 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-else-return */
+/* eslint-disable no-console */
 /* eslint-disable prefer-template */
 /* eslint-disable lit/no-value-attribute */
 /* eslint-disable prefer-arrow-callback */
@@ -30,6 +33,8 @@ import '../../packages/borsuk-button.js';
 import { events } from '../../../properties/events.js';
 import { titles } from '../../../properties/titles.js';
 
+import { validateSubofferAction } from '../../../properties/actions.js';
+
 // konektor do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
 
@@ -39,6 +44,7 @@ import { store } from '../../../redux/store.js';
 // załadowanie kreatorów akcji.
 import { changeFormValue } from '../../../redux/actions/cesuboffer.js';
 
+import customevents, { actionClickSelector, actionParamSelector } from '../../../redux/reducers/customevents.js';
 import { dictProductGroupSelector, dictCategorySelector, dictEventsSelector } from '../../../redux/reducers/dictionaries.js';
 import { cesubofferPageReselector } from '../../../redux/reducers/cesuboffer.js';
 
@@ -58,6 +64,7 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
             categoryDict: { type: Array },
             productGroupDict: { type: Array },
             subOfferDetails: { type: Object },
+            _page: { type: String }
         }
     }
 
@@ -102,9 +109,9 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
                                     char-counter
                                     maxlength=50
                                     value=${i.subofferName}
-                                    error-message=${titles.get('errorMessageSubofferName')}
-                                    allowed-pattern="[0-9a-zA-Z_]"
-                                    pattern="^[a-zA-Z]+[0-9a-zA-Z_]{3,50}">
+                                    error-message=${titles.get('errorMessageRequiredName')}
+                                    allowed-pattern=${titles.get('nameAllowedPattern')}
+                                    pattern=${titles.get('namePattern')}>
                                 </paper-input>
                             </div>
 
@@ -178,20 +185,61 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
     }
 
     subofferNameChanged(param) {
-        store.dispatch(changeFormValue(this._page, param, this.shadowRoot.getElementById(param).value));
+        this.shadowRoot.getElementById(param).validate();
+        if (this.shadowRoot.getElementById(param).invalid === false) {
+            store.dispatch(changeFormValue(this._page, param, this.shadowRoot.getElementById(param).value));
+        }
     }
 
     productGroupChanged(param) {
-        store.dispatch(changeFormValue(this._page, param, this.productGroupDict[this.shadowRoot.getElementById(param).selected].id));
+        this.shadowRoot.getElementById("formProductGroup").validate();
+        if (this.shadowRoot.getElementById("formProductGroup").invalid === false) {
+            store.dispatch(changeFormValue(this._page, param, this.productGroupDict[this.shadowRoot.getElementById(param).selected].id));
+        }
     }
 
     categoryChanged(param) {
-        store.dispatch(changeFormValue(this._page, param, this.categoryDict[this.shadowRoot.getElementById(param).selected].id));
+        this.shadowRoot.getElementById("formCategory").validate();
+        if (this.shadowRoot.getElementById("formCategory").invalid === false) {
+            store.dispatch(changeFormValue(this._page, param, this.categoryDict[this.shadowRoot.getElementById(param).selected].id));
+        }
     }
 
     confirmModal(event) {
         const chosenEvent = JSON.parse(event.detail.chosenEvent);
         store.dispatch(changeFormValue(this._page, 'eventId', chosenEvent.event.id));
+        this.shadowRoot.getElementById("eventId").invalid = false;
+    }
+
+    clearValidateStatus() {
+        this.shadowRoot.getElementById("subofferName").invalid = false;
+        this.shadowRoot.getElementById("formCategory").invalid = false;
+        this.shadowRoot.getElementById("formProductGroup").invalid = false;
+        this.shadowRoot.getElementById("eventId").invalid = false;
+    }
+
+    validateForm(page) {
+        if (page === this._page) {
+            this.shadowRoot.getElementById("subofferName").validate();
+            this.shadowRoot.getElementById("formCategory").validate();
+            this.shadowRoot.getElementById("formProductGroup").validate();
+            this.shadowRoot.getElementById("eventId").validate();
+
+            if (this.shadowRoot.getElementById("subofferName").invalid === false &&
+                this.shadowRoot.getElementById("formCategory").invalid === false &&
+                this.shadowRoot.getElementById("formProductGroup").invalid === false &&
+                this.shadowRoot.getElementById("eventId").invalid === false) {
+                    return true;
+                } else {
+                    return false;
+                }
+        }
+    }
+                
+    updated(changedProps) {
+        if (changedProps.has('_page')) {
+            this.clearValidateStatus();
+        }
     }
 
     stateChanged(state) {
@@ -199,6 +247,8 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
         if (this.categoryDict !== dictCategorySelector(state)) { this.categoryDict = dictCategorySelector(state); }
         if (this.eventsDict !== dictEventsSelector(state)) { this.eventsDict = dictEventsSelector(state); }
         if (this.subOfferDetails !== cesubofferPageReselector(state)) { this.subOfferDetails = cesubofferPageReselector(state); }
+
+        if (actionClickSelector(state) === validateSubofferAction) { this.validateForm(state, this._page); }
         this._page = state.cesuboffer.page;
         // this._slot = state.cesuboffer.slot;
     }

@@ -24,6 +24,7 @@ export const UPDATE_STATUS_VAL = 'UPDATE_STATUS_VAL';
 export const UPDATE_STATUS_DESC = 'UPDATE_STATUS_DESC';
 export const GET_VERSIONS_LIST = 'GET_VERSIONS_LIST';
 export const GET_SCHEDULES_LIST = 'GET_SCHEDULES_LIST';
+export const GET_PUBLICATIONS_LIST = 'GET_PUBLICATIONS_LIST';
 export const GET_CHANNEL_ACTIONS_PARAMS = 'GET_CHANNEL_ACTIONS_PARAMS';
 export const ADD_CHANNEL_ACTIONS_PARAM = 'ADD_CHANNEL_ACTIONS_PARAM';
 
@@ -278,6 +279,18 @@ export const getSchedulesList = (ceSchedulesList) => (dispatch) => {
   dispatch({
     type: GET_SCHEDULES_LIST,
     ceschlist
+  });
+};
+
+export const getPublicationsList = (cePublicationsList) => (dispatch) => {
+  const cepubslist = cePublicationsList.reduce((obj, option) => {
+    obj[option.versionId + option.publishNo] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_PUBLICATIONS_LIST,
+    cepubslist
   });
 };
 

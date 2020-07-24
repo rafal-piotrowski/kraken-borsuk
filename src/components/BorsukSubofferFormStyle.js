@@ -41,4 +41,11 @@ export const BorsukSubofferFormStyle = css`
         display: flex;
         justify-content: space-between;
     }
+    
+    :host([unsaved]) #contentForSuboffer {
+        padding: 5px;
+        border: 1px solid rgba(255,0,0,0.5);
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px 1px rgba(255,0,0,0.5);
+    }
 `;

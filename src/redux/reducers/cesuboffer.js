@@ -25,6 +25,7 @@ import {
     UPDATE_STATUS_DESC,
     GET_VERSIONS_LIST,
     GET_SCHEDULES_LIST,
+    GET_PUBLICATIONS_LIST,
     GET_CHANNEL_ACTIONS_PARAMS,
     ADD_CHANNEL_ACTIONS_PARAM
 } from '../actions/cesuboffer.js';
@@ -36,13 +37,16 @@ const INITIAL_STATE = {
     slot: '',
     cesubtabs: {},
     cesubslots: {},
+    cxsubslots: {},
     cechnltabs: {},
     cechnlslots: {},
+    cxchnlslots: {},
     cesubtypes: {},
     cesubnames: {},
     searchresults: {},
     ceverslist: {},
     ceschlist: {},
+    cepubslist: {},
     chnactparams: {}
 };
   
@@ -77,7 +81,8 @@ const cesuboffer = (state = INITIAL_STATE, action) => {
         case GET_CESUBOFFER_SLOTS:
             return {
                 ...state,
-                cesubslots: action.cesubslots
+                cesubslots: action.cesubslots,
+                cxsubslots: action.cesubslots
             };
         case GET_VERSIONS_LIST:
             return {
@@ -89,6 +94,11 @@ const cesuboffer = (state = INITIAL_STATE, action) => {
                 ...state,
                 ceschlist: action.ceschlist
             };
+        case GET_PUBLICATIONS_LIST:
+                return {
+                    ...state,
+                    cepubslist: action.cepubslist
+                };
         case GET_CHANNEL_ACTIONS_PARAMS:
             return {
                 ...state,
@@ -109,7 +119,8 @@ const cesuboffer = (state = INITIAL_STATE, action) => {
         case GET_CE_CHANNEL_SLOTS:
             return {
                 ...state,
-                cechnlslots: action.cechnlslots
+                cechnlslots: action.cechnlslots,
+                cxchnlslots: action.cechnlslots
             };
         case GET_SIDEBAR_TYPES:
             return {
@@ -223,13 +234,16 @@ export default cesuboffer;
 
 export const cesubofferTabsSelector = state => state.cesuboffer.cesubtabs;
 export const cesubofferSlotsSelector = state => state.cesuboffer.cesubslots;
+export const cesubofferSlotsBckpSelector = state => state.cesuboffer.cxsubslots;
 export const ceChannelTabsSelector = state => state.cesuboffer.cechnltabs;
 export const ceChannelSlotsSelector = state => state.cesuboffer.cechnlslots;
+export const ceChannelSlotsBckpSelector = state => state.cesuboffer.cxchnlslots;
 export const cesubofferTypesSelector = state => state.cesuboffer.cesubtypes;
 export const cesubofferNamesSelector = state => state.cesuboffer.cesubnames;
 export const ceSearchResultsSelector = state => state.cesuboffer.searchresults;
 export const ceVersionsListSelector = state => state.cesuboffer.ceverslist;
 export const ceSchedulesListSelector = state => state.cesuboffer.ceschlist;
+export const cePublicationsListSelector = state => state.cesuboffer.cepubslist;
 export const ceChnActParamsSelector = state => state.cesuboffer.chnactparams;
 
 export const getActivePage = createSelector(
@@ -267,10 +281,24 @@ export const cesubofferPageReselector = createSelector(
     }
   )
 
+export const cesubofferPageBckpReselector = createSelector(
+    [ cesubofferSlotsBckpSelector, getActivePage ],
+    (cxsubslots, page) => {
+        return Object.values(cxsubslots).filter(subslot => subslot.tabPageId === page);
+    }
+  )
+
 export const ceVersionsListReselector = createSelector(
     [ ceVersionsListSelector, getActivePage ],
     (ceverslist, page) => {
         return Object.values(ceverslist).filter(version => version.tabPageId === page);
+    }
+  )
+
+export const cePublicationsListReselector = createSelector(
+    [ cePublicationsListSelector, getActivePage ],
+    (cepubslist, page) => {
+        return Object.values(cepubslist).filter(cepublic => cepublic.tabPageId === page);
     }
   )
 
@@ -299,6 +327,13 @@ export const ceChannelsSlotReselector = createSelector(
     [ ceChannelSlotsSelector, getActivePage ],
     (cechnlslots, page) => {
         return Object.values(cechnlslots).filter(chnlslot => chnlslot.parentPageId === page);
+    }
+  )
+
+export const ceChannelsSlotBckpReselector = createSelector(
+    [ ceChannelSlotsBckpSelector, getActivePage ],
+    (cxchnlslots, page) => {
+        return Object.values(cxchnlslots).filter(chnlslot => chnlslot.parentPageId === page);
     }
   )
 

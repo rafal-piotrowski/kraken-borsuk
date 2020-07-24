@@ -1,0 +1,76 @@
+{
+    "cePublicationsList": [
+        {
+            "tabPageId": "5002",
+            "versionId": "12346",
+            "publishNo": "0666",
+            "versionName": "wersja_170131",
+            "versionStatus": "A",
+            "startDate": "1580338800000",
+            "endDate": "1580511599999"
+          },
+          {
+            "tabPageId": "5002",
+            "versionId": "13707",
+            "publishNo": "2143",
+            "versionName": "Wersja_1",
+            "versionStatus": "A",
+            "startDate": "1477306013463",
+            "endDate": "1483225199999"
+          },
+          {
+            "tabPageId": "5002",
+            "versionId": "13881",
+            "publishNo": "2359",
+            "versionName": "wersja_170131",
+            "versionStatus": "A",
+            "startDate": "1485854330716",
+            "endDate": "1548975599999"
+          },
+          {
+            "tabPageId": "5002",
+            "versionId": "14457",
+            "publishNo": "3164",
+            "versionName": "wersja_170131",
+            "versionStatus": "A",
+            "startDate": "1580369889691",
+            "endDate": "1580511599999"
+          },
+          {
+            "tabPageId": "5002",
+            "versionId": "612346",
+            "publishNo": "60666",
+            "versionName": "wersja_170131",
+            "versionStatus": "S",
+            "startDate": "1580338800000",
+            "endDate": "1580511599999"
+          },
+          {
+            "tabPageId": "5002",
+            "versionId": "613707",
+            "publishNo": "62143",
+            "versionName": "Wersja_1",
+            "versionStatus": "S",
+            "startDate": "1477306013463",
+            "endDate": "1483225199999"
+          },
+          {
+            "tabPageId": "5002",
+            "versionId": "613881",
+            "publishNo": "62359",
+            "versionName": "wersja_170131",
+            "versionStatus": "U",
+            "startDate": "1485854330716",
+            "endDate": "1548975599999"
+          },
+          {
+            "tabPageId": "5002",
+            "versionId": "614457",
+            "publishNo": "63164",
+            "versionName": "wersja_170131",
+            "versionStatus": "P",
+            "startDate": "1580369889691",
+            "endDate": "1580511599999"
+          }
+    ]
+}

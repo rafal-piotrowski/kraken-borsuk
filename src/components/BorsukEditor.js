@@ -115,7 +115,8 @@ export class BorsukEditor extends connect(store)(LitElement) {
                     <div id="editor-source">${this.navSourceTamplete}</div>
                 </div>
 
-                <div id="inputTitle" class="inputTitle"><span>Treść wiadomości:</span></div>
+                <div id="inputTitle"><span>Treść wiadomości:</span></div>
+                <div id="inputError"><span>Uzupełnij treść wiadomości:</span></div>
                 <div id="editorWrapper" class="ing-new-theme">
                     <div class="messages-container">
                         <div id="editor" class="msg_content">
@@ -230,7 +231,7 @@ export class BorsukEditor extends connect(store)(LitElement) {
     }
 
     textChanged() {
-        this.changedText = (this._subslot === 'S13') ? JSON.stringify(html2json(this.editor.root.innerHTML)) : this.editor.getText();
+        this.changedText = (this._subslot === 'S13') ? JSON.stringify(html2json(this.editor.root.innerHTML)) : this.editor.getText().trimEnd();
         this.dispatchEvent(new CustomEvent('ev-confirm-text-change', { detail: { textChanged: this.changedText } }));
     }
 
@@ -495,6 +496,18 @@ export class BorsukEditor extends connect(store)(LitElement) {
         this.contextRoot = '';
         this.selectionChangeFlg = false;
         this.clickAction = '';
+    }
+
+    getLength() {
+        return this.editor.getLength();
+    }
+
+    getText() {
+        return this.editor.getText();
+    }
+
+    getContents() {
+        return this.editor.getContents();
     }
 
     // createRenderRoot() { 

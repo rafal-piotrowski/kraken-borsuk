@@ -1,3 +1,5 @@
+/* eslint-disable no-else-return */
+/* eslint-disable consistent-return */
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable func-names */
 /* eslint-disable prefer-template */
@@ -79,9 +81,9 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
                                         @change=${() => this.messageInputChanged('formMessageTitle')}
                                         char-counter
                                         maxlength=50
-                                        error-message=${titles.get('messageTitleError')}
-                                        allowed-pattern=${this.titleAllowedPattern}
-                                        pattern=${this.titlePattern}>
+                                        error-message=${titles.get('errorMessageRequiredName')}
+                                        allowed-pattern=${titles.get('nameAllowedPattern')}
+                                        pattern=${titles.get('namePattern')}>
                                     </paper-input>
                                 </div>
  
@@ -145,6 +147,7 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
 
                             <div class="inputGrid inputFrame formSpanGrid12 formMessageBorder formBottomShadow">
                                 <borsuk-editor  class="editor-component" 
+                                                id="formMessageText"
                                                 .sourceButtons=${this.editorSourceButtons}
                                                 .embedButtons=${this.editorEmbedButtons}
                                                 .formatButtons=${this.editorFormatButtons}
@@ -359,14 +362,48 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
     }
 
     editorTextChanged(event) {
-        // console.log('___ jestem w input message, subpage to: '+this._subpage);
-        // console.log('natomiast zawartosc edytora w postaci json jest następująca: ');
-        // console.log(event.detail.textChanged);
-        store.dispatch(changeFormValue(this._subpage, 'editor', event.detail.textChanged));
+        if (this.shadowRoot.getElementById("formMessageText").getText().trim().length > 0) {
+            this.shadowRoot.getElementById("formMessageText").removeAttribute("error");
+            store.dispatch(changeFormValue(this._subpage, 'editor', event.detail.textChanged));
+        } else {
+            this.shadowRoot.getElementById("formMessageText").setAttribute("error", "");
+        }
     }
 
     messageInputChanged(param) {
-        store.dispatch(changeFormValue(this._subpage, param, this.shadowRoot.getElementById(param).value));
+        this.shadowRoot.getElementById(param).validate();
+        if (this.shadowRoot.getElementById(param).invalid === false) {
+            store.dispatch(changeFormValue(this._subpage, param, this.shadowRoot.getElementById(param).value));
+        }
+    }
+        
+    clearValidateStatus() {
+        this.shadowRoot.getElementById("formMessageTitle").invalid = false;
+    }
+
+    validateForm(page) {
+        if (page === this._page) {
+            this.shadowRoot.getElementById("formMessageTitle").validate();
+
+            // _________ walidacja tresci wiadomosci
+            let invalidEditor = false;
+
+            if (this.shadowRoot.getElementById("formMessageText").getText().trim().length > 0) {
+                this.shadowRoot.getElementById("formMessageText").removeAttribute("error");
+                invalidEditor = false;
+            } else {
+                this.shadowRoot.getElementById("formMessageText").setAttribute("error", "");
+                invalidEditor = true;
+            }
+
+            // _________ informacja zwrotna do komponentu rodzica
+            if (this.shadowRoot.getElementById("formMessageTitle").invalid === false &&
+                invalidEditor === false) {
+                    return true;
+                } else {
+                    return false;
+                }
+        }
     }
 
     messageGroupChanged(param) {

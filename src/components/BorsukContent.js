@@ -32,7 +32,8 @@ import { store } from '../redux/store.js';
 import { navigate } from '../redux/actions/cesuboffer.js';
 
 // podłączenie reducer-a.
-import cesuboffer, { cesubofferTabsSelector, getActivePage, getActiveSlot } from '../redux/reducers/cesuboffer.js';
+import cesuboffer, { cesubofferTabsSelector, getActivePage, getActiveSlot, cesubofferPageReselector, 
+                    cesubofferPageBckpReselector, ceChannelsSlotReselector, ceChannelsSlotBckpReselector } from '../redux/reducers/cesuboffer.js';
 // store.addReducers({
 //     cesuboffer
 // });
@@ -59,8 +60,8 @@ export class BorsukContent extends connect(store)(LitElement) {
         return html`
             <borsuk-tabs .tabsList="${this.cesubofferTabsList}" .activePage="${this._page}" @change-tab=${this.changeTab}>
                 <borsuk-welcome class="page" ?active="${this._slot === 'S00'}" .page=${this._page}></borsuk-welcome>
-                <borsuk-suboffer-form class="page" ?active="${this._slot === 'S01'}" .page=${this._page}></borsuk-suboffer-form>
-                <borsuk-version-form class="page" ?active="${this._slot === 'S02'}" .page=${this._page}></borsuk-version-form>
+                <borsuk-suboffer-form id="subofferContent" class="page" ?active="${this._slot === 'S01'}" .page=${this._page}></borsuk-suboffer-form>
+                <borsuk-version-form id="versionContent" class="page" ?active="${this._slot === 'S02'}" .page=${this._page}></borsuk-version-form>
                 <borsuk-filter-form class="page" ?active="${this._slot === 'S99'}" .page=${this._page}></borsuk-filter-form>
                 <borsuk-page404 class="page" ?active="${this._slot === 'S404'}" .page=${this._page}></borsuk-page404>
             </borsuk-tabs>
@@ -73,6 +74,10 @@ export class BorsukContent extends connect(store)(LitElement) {
             _page: { type: String },
             _slot: { type: String },
             cesubofferTabsList: { type: Array },
+            ceSlotValues: { type: Array },
+            ceChannelsValues: { type: Array },
+            ceSlotBckpValues: { type: Array },
+            ceChannelsBckpValues: { type: Array }
         };
     }
 
@@ -80,6 +85,10 @@ export class BorsukContent extends connect(store)(LitElement) {
         super();
         this.appTitle = "BORSUK";
         this.cesubofferTabsList = [];
+        this.ceSlotValues = [];
+        this.ceChannelsValues = [];
+        this.ceSlotBckpValues = [];
+        this.ceChannelsBckpValues = [];
     }
 
     firstUpdated() {
@@ -90,7 +99,7 @@ export class BorsukContent extends connect(store)(LitElement) {
 
     updated(changedProps) {
         if (changedProps.has('_page')) {
-
+            this.inspectStateChanges();
             const pageTitle = this.appTitle + ' - ' + this._page;
             updateMetadata({
                 title: pageTitle,
@@ -113,10 +122,28 @@ export class BorsukContent extends connect(store)(LitElement) {
 
     stateChanged(state) {
         if (this.cesubofferTabsList !== cesubofferTabsSelector(state)) { this.cesubofferTabsList = cesubofferTabsSelector(state); }
+        if (this.ceSlotValues !== cesubofferPageReselector(state)) { this.ceSlotValues = cesubofferPageReselector(state); this.inspectStateChanges(); }
+        if (this.ceChannelsValues !== ceChannelsSlotReselector(state)) { this.ceChannelsValues = ceChannelsSlotReselector(state); this.inspectStateChanges(); }
+        if (this.ceSlotBckpValues !== cesubofferPageBckpReselector(state)) { this.ceSlotBckpValues = cesubofferPageBckpReselector(state) }
+        if (this.ceChannelsBckpValues !== ceChannelsSlotBckpReselector(state)) { this.ceChannelsBckpValues = ceChannelsSlotBckpReselector(state) }
         // if (this._page !== getActivePageFromFlag(state)) { this._page = getActivePageFromFlag(state); }
         // if (this._slot !== getActiveSlotFromFlag(state)) { this._slot = getActiveSlotFromFlag(state); }
+        // this._page = getActivePage(state);
         this._page = getActivePage(state);
-        this._slot = getActiveSlot(state)
+        this._slot = getActiveSlot(state);
+        
+    }
+
+    inspectStateChanges() {
+        if (JSON.stringify(Object.values(this.ceSlotValues)) === JSON.stringify(Object.values(this.ceSlotBckpValues)) &&
+            JSON.stringify(Object.values(this.ceChannelsValues)) === JSON.stringify(Object.values(this.ceChannelsBckpValues)))
+        {
+            if (this._slot === 'S01') { this.shadowRoot.getElementById("subofferContent").removeAttribute("unsaved"); }
+            if (this._slot === 'S02') { this.shadowRoot.getElementById("versionContent").removeAttribute("unsaved"); }
+        } else {
+            if (this._slot === 'S01') { this.shadowRoot.getElementById("subofferContent").setAttribute("unsaved", ""); }
+            if (this._slot === 'S02') { this.shadowRoot.getElementById("versionContent").setAttribute("unsaved", ""); }
+        }
     }
 
 }

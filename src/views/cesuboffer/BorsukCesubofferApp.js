@@ -46,14 +46,15 @@ import { store } from '../../redux/store.js';
 // getUserInfo do wywalenia po wrzuceniu do projektu.
 import { getUserInfo } from '../../redux/actions/menu.js';
 import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSlots, getSidebarTypes, getSidebarNames, getSearchResults, 
-        navigate, changeStatus, getVersionsList, getSchedulesList, getChannelActionsParams } from '../../redux/actions/cesuboffer.js';
+        navigate, changeStatus, getVersionsList, getSchedulesList, getPublicationsList, getChannelActionsParams } from '../../redux/actions/cesuboffer.js';
 import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict, 
         getResponseCodesDict, getContentParamsDict, getActionsParamsDict } from '../../redux/actions/dictionaries.js';
 import { setClickAction } from '../../redux/actions/customevents.js';
 
 // podłączenie reducer-a.
 import menu, { userInfoSelector } from '../../redux/reducers/menu.js';
-import cesuboffer from '../../redux/reducers/cesuboffer.js';
+import cesuboffer, { getActivePage, cesubofferSlotsSelector, cesubofferSlotsBckpSelector, ceChannelSlotsSelector, ceChannelSlotsBckpSelector,
+    cesubofferPageReselector, cesubofferPageBckpReselector, ceChannelsSlotReselector, ceChannelsSlotBckpReselector } from '../../redux/reducers/cesuboffer.js';
 import customevents, { actionClickSelector, actionParamSelector } from '../../redux/reducers/customevents.js';
 import dictionaries from '../../redux/reducers/dictionaries.js';
 
@@ -142,6 +143,7 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         this._setSidebarSubnames();
         this._setVersionsList();
         this._setSchedulesList();
+        this._setPublicationsList();
         this._setChannelActionsParams();
 
         // ładowanie słowników
@@ -216,6 +218,11 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         else { loadJSON('/src/properties/_ceSchedulesList.json').then(data => { store.dispatch(getSchedulesList(data.ceSchedulesList)); }) }
     }
 
+    _setPublicationsList(jsonData) {
+        if (jsonData) { store.dispatch(getPublicationsList(jsonData.cePublicationsList)); }
+        else { loadJSON('/src/properties/_cePublicationsList.json').then(data => { store.dispatch(getPublicationsList(data.cePublicationsList)); }) }
+    }
+
     // metoda do zasilenia filtra
     _setFilterContent(jsonData) {
         if (jsonData) { store.dispatch(getSearchResults(jsonData.searchResults)); } 
@@ -284,8 +291,24 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
 
     stateChanged(state) {
         if (this.userInfo !== userInfoSelector(state)) { this.userInfo = userInfoSelector(state); }
-        if (actionClickSelector(state) === actions.get('logoutAction')) { localStorage.clear(); location.reload(); }
-        if (actionClickSelector(state)) { this.fireCustomEvent(state, actionClickSelector(state), actionParamSelector(state) ? actionParamSelector(state) : null) }
+        // if (actionClickSelector(state) === actions.get('logoutAction')) { localStorage.clear(); location.reload(); }
+        if (actionClickSelector(state) === actions.get('closeTabAction') ||
+            actionClickSelector(state) === actions.get('homeAction') ||
+            actionClickSelector(state) === actions.get('logoutAction') ||
+            actionClickSelector(state) === actions.get('addSubofferAction') ||
+            actionClickSelector(state) === actions.get('editSubofferAction') ||
+            actionClickSelector(state) === actions.get('editVersionAction') ||
+            actionClickSelector(state) === actions.get('addVersionAction') ||
+            actionClickSelector(state) === actions.get('copySubofferAction') ||
+            actionClickSelector(state) === actions.get('copyVersionAction') ||
+            actionClickSelector(state) === actions.get('removeVersionAction') ||
+            actionClickSelector(state) === actions.get('removeSubofferAction') ||
+            actionClickSelector(state) === actions.get('filterOpenAction')) {
+            this.fireProtectEvent(state, actionClickSelector(state), actionParamSelector(state) ? actionParamSelector(state) : null);
+        } else {
+            this.fireCustomEvent(state, actionClickSelector(state), actionParamSelector(state) ? actionParamSelector(state) : null)
+        }
+        this._page = getActivePage(state);
     }
 
     openModal(type, mode, textLine1, textLine2, textLine3, jsonToken, scale) {
@@ -295,12 +318,76 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
 
     confirmModal(event) {
         this.dialogElements = event.detail;
-        this.dispatchEvent(new CustomEvent(events.get('confirmModalEvent'), { detail: this.dialogElements }));
+        let actionType = JSON.parse(this.dialogElements.tokenValues).tokenKey;
+        if (actionType === actions.get('closeTabAction') ||
+            actionType === actions.get('homeAction') ||
+            actionType === actions.get('logoutAction') ||
+            actionType === actions.get('addSubofferAction') ||
+            actionType === actions.get('editSubofferAction') ||
+            actionType === actions.get('editVersionAction') ||
+            actionType === actions.get('addVersionAction') ||
+            actionType === actions.get('copySubofferAction') ||
+            actionType === actions.get('copyVersionAction') ||
+            actionType === actions.get('removeVersionAction') ||
+            actionType === actions.get('removeSubofferAction') ||
+            actionType === actions.get('filterOpenAction')) {
+                this.fireCustomEvent("", actionType, this.closingPage);
+                if (actionType === actions.get('logoutAction')) { localStorage.clear(); location.reload(); }
+        } else {
+            this.dispatchEvent(new CustomEvent(events.get('confirmModalEvent'), { detail: this.dialogElements }));
+        }
     }
 
     cancelModal(event) {
         this.dialogElements = event.detail;
         this.dispatchEvent(new CustomEvent(events.get('cancelModalEvent'), { detail: this.dialogElements }));
+    }
+
+    // fireCloseTabEvent(state, type, param) {
+    //     let checkingState = Object.values(cesubofferSlotsSelector(state)).filter(subslot => subslot.tabPageId === param.pageId);
+    //     let originState = Object.values(cesubofferSlotsBckpSelector(state)).filter(subslot => subslot.tabPageId === param.pageId);
+    //     let checkingChannelsState = Object.values(ceChannelSlotsSelector(state)).filter(subslot => subslot.parentPageId === param.pageId);
+    //     let originChannelsState = Object.values(ceChannelSlotsBckpSelector(state)).filter(subslot => subslot.parentPageId === param.pageId);
+    //     let token = {"tokenKey": "token-ev-close-tab"}
+    //     this.closingPage = param;
+
+    //     if (JSON.stringify(checkingState) === JSON.stringify(originState) &&
+    //         JSON.stringify(checkingChannelsState) === JSON.stringify(originChannelsState))
+    //     {
+    //         this.fireCustomEvent(state, type, param);
+    //     } else {
+    //         this.openModal( 'M', 'C',
+    //                     "Nie zapisano zmian",
+    //                     "Czy jesteś pewien że chcesz zamknąć formatkę ?",
+    //                     "", JSON.stringify(token));
+    //     }
+    // }
+
+    fireProtectEvent(state, type, param) {
+
+        // let checkingState = Object.values(cesubofferPageReselector(state));
+        // let originState = Object.values(cesubofferPageBckpReselector(state));
+        // let checkingChannelsState = Object.values(ceChannelsSlotReselector(state));
+        // let originChannelsState = Object.values(ceChannelsSlotBckpReselector(state));
+
+        let checkingState = Object.values(cesubofferSlotsSelector(state));
+        let originState = Object.values(cesubofferSlotsBckpSelector(state));
+        let checkingChannelsState = Object.values(ceChannelSlotsSelector(state));
+        let originChannelsState = Object.values(ceChannelSlotsBckpSelector(state));
+
+        let token = {"tokenKey": type}
+        this.closingPage = param;
+
+        if (JSON.stringify(checkingState) === JSON.stringify(originState) &&
+            JSON.stringify(checkingChannelsState) === JSON.stringify(originChannelsState))
+        {
+            this.fireCustomEvent(state, type, param);
+        } else {
+            this.openModal( 'M', 'C',
+                        "Nie zapisano wszystkich zmian",
+                        "Czy jesteś pewien że chcesz je utracić ?",
+                        "", JSON.stringify(token));
+        }
     }
 
     fireCustomEvent(state, type, param) {
@@ -318,6 +405,8 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
             footing: { type: String },
             title: { type: String },
             userInfo: { type: Object },
+            _page: { type: String },
+            closingPage: { type: Object }
         };
     }
 

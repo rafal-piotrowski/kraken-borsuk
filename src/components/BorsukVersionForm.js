@@ -102,7 +102,7 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
                 <div class="container-fluid">
                     <div id="tabsVerForm" class="card card-nav-tabs text-center">
                         <div id="headerTabsVerForm" class="card-header card-header-warning">
-                            <borsuk-channels-section></borsuk-channels-section>
+                            <borsuk-channels-section id="channelsForms"></borsuk-channels-section>
                         </div>
                     </div>
                 </div>
@@ -165,8 +165,8 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
     }
 
     updated(changedProps) {
-        if (changedProps.has('_subpage')) {
-            // console.log('##################### BorsukVersionForm (updated) - subpage_has_changed');
+        if (changedProps.has('_page')) {
+            this.shadowRoot.getElementById("channelsForms").clearValidateStatus();
         }
     }
 
@@ -177,9 +177,18 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
         this._slot = getActiveSlot(state);
     }
 
-    validateVersion(state, param) {
+    validateVersion(state, page) {
+        const validateVersionStatus = this.shadowRoot.getElementById("versionInputForm").validateForm(page);
+        const validateChannelsStatus = this.shadowRoot.getElementById("channelsForms").validateForms(page);
+        if (validateVersionStatus && validateChannelsStatus) {
+            this.saveVersion(state, page);
+        } else {
+            // tu bedzie wywolanie modala
+        }
+    }
 
-        // IF validation OK
+    saveVersion(state, param) {
+        
         let formInfo = [];
         let pushInfo = [];
         let smsInfo = [];
@@ -188,8 +197,6 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
         let pushActiveFlg = false;
         let smsActiveFlg = false;
         let messageActiveFlg = false;
-
-        console.log(ceChnActParamsReselector(state));
 
         for(let i = 0; i < Object.keys(cesubofferPageReselector(state)).length; i++){
             formInfo.push({ versionName: cesubofferPageReselector(state)[i].versionName, 

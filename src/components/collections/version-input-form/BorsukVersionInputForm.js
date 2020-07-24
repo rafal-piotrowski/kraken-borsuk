@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-else-return */
 /* eslint-disable prefer-template */
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable func-names */
@@ -49,7 +51,8 @@ export class BorsukVersionInputForm extends connect(store)(LitElement) {
     static get properties() {
         return {
             versionDetails: { type: Object },
-            radioChanged: { type: Boolean }
+            radioChanged: { type: Boolean },
+            _page: { type: String }
         }
     }
  
@@ -97,9 +100,9 @@ export class BorsukVersionInputForm extends connect(store)(LitElement) {
                                         @change=${() => this.versionNameChanged('versionName')}
                                         char-counter
                                         maxlength=50
-                                        error-message=${titles.get('errorMessageVersionName')}
-                                        allowed-pattern="[0-9a-zA-Z_ ]"
-                                        pattern="^[a-zA-Z]+[0-9a-zA-Z_ ]{3,50}">
+                                        error-message=${titles.get('errorMessageRequiredName')}
+                                        allowed-pattern=${titles.get('nameAllowedPattern')}
+                                        pattern=${titles.get('namePattern')}>
                                 </paper-input>
                             </div>
 
@@ -117,11 +120,36 @@ export class BorsukVersionInputForm extends connect(store)(LitElement) {
     }
 
     versionNameChanged(param) {
-        store.dispatch(changeFormValue(this._page, param, this.shadowRoot.getElementById(param).value));
+        this.shadowRoot.getElementById(param).validate();
+        if (this.shadowRoot.getElementById(param).invalid === false) {
+            store.dispatch(changeFormValue(this._page, param, this.shadowRoot.getElementById(param).value));
+        }
     }
  
     pushAndSmsChanged(param) {
         store.dispatch(changeFormValue(this._page, param, this.shadowRoot.getElementById(param).selected));
+    }
+
+    clearValidateStatus() {
+        this.shadowRoot.getElementById("versionName").invalid = false;
+    }
+
+    validateForm(page) {
+        if (page === this._page) {
+            this.shadowRoot.getElementById("versionName").validate();
+
+            if (this.shadowRoot.getElementById("versionName").invalid === false) {
+                    return true;
+                } else {
+                    return false;
+                }
+        }
+    }
+
+    updated(changedProps) {
+        if (changedProps.has('_page')) {
+            this.clearValidateStatus();
+        }
     }
 
     stateChanged(state) {
