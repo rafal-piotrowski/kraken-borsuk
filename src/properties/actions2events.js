@@ -29,3 +29,4 @@ actions2events.set(actions.get('filterSelectResultAction'), events.get('filterSe
 actions2events.set(actions.get('addScheduleAction'),        events.get('addScheduleEvent'));
 actions2events.set(actions.get('editScheduleAction'),       events.get('editScheduleEvent'));
 actions2events.set(actions.get('removeScheduleAction'),     events.get('removeScheduleEvent'));
+actions2events.set(actions.get('filterResetAction'),        events.get('filterResetEvent'));

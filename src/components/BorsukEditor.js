@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-lonely-if */
 /* eslint-disable eqeqeq */
@@ -164,6 +165,13 @@ export class BorsukEditor extends connect(store)(LitElement) {
         this.initEditor();
     }
 
+    updated(changedProps) {
+        if (changedProps.has('_page') || changedProps.has('_subpage')) {
+            let htmlEditor = this.shadowRoot.querySelector('.ql-html-editor');
+            if (htmlEditor) { this.editor.container.removeChild(htmlEditor) }
+        }
+    }
+
     initEditor() {
         let container = this.shadowRoot.querySelector("#editor");
         this.editor = new Quill(container);
@@ -198,6 +206,8 @@ export class BorsukEditor extends connect(store)(LitElement) {
                 }
             }
         }
+
+        if (this._htmlflg !== state.cesuboffer.htmlflg) { this._htmlflg = state.cesuboffer.htmlflg }
 
         if (this.clickAction !== actionClickSelector(state)) {
             this.clickAction = actionClickSelector(state);
@@ -460,8 +470,47 @@ export class BorsukEditor extends connect(store)(LitElement) {
     }
 
     htmlAction() {
-        this.editorContent = JSON.stringify(html2json(this.editor.root.innerHTML));
-        console.log(this.editorContent);
+        // this.editorContent = JSON.stringify(html2json(this.editor.root.innerHTML));
+        // console.log(this.editorContent);
+        // console.log('-----------------------------------------');
+        // console.log(this.editor.root.innerHTML);
+        let htmlEditor = this.shadowRoot.querySelector('.ql-html-editor');
+        if (htmlEditor){
+                // this.editor.root.innerHTML = htmlEditor.value.replace(/\n/g, "");
+            this.editor.root.innerHTML = htmlEditor.value;
+            this.editor.container.removeChild(htmlEditor);
+        } else {
+            let options = {
+                "indent":"auto",
+                "indent-spaces":2,
+                "wrap":80,
+                "markup":true,
+                "output-xml":false,
+                "numeric-entities":true,
+                "quote-marks":true,
+                "quote-nbsp":false,
+                "show-body-only":true,
+                "quote-ampersand":false,
+                "break-before-br":true,
+                "uppercase-tags":false,
+                "uppercase-attributes":false,
+                "drop-font-tags":true,
+                "tidy-mark":false
+            }
+            let htmlEditor = document.createElement("textarea");
+
+            // ponizej flaga dezaktywacji dla backendu
+            // if (!this.userAllowed) { 
+            if (!this._htmlflg) { htmlEditor.setAttribute("readonly",""); }
+            htmlEditor.setAttribute("style", "resize: none");
+            // }
+            htmlEditor.className = 'ql-editor ql-html-editor';
+            
+            // htmlEditor.innerHTML = tidy_html5(this.editor.root.innerHTML, options).replace(/\n\n/g, "\n");
+            htmlEditor.innerHTML = this.editor.root.innerHTML;
+            // htmlEditor.innerHTML = this.editor.root.innerHTML;
+            this.editor.container.appendChild(htmlEditor);
+        }
     }
 
     // natomiast ponizej przyklad wysylka tresci z edytora na backend
@@ -472,10 +521,12 @@ export class BorsukEditor extends connect(store)(LitElement) {
         return {
             selectionChangeFlg: { type: Boolean },
             _page: { type: String },
+            _subpage: { type: String },
             _slot: { type: String },
             _tabSlotId: { type: String },
             channelDetails: { type: Object },
-            clickAction: { type: String }
+            clickAction: { type: String },
+            _htmlflg: { type: Boolean }
         };
     }
 
@@ -496,6 +547,7 @@ export class BorsukEditor extends connect(store)(LitElement) {
         this.contextRoot = '';
         this.selectionChangeFlg = false;
         this.clickAction = '';
+        this._htmlflg = false;
     }
 
     getLength() {

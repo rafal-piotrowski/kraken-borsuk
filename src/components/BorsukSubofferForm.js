@@ -30,6 +30,7 @@ import './collections/borsuk-preloader.js'
 import './collections/borsuk-suboffer-status.js';
 import './collections/borsuk-versions-list.js';
 import './collections/borsuk-publications-list.js';
+import './collections/borsuk-dialog.js';
 
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -41,7 +42,7 @@ import { store } from '../redux/store.js';
 import { setClickAction } from '../redux/actions/customevents.js';
 
 import customevents, { actionClickSelector, actionParamSelector } from '../redux/reducers/customevents.js';
-import { cesubofferPageReselector, getActivePage, getActiveSlot } from '../redux/reducers/cesuboffer.js';
+import { cesubofferPageReselector, getActivePage, getActiveSlot, ceBtnsFlagsReselector } from '../redux/reducers/cesuboffer.js';
 
 export class BorsukSubofferForm extends connect(store)(LitElement) {
     static get styles() {
@@ -62,6 +63,10 @@ export class BorsukSubofferForm extends connect(store)(LitElement) {
             ${this.formInputTemplate}
             ${this.versionsListTemplate}
             ${this.publicationsListTemplate}
+            <borsuk-dialog  id="dialogWindow" 
+                            @confirm-dialog-fired=${this.confirmModal} 
+                            @cancel-dialog-fired=${this.cancelModal}>
+            </borsuk-dialog>
         `;
     }
 
@@ -109,6 +114,7 @@ export class BorsukSubofferForm extends connect(store)(LitElement) {
             _slot: { type: String },
             subofferFormContent: { type: String },
             formButtons: { type: Array },
+            buttonsFlags: { type: Array },
             productGroupDict: { type: Array },
         };
     }
@@ -173,6 +179,17 @@ export class BorsukSubofferForm extends connect(store)(LitElement) {
 
     stateChanged(state) {
         if (actionClickSelector(state) === validateSubofferAction) { this.validateSuboffer(state, this._page); }
+        if (this.buttonsFlags !== ceBtnsFlagsReselector(state)) { 
+            this.buttonsFlags = ceBtnsFlagsReselector(state); 
+
+            // ustawienia aktywnosci przyciskow
+            for (let i=0; i < this.formButtons.length; i++) {
+                this.formButtons[i].buttonActive = 
+                    (Object.values(this.buttonsFlags).filter(button => button.buttonId === this.formButtons[i].buttonId).length > 0) ?
+                    Object.values(this.buttonsFlags).filter(button => button.buttonId === this.formButtons[i].buttonId)[0].buttonFlg : true;
+            }
+        }
+
         this._page = getActivePage(state);
         this._slot = getActiveSlot(state);
     }
@@ -182,7 +199,7 @@ export class BorsukSubofferForm extends connect(store)(LitElement) {
         if (validateStatus) {
             this.saveSuboffer(state, page);
         } else {
-            // tu bedzie wywolanie modala
+            this.shadowRoot.getElementById('dialogWindow').openDialog('A',"Formularz zawiera błędy !","Sprawdź i popraw wszystkie pola zaznaczone na czerwono","");
         }
     }
 
@@ -203,5 +220,9 @@ export class BorsukSubofferForm extends connect(store)(LitElement) {
         }
         store.dispatch(setClickAction(saveSubofferAction, this.formElements));
     }
+
+    confirmModal() {}
+    
+    cancelModal() {}
 
 }

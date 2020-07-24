@@ -123,4 +123,17 @@ export const BorsukEditorStyle = css`
     :host([error]) #inputTitle {
         display: none;
     }
+
+    #editor .ql-html-editor {
+        position: absolute;
+        background: var(--ing-black-color);
+        color: var(--ing-8percent-black-color);
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        border: 0;
+        padding: 12px;
+        box-sizing: border-box;
+    }
 `;

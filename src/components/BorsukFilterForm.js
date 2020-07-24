@@ -17,13 +17,15 @@ import { BorsukFilterFormStyle } from './BorsukFilterFormStyle.js';
 import '@polymer/paper-input/paper-input';
 import '@polymer/paper-checkbox/paper-checkbox';
 import './packages/borsuk-button.js';
+import './packages/borsuk-icon.js';
 import '@polymer/iron-collapse/iron-collapse';
-
 import './collections/borsuk-events-modal.js';
 
-import { filterConfirmAction, filterSelectResultAction } from '../properties/actions.js';
+import { filterConfirmAction, filterSelectResultAction, filterResetAction } from '../properties/actions.js';
 
-import { borsukDoubleChevronUp, borsukDoubleChevronDown } from '../icons/icons.js';
+import { borsukDoubleChevronUp, borsukDoubleChevronDown, borsukRemove } from '../icons/icons.js';
+
+import { tooltips } from '../properties/tooltips.js';
 
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -44,7 +46,7 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
     render() {
         return html`
             
-            <filter-collapse>    
+            <filter-collapse id="filterContentCollapse" @click=${this.isCollapsed}>
                 <div class="formGrid formGrid12">
                     <div class="inputGrid formSpanGrid6">
                         <paper-input
@@ -75,12 +77,12 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
                     
                     </div>
 
-                    <div class="inputGrid formSpanGrid12">
+                    <div class="inputGrid formGrid12 formSpanGrid12">
                         <paper-input 
                             type="text"
                             label="Event" 
                             id="filterEvent"
-                            class="br-input inputFormSize90"
+                            class="br-input inputFormSize90 formSpanGrid11"
                             @focus="${this.chooseEventFromDict}"
                             value=""
                             char-counter
@@ -88,6 +90,11 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
                             allowed-pattern="[0-9a-zA-Z\u0105\u0107\u0119\u0142\u0144\u00F3\u015B\u017A\u017C\u0104\u0106\u0118\u0141\u0143\u00D3\u015A\u0179\u017B_ -]"
                             pattern="^[a-zA-Z]+[0-9a-zA-Z_ -]{0,50}">
                         </paper-input>
+
+                        <borsuk-button smicon animate id="eventRemoveButton" class="inputGrid formSpanGrid1 inputFormSize90 btn-icon-animated btn-icon-ing" @click="${this.eventRemove}">
+                            <borsuk-icon .svg=${borsukRemove}></borsuk-icon>
+                        </borsuk-button>
+                        <paper-tooltip  id="eventRemoveButton-tooltip" for="eventRemoveButton">${tooltips.get('removeMessageEventTooltip')}</paper-tooltip>
                     </div>
 
                     <div class="inputGrid formSpanGrid6">
@@ -141,7 +148,7 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
 
             <borsuk-events-modal
                 id="eventModal"
-                @evConfirmEventChosen=${this.confirmModal}>
+                @ev-confirm-event-chosen=${this.confirmModal}>
             </borsuk-events-modal>
 
             ${this.resultsTemplate}
@@ -200,6 +207,23 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
         this.shadowRoot.getElementById("eventModal").openModal();
     }
 
+    confirmModal(event) {
+        const chosenEvent = JSON.parse(event.detail.chosenEvent);
+        this.shadowRoot.getElementById("filterEvent").value = chosenEvent.event.name;
+    }
+
+    eventRemove() {
+        this.shadowRoot.getElementById("filterEvent").value = '';
+    }
+
+    isCollapsed() {
+        if (this.shadowRoot.getElementById("filterContentCollapse").getAttribute('opened') === null) {
+            this.shadowRoot.getElementById("filterContentCollapse").setAttribute('opened', '');
+        } else {
+            this.shadowRoot.getElementById("filterContentCollapse").removeAttribute('opened');
+        }
+    }
+
     filterConfirm(event) {
         let filterData = [];
         filterData.push({ subofferName: this.shadowRoot.getElementById('filterSubofferName').value, 
@@ -228,6 +252,8 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
         this.shadowRoot.getElementById('approvedStatusCheckbox').checked = false;
         this.shadowRoot.getElementById('testPublishedCheckbox').checked = false;
         this.shadowRoot.getElementById('prodPublishedCheckbox').checked = false;
+
+        store.dispatch(setClickAction(filterResetAction));
     }
 
     filterSelectResult(event, suboffer) {
@@ -266,7 +292,11 @@ class FilterCollapse extends LitElement {
                     </div>
                     <div>
                         <borsuk-button smicon id="hideFilter" class="btn-icon-animated btn-icon-ing" @click="${this.toggle}" aria-expanded="${this.opened}" aria-controls="collapse">
-                            <borsuk-icon .svg=${borsukDoubleChevronDown}></borsuk-icon>
+                            ${this.opened? html`
+                                <borsuk-icon .svg=${borsukDoubleChevronDown}></borsuk-icon>
+                            ` : html`
+                                <borsuk-icon .svg=${borsukDoubleChevronUp}></borsuk-icon>
+                            `}
                         </borsuk-button>
                     </div>
                 </div>

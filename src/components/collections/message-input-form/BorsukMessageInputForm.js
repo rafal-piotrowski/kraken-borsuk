@@ -330,7 +330,7 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
             buttonId: actions.get('sourceHtmlAction'),
             buttonTooltip: 'Kod źródłowy',
             buttonIcon: borsukSourceHtml,
-            buttonActive: false,
+            buttonActive: true,
             buttonPressed: false
         }];
     }

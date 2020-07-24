@@ -19,6 +19,7 @@ export const logoutEvent = 'evLogout';
 export const filterOpenEvent = 'evFilterOpen';
 export const filterConfirmEvent = 'evFilterConfirm';
 export const filterSelectResultEvent = 'evFilterSelectResult';
+export const filterResetEvent = 'evFilterReset';
 
 // eventy wywoływane przey zamknieciu modala
 export const confirmModalEvent = 'evConfirmModal';
@@ -69,6 +70,7 @@ events.set('approveVersionEvent', approveVersionEvent);
 events.set('filterOpenEvent', filterOpenEvent);
 events.set('filterConfirmEvent', filterConfirmEvent);
 events.set('filterSelectResultEvent', filterSelectResultEvent);
+events.set('filterResetEvent', filterResetEvent);
 events.set('addScheduleEvent', addScheduleEvent);
 events.set('editScheduleEvent', editScheduleEvent);
 events.set('removeScheduleEvent', removeScheduleEvent);

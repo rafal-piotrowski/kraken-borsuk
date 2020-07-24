@@ -27,7 +27,9 @@ import {
     GET_SCHEDULES_LIST,
     GET_PUBLICATIONS_LIST,
     GET_CHANNEL_ACTIONS_PARAMS,
-    ADD_CHANNEL_ACTIONS_PARAM
+    ADD_CHANNEL_ACTIONS_PARAM,
+    UPDATE_HTML_FLG,
+    GET_BUTTONS_FLAGS
 } from '../actions/cesuboffer.js';
 
 import { createSelector } from 'reselect';
@@ -35,6 +37,7 @@ import { createSelector } from 'reselect';
 const INITIAL_STATE = {
     page: '',
     slot: '',
+    htmlflg: false,
     cesubtabs: {},
     cesubslots: {},
     cxsubslots: {},
@@ -47,7 +50,8 @@ const INITIAL_STATE = {
     ceverslist: {},
     ceschlist: {},
     cepubslist: {},
-    chnactparams: {}
+    chnactparams: {},
+    cebtnsflgs: {}
 };
   
 const cesuboffer = (state = INITIAL_STATE, action) => {
@@ -58,6 +62,11 @@ const cesuboffer = (state = INITIAL_STATE, action) => {
                 page: action.page,
                 slot: action.slot,
                 cesubtabs: Object.keys(state.cesubtabs).map((key) => state.cesubtabs[key].tabPageId === action.page ? { ...state.cesubtabs[key], tabActive: true } : { ...state.cesubtabs[key], tabActive: false })
+            };
+        case UPDATE_HTML_FLG:
+            return {
+                ...state,
+                htmlflg: action.flag
             };
         case ACTIVATE_CHANNEL_TAB:
             const activePage = Object.values(state.cesubtabs).filter(subtab => subtab.tabActive === true)[0].tabPageId;
@@ -131,6 +140,11 @@ const cesuboffer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 cesubnames: action.cesubnames
+            }
+        case GET_BUTTONS_FLAGS:
+            return {
+                ...state,
+                cebtnsflgs: action.cebtnsflgs
             }
         case GET_SEARCH_RESULTS:
             return {
@@ -245,6 +259,7 @@ export const ceVersionsListSelector = state => state.cesuboffer.ceverslist;
 export const ceSchedulesListSelector = state => state.cesuboffer.ceschlist;
 export const cePublicationsListSelector = state => state.cesuboffer.cepubslist;
 export const ceChnActParamsSelector = state => state.cesuboffer.chnactparams;
+export const ceBtnsFlagsSelector = state => state.cesuboffer.cebtnsflgs;
 
 export const getActivePage = createSelector(
     [ cesubofferTabsSelector ],
@@ -285,6 +300,13 @@ export const cesubofferPageBckpReselector = createSelector(
     [ cesubofferSlotsBckpSelector, getActivePage ],
     (cxsubslots, page) => {
         return Object.values(cxsubslots).filter(subslot => subslot.tabPageId === page);
+    }
+  )
+
+export const ceBtnsFlagsReselector = createSelector(
+    [ ceBtnsFlagsSelector, getActivePage ],
+    (cebtnsflgs, page) => {
+        return Object.values(cebtnsflgs).filter(btnflag => btnflag.tabPageId === page);
     }
   )
 

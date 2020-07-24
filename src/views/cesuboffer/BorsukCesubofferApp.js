@@ -46,7 +46,7 @@ import { store } from '../../redux/store.js';
 // getUserInfo do wywalenia po wrzuceniu do projektu.
 import { getUserInfo } from '../../redux/actions/menu.js';
 import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSlots, getSidebarTypes, getSidebarNames, getSearchResults, 
-        navigate, changeStatus, getVersionsList, getSchedulesList, getPublicationsList, getChannelActionsParams } from '../../redux/actions/cesuboffer.js';
+        navigate, changeStatus, getVersionsList, getSchedulesList, getPublicationsList, getChannelActionsParams, updateHtmlFlg, getButtonsFlags } from '../../redux/actions/cesuboffer.js';
 import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict, 
         getResponseCodesDict, getContentParamsDict, getActionsParamsDict } from '../../redux/actions/dictionaries.js';
 import { setClickAction } from '../../redux/actions/customevents.js';
@@ -145,6 +145,7 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         this._setSchedulesList();
         this._setPublicationsList();
         this._setChannelActionsParams();
+        this._setButtonsFlags();
 
         // ładowanie słowników
         this._setProductGroupDict();
@@ -287,6 +288,16 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
 
     _changeStatus(tabPageId, status, statusDesc) {
         store.dispatch(changeStatus(tabPageId, status, statusDesc));
+    }
+
+    _setHtmlEditor(flag) {
+        store.dispatch(updateHtmlFlg(flag));
+    }
+
+    // metoda do zasilenia wyjatkow dla wylaczenia przyciskow akcji
+    _setButtonsFlags(jsonData) {
+        if (jsonData) { store.dispatch(getButtonsFlags(jsonData.ceBtnsFlags)); } 
+        else { loadJSON('/src/properties/_ceBtnsFlags.json').then(data => { store.dispatch(getButtonsFlags(data.ceBtnsFlags)); }) }
     }
 
     stateChanged(state) {

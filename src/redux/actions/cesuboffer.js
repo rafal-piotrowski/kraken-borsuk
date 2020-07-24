@@ -27,6 +27,8 @@ export const GET_SCHEDULES_LIST = 'GET_SCHEDULES_LIST';
 export const GET_PUBLICATIONS_LIST = 'GET_PUBLICATIONS_LIST';
 export const GET_CHANNEL_ACTIONS_PARAMS = 'GET_CHANNEL_ACTIONS_PARAMS';
 export const ADD_CHANNEL_ACTIONS_PARAM = 'ADD_CHANNEL_ACTIONS_PARAM';
+export const UPDATE_HTML_FLG = 'UPDATE_HTML_FLG';
+export const GET_BUTTONS_FLAGS = 'GET_BUTTONS_FLAGS';
 
 export const navigate = (path, search) => (dispatch) => {
 
@@ -315,5 +317,24 @@ export const addChanelActionsParam = (channelActionsParam) => (dispatch) => {
   dispatch({
     type: ADD_CHANNEL_ACTIONS_PARAM,
     chnactparam
+  });
+};
+
+export const updateHtmlFlg = (flag) => (dispatch) => {
+  dispatch({
+    type: UPDATE_HTML_FLG,
+    flag
+  });
+};
+
+export const getButtonsFlags = (ceBtnsFlags) => (dispatch) => {
+  const cebtnsflgs = ceBtnsFlags.reduce((obj, option) => {
+    obj[option.tabPageId + option.buttonId] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_BUTTONS_FLAGS,
+    cebtnsflgs
   });
 };

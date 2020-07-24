@@ -30,6 +30,7 @@ import './collections/borsuk-preloader.js'
 import './collections/borsuk-tabs.js';
 import './borsuk-channels-section.js';
 import './collections/borsuk-version-status.js';
+import './collections/borsuk-dialog.js';
 
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -44,7 +45,7 @@ import { setClickAction } from '../redux/actions/customevents.js';
 // podłączenie reducer-a.
 import customevents, { actionClickSelector, actionParamSelector } from '../redux/reducers/customevents.js';
 import { cesubofferPageReselector, ceChannelsSlotReselector, ceChannelsPageReselector, ceChnActParamsReselector, 
-        getActivePage, getActiveSlot, getActiveChannelTabs } from '../redux/reducers/cesuboffer.js';
+        getActivePage, getActiveSlot, getActiveChannelTabs, ceBtnsFlagsReselector } from '../redux/reducers/cesuboffer.js';
 
 export class BorsukVersionForm extends connect(store)(LitElement) {
     static get styles() {
@@ -64,6 +65,10 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
             ${this.headerTemplate}
             ${this.formInputTemplate}
             ${this.channelsTemplate}
+            <borsuk-dialog  id="dialogWindow" 
+                            @confirm-dialog-fired=${this.confirmModal} 
+                            @cancel-dialog-fired=${this.cancelModal}>
+            </borsuk-dialog>
         `;
     }
 
@@ -117,6 +122,7 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
             _slot: { type: String },
             versionFormContent: { type: String },
             formButtons: { type: Array },
+            buttonsFlags: { type: Array },
         };
     }
 
@@ -172,6 +178,16 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
 
     stateChanged(state) {
         if (actionClickSelector(state) === validateVersionAction) { this.validateVersion(state, this._page); }
+        if (this.buttonsFlags !== ceBtnsFlagsReselector(state)) { 
+            this.buttonsFlags = ceBtnsFlagsReselector(state); 
+
+            // ustawienia aktywnosci przyciskow
+            for (let i=0; i < this.formButtons.length; i++) {
+                this.formButtons[i].buttonActive = 
+                    (Object.values(this.buttonsFlags).filter(button => button.buttonId === this.formButtons[i].buttonId).length > 0) ?
+                    Object.values(this.buttonsFlags).filter(button => button.buttonId === this.formButtons[i].buttonId)[0].buttonFlg : true;
+            }
+        }
 
         this._page = getActivePage(state);
         this._slot = getActiveSlot(state);
@@ -183,7 +199,7 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
         if (validateVersionStatus && validateChannelsStatus) {
             this.saveVersion(state, page);
         } else {
-            // tu bedzie wywolanie modala
+            this.shadowRoot.getElementById('dialogWindow').openDialog('A',"Formularz zawiera błędy !","Sprawdź i popraw wszystkie pola zaznaczone na czerwono","");
         }
     }
 
@@ -260,5 +276,9 @@ export class BorsukVersionForm extends connect(store)(LitElement) {
         }
         store.dispatch(setClickAction(saveVersionAction, this.formElements));
     }
+
+    confirmModal() {}
+
+    cancelModal() {}
 
 }

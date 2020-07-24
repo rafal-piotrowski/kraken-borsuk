@@ -19,6 +19,7 @@ export const logoutAction = 'logout';
 export const filterOpenAction = 'filterOpen';
 export const filterConfirmAction = 'filterConfirm';
 export const filterSelectResultAction = 'filterSelectResult';
+export const filterResetAction = 'filterReset';
 
 // akcje cyklu tworzenia subofert i wersji
 export const addSubofferAction = 'addSuboffer';
@@ -91,6 +92,7 @@ actions.set('approveVersionAction', approveVersionAction);
 actions.set('filterOpenAction', filterOpenAction);
 actions.set('filterConfirmAction', filterConfirmAction);
 actions.set('filterSelectResultAction', filterSelectResultAction);
+actions.set('filterResetAction', filterResetAction);
 actions.set('textBoldAction', textBoldAction);
 actions.set('textItalicAction', textItalicAction);
 actions.set('textUnderlineAction', textUnderlineAction);

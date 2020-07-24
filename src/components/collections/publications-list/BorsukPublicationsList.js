@@ -63,8 +63,6 @@ export class BorsukPublicationsList extends connect(store)(LitElement) {
     constructor() {
         super();
         this.versionsData = {};
-        // this.pubsData = [];
-        // this.addScheduleToastTitle = "";
     }
   
     static get styles() {

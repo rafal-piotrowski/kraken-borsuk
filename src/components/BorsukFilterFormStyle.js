@@ -88,11 +88,19 @@ export const BorsukFilterFormStyle = css`
         justify-items: center;
         align-items: center;
         height: 50px;
-        padding: 0 10px;
+        padding: 5px 10px;
     }
 
     .formSpanGrid12 {
         grid-column: span 12 / auto;
+    }
+
+    .formSpanGrid11 {
+        grid-column: span 11 / auto;
+    }
+
+    .formSpanGrid1 {
+        grid-column: span 1 / auto;
     }
 
     .formSpanGrid6 {

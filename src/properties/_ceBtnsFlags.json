@@ -1,0 +1,29 @@
+{
+    "ceBtnsFlags": [
+        {
+            "tabPageId": "1845",
+            "buttonId": "removeVersion",
+            "buttonFlg": false
+        },{
+            "tabPageId": "1845",
+            "buttonId": "copyVersion",
+            "buttonFlg": false
+        },{
+            "tabPageId": "5002",
+            "buttonId": "saveSuboffer",
+            "buttonFlg": false
+        },{
+            "tabPageId": "5002",
+            "buttonId": "publishTest",
+            "buttonFlg": false
+        },{
+            "tabPageId": "5002",
+            "buttonId": "publishProd",
+            "buttonFlg": false
+        },{
+            "tabPageId": "-1",
+            "buttonId": "approveVersion",
+            "buttonFlg": false
+        }
+    ]
+}
