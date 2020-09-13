@@ -45,16 +45,15 @@ import { store } from '../../redux/store.js';
 // załadowanie kreatorów akcji.
 // getUserInfo do wywalenia po wrzuceniu do projektu.
 import { getUserInfo } from '../../redux/actions/menu.js';
-import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSlots, getSidebarTypes, getSidebarNames, getSearchResults, 
-        navigate, changeStatus, getVersionsList, getSchedulesList, getPublicationsList, getChannelActionsParams, updateHtmlFlg, getButtonsFlags } from '../../redux/actions/cesuboffer.js';
+import { navigate, getAFormsTabs, getAFormsSlots, getSidebarAFTypes, getSidebarAFNames } from '../../redux/actions/actionforms.js';
 import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict, 
         getResponseCodesDict, getContentParamsDict, getActionsParamsDict, getUnusedEventsDict } from '../../redux/actions/dictionaries.js';
 import { setClickAction } from '../../redux/actions/customevents.js';
 
 // podłączenie reducer-a.
 import menu, { userInfoSelector } from '../../redux/reducers/menu.js';
-import cesuboffer, { getActivePage, cesubofferSlotsSelector, cesubofferSlotsBckpSelector, ceChannelSlotsSelector, ceChannelSlotsBckpSelector,
-    cesubofferPageReselector, cesubofferPageBckpReselector, ceChannelsSlotReselector, ceChannelsSlotBckpReselector } from '../../redux/reducers/cesuboffer.js';
+import actionforms, { getActivePage, actionformsTabsSelector, actionformsSlotsSelector, actionformsSlotsBckpSelector, 
+    actionformsTypesSelector, actionformsNamesSelector } from '../../redux/reducers/actionforms.js';
 import customevents, { actionClickSelector, actionParamSelector } from '../../redux/reducers/customevents.js';
 import dictionaries from '../../redux/reducers/dictionaries.js';
 
@@ -135,30 +134,30 @@ export class BorsukActionformsApp extends connect(store)(LitElement) {
 
         // poniższe do wycięcia po wdrożeniu do projektu
         this._setUserInfo();
-        this._setCeTabs();
-        this._setCeSlots();
-        this._setCeChannelTabs();
-        this._setCeChannelSlots();
-        this._setSidebarSubtypes();
-        this._setSidebarSubnames();
-        this._setVersionsList();
-        this._setSchedulesList();
-        this._setPublicationsList();
-        this._setChannelActionsParams();
-        this._setButtonsFlags();
+        this._setAFormsTabs();
+        this._setAFormsSlots();
+        // this._setCeChannelTabs();
+        // this._setCeChannelSlots();
+        this._setSidebarAFTypes();
+        this._setSidebarAFNames();
+        // this._setVersionsList();
+        // this._setSchedulesList();
+        // this._setPublicationsList();
+        // this._setChannelActionsParams();
+        // this._setButtonsFlags();
 
         // ładowanie słowników
-        this._setProductGroupDict();
-        this._setCategoryDict();
-        this._setEventsDict();
-        this._setUnusedEventsDict();
-        this._setPushActionDict();
-        this._setPeriodsDict();
-        this._setPhoneTypeDict();
-        this._setMessageGroupDict();
-        this._setResponseCodesDict();
-        this._setContentParamsDict();
-        this._setActionsParamsDict();
+        // this._setProductGroupDict();
+        // this._setCategoryDict();
+        // this._setEventsDict();
+        // this._setUnusedEventsDict();
+        // this._setPushActionDict();
+        // this._setPeriodsDict();
+        // this._setPhoneTypeDict();
+        // this._setMessageGroupDict();
+        // this._setResponseCodesDict();
+        // this._setContentParamsDict();
+        // this._setActionsParamsDict();
 
         // to tylko test wymuszenia aktywności taba
         // setTimeout(() => {
@@ -173,138 +172,138 @@ export class BorsukActionformsApp extends connect(store)(LitElement) {
     }
 
     // metody do zasilenia tabów
-    _setCeTabs(jsonData) {
-        if (jsonData) { store.dispatch(getCesubofferTabs(jsonData.ceTabs)); } 
-        else { loadJSON('/src/properties/_cesubofferTabs.json').then(data => { store.dispatch(getCesubofferTabs(data.ceTabs)); }) }
+    _setAFormsTabs(jsonData) {
+        if (jsonData) { store.dispatch(getAFormsTabs(jsonData.aFormsTabs)); } 
+        else { loadJSON('/src/properties/_aFormsTabs.json').then(data => { store.dispatch(getAFormsTabs(data.aFormsTabs)); }) }
     }
 
-    _setCeSlots(jsonData) {
-        if (jsonData) { store.dispatch(getCesubofferSlots(jsonData.ceSlots)); } 
-        else { loadJSON('/src/properties/_cesubofferSlots.json').then(data => { store.dispatch(getCesubofferSlots(data.ceSlots)); }) }
+    _setAFormsSlots(jsonData) {
+        if (jsonData) { store.dispatch(getAFormsSlots(jsonData.aFormsSlots)); } 
+        else { loadJSON('/src/properties/_aFormsSlots.json').then(data => { store.dispatch(getAFormsSlots(data.aFormsSlots)); }) }
     }
 
-    _setCeChannelTabs(jsonData) {
-        if (jsonData) { store.dispatch(getCeChannelTabs(jsonData.ceChannelTabs)); } 
-        else { loadJSON('/src/properties/_ceChannelTabs.json').then(data => { store.dispatch(getCeChannelTabs(data.ceChannelTabs)); }) }
-    }
+    // _setCeChannelTabs(jsonData) {
+    //     if (jsonData) { store.dispatch(getCeChannelTabs(jsonData.ceChannelTabs)); } 
+    //     else { loadJSON('/src/properties/_ceChannelTabs.json').then(data => { store.dispatch(getCeChannelTabs(data.ceChannelTabs)); }) }
+    // }
 
-    _setCeChannelSlots(jsonData) {
-        if (jsonData) { store.dispatch(getCeChannelSlots(jsonData.ceChannelSlots)); } 
-        else { loadJSON('/src/properties/_ceChannelSlots.json').then(data => { store.dispatch(getCeChannelSlots(data.ceChannelSlots)); }) }
-    }
+    // _setCeChannelSlots(jsonData) {
+    //     if (jsonData) { store.dispatch(getCeChannelSlots(jsonData.ceChannelSlots)); } 
+    //     else { loadJSON('/src/properties/_ceChannelSlots.json').then(data => { store.dispatch(getCeChannelSlots(data.ceChannelSlots)); }) }
+    // }
 
-    _setChannelActionsParams(jsonData) {
-        if (jsonData) { store.dispatch(getChannelActionsParams(jsonData.channelActionsParams)); } 
-        else { loadJSON('/src/properties/_channelActionsParams.json').then(data => { store.dispatch(getChannelActionsParams(data.channelActionsParams)); }) }
-    }
+    // _setChannelActionsParams(jsonData) {
+    //     if (jsonData) { store.dispatch(getChannelActionsParams(jsonData.channelActionsParams)); } 
+    //     else { loadJSON('/src/properties/_channelActionsParams.json').then(data => { store.dispatch(getChannelActionsParams(data.channelActionsParams)); }) }
+    // }
 
     // metody do zasilenia drzewa subofert
-    _setSidebarSubtypes(jsonData) {
-        if (jsonData) { store.dispatch(getSidebarTypes(jsonData.sidebarSubtypes)); } 
-        else { loadJSON('/src/properties/_sidebarSubtypes.json').then(data => { store.dispatch(getSidebarTypes(data.sidebarSubtypes)); }) }
+    _setSidebarAFTypes(jsonData) {
+        if (jsonData) { store.dispatch(getSidebarAFTypes(jsonData.sidebarAFTypes)); } 
+        else { loadJSON('/src/properties/_sidebarAFTypes.json').then(data => { store.dispatch(getSidebarAFTypes(data.sidebarAFTypes)); }) }
     }
 
-    _setSidebarSubnames(jsonData) {
-        if (jsonData) { store.dispatch(getSidebarNames(jsonData.sidebarSubnames)); } 
-        else { loadJSON('/src/properties/_sidebarSubnames.json').then(data => { store.dispatch(getSidebarNames(data.sidebarSubnames)); }) }
+    _setSidebarAFNames(jsonData) {
+        if (jsonData) { store.dispatch(getSidebarAFNames(jsonData.sidebarAFNames)); } 
+        else { loadJSON('/src/properties/_sidebarAFNames.json').then(data => { store.dispatch(getSidebarAFNames(data.sidebarAFNames)); }) }
     }
 
     // metody do zasilenia publikacji wersji
-    _setVersionsList(jsonData) {
-        if (jsonData) { store.dispatch(getVersionsList(jsonData.ceVersionsList)); } 
-        else { loadJSON('/src/properties/_ceVersionsList.json').then(data => { store.dispatch(getVersionsList(data.ceVersionsList)); }) }
-    }
+    // _setVersionsList(jsonData) {
+    //     if (jsonData) { store.dispatch(getVersionsList(jsonData.ceVersionsList)); } 
+    //     else { loadJSON('/src/properties/_ceVersionsList.json').then(data => { store.dispatch(getVersionsList(data.ceVersionsList)); }) }
+    // }
 
-    _setSchedulesList(jsonData) {
-        if (jsonData) { store.dispatch(getSchedulesList(jsonData.ceSchedulesList)); } 
-        else { loadJSON('/src/properties/_ceSchedulesList.json').then(data => { store.dispatch(getSchedulesList(data.ceSchedulesList)); }) }
-    }
+    // _setSchedulesList(jsonData) {
+    //     if (jsonData) { store.dispatch(getSchedulesList(jsonData.ceSchedulesList)); } 
+    //     else { loadJSON('/src/properties/_ceSchedulesList.json').then(data => { store.dispatch(getSchedulesList(data.ceSchedulesList)); }) }
+    // }
 
-    _setPublicationsList(jsonData) {
-        if (jsonData) { store.dispatch(getPublicationsList(jsonData.cePublicationsList)); }
-        else { loadJSON('/src/properties/_cePublicationsList.json').then(data => { store.dispatch(getPublicationsList(data.cePublicationsList)); }) }
-    }
+    // _setPublicationsList(jsonData) {
+    //     if (jsonData) { store.dispatch(getPublicationsList(jsonData.cePublicationsList)); }
+    //     else { loadJSON('/src/properties/_cePublicationsList.json').then(data => { store.dispatch(getPublicationsList(data.cePublicationsList)); }) }
+    // }
 
     // metoda do zasilenia filtra
-    _setFilterContent(jsonData) {
-        if (jsonData) { store.dispatch(getSearchResults(jsonData.searchResults)); } 
-        else { loadJSON('/src/properties/_searchResults.json').then(data => { store.dispatch(getSearchResults(data.searchResults)); }) }
-    }
+    // _setFilterContent(jsonData) {
+    //     if (jsonData) { store.dispatch(getSearchResults(jsonData.searchResults)); } 
+    //     else { loadJSON('/src/properties/_searchResults.json').then(data => { store.dispatch(getSearchResults(data.searchResults)); }) }
+    // }
 
     // metody do zasilenia słowników
-    _setProductGroupDict(jsonData) {
-        if (jsonData) { store.dispatch(getProductGroupDict(jsonData.productGroupDict)); } 
-        else { loadJSON('/src/properties/_productGroupDict.json').then(data => { store.dispatch(getProductGroupDict(data.productGroupDict)); }) }
-    }
+    // _setProductGroupDict(jsonData) {
+    //     if (jsonData) { store.dispatch(getProductGroupDict(jsonData.productGroupDict)); } 
+    //     else { loadJSON('/src/properties/_productGroupDict.json').then(data => { store.dispatch(getProductGroupDict(data.productGroupDict)); }) }
+    // }
 
-    _setCategoryDict(jsonData) {
-        if (jsonData) { store.dispatch(getCategoryDict(jsonData.categoryDict)); } 
-        else { loadJSON('/src/properties/_categoryDict.json').then(data => { store.dispatch(getCategoryDict(data.categoryDict)); }) }
-    }
+    // _setCategoryDict(jsonData) {
+    //     if (jsonData) { store.dispatch(getCategoryDict(jsonData.categoryDict)); } 
+    //     else { loadJSON('/src/properties/_categoryDict.json').then(data => { store.dispatch(getCategoryDict(data.categoryDict)); }) }
+    // }
 
-    _setEventsDict(jsonData) {
-        if (jsonData) { store.dispatch(getEventsDict(jsonData.eventsDict)); } 
-        else { loadJSON('/src/properties/_eventsDict.json').then(data => { store.dispatch(getEventsDict(data.eventsDict)); }) }
-    }
+    // _setEventsDict(jsonData) {
+    //     if (jsonData) { store.dispatch(getEventsDict(jsonData.eventsDict)); } 
+    //     else { loadJSON('/src/properties/_eventsDict.json').then(data => { store.dispatch(getEventsDict(data.eventsDict)); }) }
+    // }
 
-    _setUnusedEventsDict(jsonData) {
-        if (jsonData) { store.dispatch(getUnusedEventsDict(jsonData.unusedEventsDict)); } 
-        else { loadJSON('/src/properties/_unusedEventsDict.json').then(data => { store.dispatch(getUnusedEventsDict(data.unusedEventsDict)); }) }
-    }
+    // _setUnusedEventsDict(jsonData) {
+    //     if (jsonData) { store.dispatch(getUnusedEventsDict(jsonData.unusedEventsDict)); } 
+    //     else { loadJSON('/src/properties/_unusedEventsDict.json').then(data => { store.dispatch(getUnusedEventsDict(data.unusedEventsDict)); }) }
+    // }
 
-    _setPushActionDict(jsonData) {
-        if (jsonData) { store.dispatch(getPushActionDict(jsonData.pushActionDict)); } 
-        else { loadJSON('/src/properties/_pushActionDict.json').then(data => { store.dispatch(getPushActionDict(data.pushActionDict)); }) }
-    }
+    // _setPushActionDict(jsonData) {
+    //     if (jsonData) { store.dispatch(getPushActionDict(jsonData.pushActionDict)); } 
+    //     else { loadJSON('/src/properties/_pushActionDict.json').then(data => { store.dispatch(getPushActionDict(data.pushActionDict)); }) }
+    // }
 
-    _setPeriodsDict(jsonData) {
-        if (jsonData) { store.dispatch(getPeriodsDict(jsonData.periodsDict)); } 
-        else { loadJSON('/src/properties/_periodsDict.json').then(data => { store.dispatch(getPeriodsDict(data.periodsDict)); }) }
-    }
+    // _setPeriodsDict(jsonData) {
+    //     if (jsonData) { store.dispatch(getPeriodsDict(jsonData.periodsDict)); } 
+    //     else { loadJSON('/src/properties/_periodsDict.json').then(data => { store.dispatch(getPeriodsDict(data.periodsDict)); }) }
+    // }
 
-    _setPhoneTypeDict(jsonData) {
-        if (jsonData) { store.dispatch(getPhoneTypeDict(jsonData.phoneTypeDict)); } 
-        else { loadJSON('/src/properties/_phoneTypeDict.json').then(data => { store.dispatch(getPhoneTypeDict(data.phoneTypeDict)); }) }
-    }
+    // _setPhoneTypeDict(jsonData) {
+    //     if (jsonData) { store.dispatch(getPhoneTypeDict(jsonData.phoneTypeDict)); } 
+    //     else { loadJSON('/src/properties/_phoneTypeDict.json').then(data => { store.dispatch(getPhoneTypeDict(data.phoneTypeDict)); }) }
+    // }
 
-    _setMessageGroupDict(jsonData) {
-        if (jsonData) { store.dispatch(getMessageGroupDict(jsonData.messageGroupDict)); } 
-        else { loadJSON('/src/properties/_messageGroupDict.json').then(data => { store.dispatch(getMessageGroupDict(data.messageGroupDict)); }) }
-    }
+    // _setMessageGroupDict(jsonData) {
+    //     if (jsonData) { store.dispatch(getMessageGroupDict(jsonData.messageGroupDict)); } 
+    //     else { loadJSON('/src/properties/_messageGroupDict.json').then(data => { store.dispatch(getMessageGroupDict(data.messageGroupDict)); }) }
+    // }
 
-    _setResponseCodesDict(jsonData) {
-        if (jsonData) { store.dispatch(getResponseCodesDict(jsonData.responseCodesDict)); } 
-        else { loadJSON('/src/properties/_responseCodesDict.json').then(data => { store.dispatch(getResponseCodesDict(data.responseCodesDict)); }) }
-    }
+    // _setResponseCodesDict(jsonData) {
+    //     if (jsonData) { store.dispatch(getResponseCodesDict(jsonData.responseCodesDict)); } 
+    //     else { loadJSON('/src/properties/_responseCodesDict.json').then(data => { store.dispatch(getResponseCodesDict(data.responseCodesDict)); }) }
+    // }
 
-    _setContentParamsDict(jsonData) {
-        if (jsonData) { store.dispatch(getContentParamsDict(jsonData.contentParamsDict)); } 
-        else { loadJSON('/src/properties/_contentParamsDict.json').then(data => { store.dispatch(getContentParamsDict(data.contentParamsDict)); }) }
-    }
+    // _setContentParamsDict(jsonData) {
+    //     if (jsonData) { store.dispatch(getContentParamsDict(jsonData.contentParamsDict)); } 
+    //     else { loadJSON('/src/properties/_contentParamsDict.json').then(data => { store.dispatch(getContentParamsDict(data.contentParamsDict)); }) }
+    // }
 
-    _setActionsParamsDict(jsonData) {
-        if (jsonData) { store.dispatch(getActionsParamsDict(jsonData.actionsParamsDict)); } 
-        else { loadJSON('/src/properties/_actionsParamsDict.json').then(data => { store.dispatch(getActionsParamsDict(data.actionsParamsDict)); }) }
-    }
+    // _setActionsParamsDict(jsonData) {
+    //     if (jsonData) { store.dispatch(getActionsParamsDict(jsonData.actionsParamsDict)); } 
+    //     else { loadJSON('/src/properties/_actionsParamsDict.json').then(data => { store.dispatch(getActionsParamsDict(data.actionsParamsDict)); }) }
+    // }
 
     // metoda wymuszająca aktywność taba
-    _forceActivePage(page, slot) {
-        store.dispatch(navigate(page, slot));
-    }
+    // _forceActivePage(page, slot) {
+    //     store.dispatch(navigate(page, slot));
+    // }
 
-    _changeStatus(tabPageId, status, statusDesc) {
-        store.dispatch(changeStatus(tabPageId, status, statusDesc));
-    }
+    // _changeStatus(tabPageId, status, statusDesc) {
+    //     store.dispatch(changeStatus(tabPageId, status, statusDesc));
+    // }
 
-    _setHtmlEditor(flag) {
-        store.dispatch(updateHtmlFlg(flag));
-    }
+    // _setHtmlEditor(flag) {
+    //     store.dispatch(updateHtmlFlg(flag));
+    // }
 
     // metoda do zasilenia wyjatkow dla wylaczenia przyciskow akcji
-    _setButtonsFlags(jsonData) {
-        if (jsonData) { store.dispatch(getButtonsFlags(jsonData.ceBtnsFlags)); } 
-        else { loadJSON('/src/properties/_ceBtnsFlags.json').then(data => { store.dispatch(getButtonsFlags(data.ceBtnsFlags)); }) }
-    }
+    // _setButtonsFlags(jsonData) {
+    //     if (jsonData) { store.dispatch(getButtonsFlags(jsonData.ceBtnsFlags)); } 
+    //     else { loadJSON('/src/properties/_ceBtnsFlags.json').then(data => { store.dispatch(getButtonsFlags(data.ceBtnsFlags)); }) }
+    // }
 
     stateChanged(state) {
         if (this.userInfo !== userInfoSelector(state)) { this.userInfo = userInfoSelector(state); }
@@ -360,26 +359,6 @@ export class BorsukActionformsApp extends connect(store)(LitElement) {
         this.dispatchEvent(new CustomEvent(events.get('cancelModalEvent'), { detail: this.dialogElements }));
     }
 
-    // fireCloseTabEvent(state, type, param) {
-    //     let checkingState = Object.values(cesubofferSlotsSelector(state)).filter(subslot => subslot.tabPageId === param.pageId);
-    //     let originState = Object.values(cesubofferSlotsBckpSelector(state)).filter(subslot => subslot.tabPageId === param.pageId);
-    //     let checkingChannelsState = Object.values(ceChannelSlotsSelector(state)).filter(subslot => subslot.parentPageId === param.pageId);
-    //     let originChannelsState = Object.values(ceChannelSlotsBckpSelector(state)).filter(subslot => subslot.parentPageId === param.pageId);
-    //     let token = {"tokenKey": "token-ev-close-tab"}
-    //     this.closingPage = param;
-
-    //     if (JSON.stringify(checkingState) === JSON.stringify(originState) &&
-    //         JSON.stringify(checkingChannelsState) === JSON.stringify(originChannelsState))
-    //     {
-    //         this.fireCustomEvent(state, type, param);
-    //     } else {
-    //         this.openModal( 'M', 'C',
-    //                     "Nie zapisano zmian",
-    //                     "Czy jesteś pewien że chcesz zamknąć formatkę ?",
-    //                     "", JSON.stringify(token));
-    //     }
-    // }
-
     fireProtectEvent(state, type, param) {
 
         // let checkingState = Object.values(cesubofferPageReselector(state));
@@ -387,10 +366,10 @@ export class BorsukActionformsApp extends connect(store)(LitElement) {
         // let checkingChannelsState = Object.values(ceChannelsSlotReselector(state));
         // let originChannelsState = Object.values(ceChannelsSlotBckpReselector(state));
 
-        let checkingState = Object.values(cesubofferSlotsSelector(state));
-        let originState = Object.values(cesubofferSlotsBckpSelector(state));
-        let checkingChannelsState = Object.values(ceChannelSlotsSelector(state));
-        let originChannelsState = Object.values(ceChannelSlotsBckpSelector(state));
+        let checkingState = Object.values(actionformsSlotsSelector(state));
+        let originState = Object.values(actionformsSlotsBckpSelector(state));
+        // let checkingChannelsState = Object.values(ceChannelSlotsSelector(state));
+        // let originChannelsState = Object.values(ceChannelSlotsBckpSelector(state));
 
         let token = {"tokenKey": type}
         this.closingPage = param;

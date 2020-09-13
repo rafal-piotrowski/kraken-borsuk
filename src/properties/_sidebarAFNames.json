@@ -1,0 +1,147 @@
+{
+    "sidebarSubnames": [{
+        "subnameId": "10154",
+        "subtypeId": 1,
+        "text": "formatka pierwsza",
+        "show": true,
+        "index": 0
+    }, {
+        "subnameId": "15400",
+        "subtypeId": 1,
+        "text": "forkatka druga",
+        "show": true,
+        "index": 1
+    }, {
+        "subnameId": "11004",
+        "subtypeId": 1,
+        "text": "formatka trzecia",
+        "show": true,
+        "index": 2
+    }, {
+        "subnameId": "20154",
+        "subtypeId": 2,
+        "text": "formatka pierwsza",
+        "show": true,
+        "index": 0
+    }, {
+        "subnameId": "25400",
+        "subtypeId": 2,
+        "text": "forkatka druga",
+        "show": true,
+        "index": 1
+    }, {
+        "subnameId": "21004",
+        "subtypeId": 2,
+        "text": "formatka trzecia",
+        "show": true,
+        "index": 2
+    }, {
+        "subnameId": "30154",
+        "subtypeId": 3,
+        "text": "formatka pierwsza",
+        "show": true,
+        "index": 0
+    }, {
+        "subnameId": "35400",
+        "subtypeId": 3,
+        "text": "forkatka druga",
+        "show": true,
+        "index": 1
+    }, {
+        "subnameId": "31004",
+        "subtypeId": 3,
+        "text": "formatka trzecia",
+        "show": true,
+        "index": 2
+    }, {
+        "subnameId": "50154",
+        "subtypeId": 5,
+        "text": "formatka pierwsza",
+        "show": true,
+        "index": 0
+    }, {
+        "subnameId": "55400",
+        "subtypeId": 5,
+        "text": "forkatka druga",
+        "show": true,
+        "index": 1
+    }, {
+        "subnameId": "51004",
+        "subtypeId": 5,
+        "text": "formatka trzecia",
+        "show": true,
+        "index": 2
+    }, {
+        "subnameId": "11154",
+        "subtypeId": 11,
+        "text": "formatka pierwsza",
+        "show": true,
+        "index": 0
+    }, {
+        "subnameId": "11400",
+        "subtypeId": 11,
+        "text": "forkatka druga",
+        "show": true,
+        "index": 1
+    }, {
+        "subnameId": "11104",
+        "subtypeId": 11,
+        "text": "formatka trzecia",
+        "show": true,
+        "index": 2
+    }, {
+        "subnameId": "12154",
+        "subtypeId": 12,
+        "text": "formatka pierwsza",
+        "show": true,
+        "index": 0
+    }, {
+        "subnameId": "12400",
+        "subtypeId": 12,
+        "text": "forkatka druga",
+        "show": true,
+        "index": 1
+    }, {
+        "subnameId": "12004",
+        "subtypeId": 12,
+        "text": "formatka trzecia",
+        "show": true,
+        "index": 2
+    }, {
+        "subnameId": "51154",
+        "subtypeId": 51,
+        "text": "formatka pierwsza",
+        "show": true,
+        "index": 0
+    }, {
+        "subnameId": "51400",
+        "subtypeId": 51,
+        "text": "forkatka druga",
+        "show": true,
+        "index": 1
+    }, {
+        "subnameId": "51004",
+        "subtypeId": 51,
+        "text": "formatka trzecia",
+        "show": true,
+        "index": 2
+    }, {
+        "subnameId": "55154",
+        "subtypeId": 55,
+        "text": "formatka pierwsza",
+        "show": true,
+        "index": 0
+    }, {
+        "subnameId": "55400",
+        "subtypeId": 55,
+        "text": "forkatka druga",
+        "show": true,
+        "index": 1
+    }, {
+        "subnameId": "55004",
+        "subtypeId": 55,
+        "text": "formatka trzecia",
+        "show": true,
+        "index": 2
+    }]
+}

@@ -1,0 +1,59 @@
+{
+    "aFormsTabs": [
+        {
+            "tabPageId": "1",
+            "tabSlotId": "S00",
+            "tabTitle": "Informacja",
+            "tabSubtitle": "",
+            "tabPageType": "I",
+            "tabIndex": 0,
+            "tabClose": false,
+            "tabActive": true
+        },{
+            "tabPageId": "4512",
+            "tabSlotId": "S99",
+            "tabTitle": "Szukanie",
+            "tabSubtitle": "zaawansowane",
+            "tabPageType": "F",
+            "tabIndex": 1,
+            "tabClose": true,
+            "tabActive": false
+        },{
+            "tabPageId": "1845",
+            "tabSlotId": "S21",
+            "tabTitle": "formatka akcji operacyjnej",
+            "tabSubtitle": "wersja robocza",
+            "tabPageType": "E",
+            "tabIndex": 2,
+            "tabClose": true,
+            "tabActive": false
+        },{
+            "tabPageId": "5002",
+            "tabSlotId": "S22",
+            "tabTitle": "formatka akcji marketingowej",
+            "tabSubtitle": "zaakceptowana",
+            "tabPageType": "E",
+            "tabIndex": 3,
+            "tabClose": true,
+            "tabActive": false
+        },{
+            "tabPageId": "-1",
+            "tabSlotId": "S02",
+            "tabTitle": "NOWA FORMATKA operacyjna",
+            "tabSubtitle": "",
+            "tabPageType": "A",
+            "tabIndex": 4,
+            "tabClose": true,
+            "tabActive": false
+        },{
+            "tabPageId": "-2",
+            "tabSlotId": "S01",
+            "tabTitle": "NOWA FORMATKA marketingowa",
+            "tabSubtitle": "",
+            "tabPageType": "A",
+            "tabIndex": 5,
+            "tabClose": true,
+            "tabActive": false
+        }
+    ]
+}

@@ -1,0 +1,38 @@
+{
+    "sidebarAFTypes": [{
+        "subtypeId": 1,
+        "text": "Zaakceptowane",
+        "show": true,
+        "index": 0
+    }, {
+        "subtypeId": 2,
+        "text": "Do poprawki",
+        "show": true,
+        "index": 1
+    }, {
+        "subtypeId": 5,
+        "text": "Do zaakceptowania",
+        "show": true,
+        "index": 2
+    },{
+        "subtypeId": 11,
+        "text": "Archiwalne",
+        "show": true,
+        "index": 3
+    }, {
+        "subtypeId": 12,
+        "text": "Robocze",
+        "show": true,
+        "index": 4
+    }, {
+        "subtypeId": 51,
+        "text": "Do usuniecia",
+        "show": true,
+        "index": 5
+    }, {
+        "subtypeId": 55,
+        "text": "Z kreacjami",
+        "show": true,
+        "index": 6
+    }]
+}
