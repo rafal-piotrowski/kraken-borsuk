@@ -1,0 +1,1 @@
+export { default as cross } from '../../../../icons/borsuk-cross-outline/borsuk-cross-outline.js';

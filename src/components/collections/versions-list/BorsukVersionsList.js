@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable prefer-object-spread */
 /* eslint-disable object-shorthand */
 /* eslint-disable arrow-body-style */
@@ -40,6 +41,10 @@ import '@vaadin/vaadin-grid/vaadin-grid-filter-column.js';
 import '@vaadin/vaadin-grid/vaadin-grid-filter.js';
 import '@polymer/iron-form/iron-form';
 import '../../packages/borsuk-button.js';
+import '../../packages/borsuk-datepicker.js';
+
+import { MinMaxDate } from '@lion/form-core';
+// import '@lion/input-datepicker/lion-input-datepicker.js';
 import '@polymer/paper-input/paper-input';
 import moment from 'moment/dist/moment';
 
@@ -57,6 +62,12 @@ import { store } from '../../../redux/store.js';
 import { setClickAction } from '../../../redux/actions/customevents.js';
 
 import { ceVersionsListReselector, ceVersionsListSelector, ceSchedulesListSelector } from '../../../redux/reducers/cesuboffer.js';
+
+class IsMinMaxDate extends MinMaxDate {
+    static getMessage({ fieldName }) {
+        return `Please enter a valid ${fieldName} in the format "Rok/Miesiac/Dzien".`;
+    } 
+}
 
 export class BorsukVersionsList extends connect(store)(LitElement) {
 
@@ -76,7 +87,7 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
             }
         }
     }
-    
+   
     constructor() {
         super();
         this.versionsData = {};
@@ -143,8 +154,26 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
                             </div>
                             <hr/>
                             <div class="details-cell">
-                                <paper-input id="datePickerStart" label="Data od" required></paper-input>
-                                <paper-input id="datePickerEnd" label="Data do" required></paper-input>
+                                <!-- <paper-input id="datePickerStart" label="Data od" required></paper-input>
+                                <paper-input id="datePickerEnd" label="Data do" required></paper-input> -->
+                                <borsuk-datepicker
+                                    id="datePickerStart"
+                                    label="MinMaxDate"
+                                    .modelValue=${new Date('2018/05/30')}
+                                    .validators=${[new IsMinMaxDate({ min: new Date('2018/05/24'), max: new Date('2018/06/24') })]}>
+                                    <div slot="help-text">
+                                        Wprowadz poprawna date.
+                                    </div>
+                                </borsuk-datepicker>
+                                <borsuk-datepicker
+                                    id="datePickerEnd"
+                                    label="MinMaxDate"
+                                    .modelValue=${new Date('2018/05/30')}
+                                    .validators=${[new IsMinMaxDate({ min: new Date('2018/05/24'), max: new Date('2018/06/24') })]}>
+                                    <div slot="help-text">
+                                        Wprowadz poprawna date.
+                                    </div>
+                                </borsuk-datepicker>
                             </div>
                             <div class="flexbuttons">
                                 <paper-button id="addScheduleConfirmButton" @click=${this._changeScheduleConfirm} class="btn btn-warning" data-item>OK</paper-button>

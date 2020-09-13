@@ -1,0 +1,2 @@
+export default tag =>
+  tag`<svg viewBox="0 0 16 16" focusable="false"><path d="M8 16A8 8 0 108 0a8 8 0 000 16" fill="#349651"/><path d="M7.194 12.738a.63.63 0 01-1.022 0L3 8.386l1.022-.77 2.661 3.651L11.977 4 13 4.77l-5.806 7.968z" fill="#FFF"/></svg>`;

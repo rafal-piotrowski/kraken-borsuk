@@ -24,6 +24,7 @@ import { updateMetadata } from 'pwa-helpers/metadata.js';
 // import './borsuk-welcome.js';
 // import './borsuk-suboffer-form.js';
 // import './borsuk-version-form.js';
+import './borsuk-info.js';
 
 // podłączenie do Redux store.
 import { store } from '../redux/store.js';
@@ -63,6 +64,7 @@ export class BorsukContent extends connect(store)(LitElement) {
                 <borsuk-suboffer-form id="subofferContent" class="page" ?active="${this._slot === 'S01'}" .page=${this._page}></borsuk-suboffer-form>
                 <borsuk-version-form id="versionContent" class="page" ?active="${this._slot === 'S02'}" .page=${this._page}></borsuk-version-form>
                 <borsuk-filter-form class="page" ?active="${this._slot === 'S99'}" .page=${this._page}></borsuk-filter-form>
+                <borsuk-info class="page" ?active="${this._slot === 'S__'}" .page=${this._page}></borsuk-info>
                 <borsuk-page404 class="page" ?active="${this._slot === 'S404'}" .page=${this._page}></borsuk-page404>
             </borsuk-tabs>
         `;

@@ -1,0 +1,22 @@
+{
+    "unusedEventsDict": [
+        {
+            "id": "1",
+            "name": "SmartSaverRejectedTransfer_powiadomienie",
+            "sourceGroup": "FLINK",
+            "sourceSap": "SmartSaverRejectedTransfer_powiadomienie",
+            "index": 0
+        }, {
+            "id": "12",
+            "name": "transferToMobileRejectedByReceiver",
+            "sourceGroup": "FLINK",
+            "sourceSap": "transferToMobileRejectedByReceiver",
+            "index": 1
+        }, {
+            "id": "3",
+            "name": "transferToMobileUnrealized_powiadomienie",
+            "sourceGroup": "INB",
+            "sourceSap": "transferToMobileUnrealizedPowiadom",
+            "index": 2
+        }]
+}

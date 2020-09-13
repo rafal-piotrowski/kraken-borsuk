@@ -1,3 +1,4 @@
+/* eslint-disable no-else-return */
 /* eslint-disable object-shorthand */
 /* eslint-disable prefer-const */
 /* eslint-disable prefer-object-spread */
@@ -66,6 +67,7 @@ export class BorsukTabs extends connect(store)(LitElement) {
 
         ${Object.keys(this.tabsList).map((key) => {
             const i = this.tabsList[key];
+            if (i.tabSlotId !== 'S__') {
             return html`
                 <paper-tab page="${i.tabPageId}" ?selected="${this.activePage === i.tabPageId}" @tap="${(event) => { this.changeTabClick(event, i.tabPageId, i.tabSlotId) } }">
                   <div class="tabsWrapper">
@@ -91,6 +93,9 @@ export class BorsukTabs extends connect(store)(LitElement) {
                   </div>
                 </paper-tab>
             `;
+            } else {
+              return html`dupa`;
+            }
         })}
 
       </paper-tabs>

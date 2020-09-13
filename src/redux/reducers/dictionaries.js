@@ -9,7 +9,8 @@ import {
     GET_RESPONSE_CODES_DICT,
     GET_CONTENT_PARAMS_DICT,
     GET_ACTIONS_PARAMS_DICT,
-    UPDATE_ACTPARAMS_VISIBLE
+    UPDATE_ACTPARAMS_VISIBLE,
+    GET_UNUSED_EVENTS_DICT
   } from '../actions/dictionaries.js';
 
   const INITIAL_STATE = {
@@ -22,7 +23,8 @@ import {
     msggrpdict: {},
     rescodesdict: {},
     conpardict: {},
-    actpardict: {}
+    actpardict: {},
+    uneventsdict: {}
 };
 
 const dictionaries = (state = INITIAL_STATE, action) => {
@@ -41,6 +43,11 @@ const dictionaries = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 eventsdict: action.eventsdict
+            }
+        case GET_UNUSED_EVENTS_DICT:
+            return {
+                ...state,
+                uneventsdict: action.uneventsdict
             }
         case GET_PUSH_ACTION_DICT:
             return {
@@ -99,3 +106,4 @@ export const dictMessageGroupSelector = state => state.dictionaries.msggrpdict;
 export const dictResponseCodesSelector = state => state.dictionaries.rescodesdict;
 export const dictContentParamsSelector = state => state.dictionaries.conpardict;
 export const dictActionsParamsSelector = state => state.dictionaries.actpardict;
+export const dictUnusedEventsSelector = state => state.dictionaries.uneventsdict;

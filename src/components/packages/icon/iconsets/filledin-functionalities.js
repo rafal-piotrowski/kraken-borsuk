@@ -1,0 +1,1 @@
+export { default as calendar } from '../../../../icons/borsuk-calendar/borsuk-calendar.js';

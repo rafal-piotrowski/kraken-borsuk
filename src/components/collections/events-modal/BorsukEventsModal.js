@@ -35,7 +35,7 @@ import { connect } from 'pwa-helpers/connect-mixin.js';
 // podłączenie do Redux store.
 import { store } from '../../../redux/store.js';
 
-import { dictEventsSelector } from '../../../redux/reducers/dictionaries.js';
+// import { dictEventsSelector } from '../../../redux/reducers/dictionaries.js';
 
 export class BorsukEventsModal extends connect(store)(LitElement) {
     static get properties() {
@@ -73,7 +73,7 @@ export class BorsukEventsModal extends connect(store)(LitElement) {
                     <vaadin-grid    class="vaadinEvents"
                                     id="eventsGrid"
                                     theme="no-border no-row-borders"
-                                    .items=${Object.values(this.eventsDict)}
+                                    .items=${Object.values(this.events)}
                                     .selectedItems=${this.selectedItem}
                                     @active-item-changed="${this.activeItemChanged}">
                         
@@ -111,7 +111,7 @@ export class BorsukEventsModal extends connect(store)(LitElement) {
     }
 
     stateChanged(state) {
-        if (this.eventsDict !== dictEventsSelector(state)) { this.eventsDict = dictEventsSelector(state); }
+        // if (this.eventsDict !== dictEventsSelector(state)) { this.eventsDict = dictEventsSelector(state); }
         // this._page = state.cesuboffer.page;
         // this._slot = state.cesuboffer.slot;
     }

@@ -47,7 +47,7 @@ import { store } from '../../../redux/store.js';
 import { changeFormValue, changeChannelActiveFlg } from '../../../redux/actions/cesuboffer.js';
 
 import { getActivePage, getActiveSlot, getActiveChannelTabs, ceChannelSlotsReselector, getChannelContentFlg } from '../../../redux/reducers/cesuboffer.js';
-import { dictEventsSelector, dictMessageGroupSelector } from '../../../redux/reducers/dictionaries.js';
+import { dictEventsSelector, dictUnusedEventsSelector, dictMessageGroupSelector } from '../../../redux/reducers/dictionaries.js';
 
 export class BorsukMessageInputForm extends connect(store)(LitElement) {
     static get styles() {
@@ -164,6 +164,7 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
  
                 <borsuk-events-modal
                     id="eventModal"
+                    .events=${this.unusedEventsDict}
                     @ev-confirm-event-chosen=${this.confirmModal}>
                 </borsuk-events-modal>
             </iron-form>
@@ -178,6 +179,7 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
             messageDetails: { type: Object },
             groupSelected: { type: Object },
             eventsDict: { type: Array },
+            unusedEventsDict: { type: Array },
             messageGroupDict: { type: Array },
             editorSourceButtons: { type: Array },
             editorEmbedButtons: { type: Array },
@@ -196,6 +198,7 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
         this.titlePattern = "^" + this.titleStartPattern + "+" + this.titleAllowedPattern + "{3,50}";
         this.messageDetails = {};
         this.eventsDict = [];
+        this.unusedEventsDict = [];
         this.messageGroupDict = [];
         this.groupSelected = null;
         this.contentFlg = false;
@@ -348,6 +351,7 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
     stateChanged(state) {
         if (this.messageGroupDict !== dictMessageGroupSelector(state)) { this.messageGroupDict = dictMessageGroupSelector(state); }
         if (this.eventsDict !== dictEventsSelector(state)) { this.eventsDict = dictEventsSelector(state); }
+        if (this.unusedEventsDict !== dictUnusedEventsSelector(state)) { this.unusedEventsDict = dictUnusedEventsSelector(state); }
 
         this._page = getActivePage(state);
         this._slot = getActiveSlot(state);

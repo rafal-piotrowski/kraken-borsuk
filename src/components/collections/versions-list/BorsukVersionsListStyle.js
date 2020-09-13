@@ -129,7 +129,14 @@ export const BorsukVersionsListStyle = css`
         /* margin-left: calc(var(--borsuk-sidebar-width) + 25px); */
         top: 25% !important;
         left: 40% !important;
+        max-width: 550px;
+        max-height: 350px;
         /* margin-bottom: 25vh; */
+    }
+
+    .searchToastBody {
+        width: 500px;
+        min-height: 250px;
     }
 
     .version-grid-details {

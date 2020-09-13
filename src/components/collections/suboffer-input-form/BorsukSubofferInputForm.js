@@ -45,7 +45,7 @@ import { store } from '../../../redux/store.js';
 import { changeFormValue } from '../../../redux/actions/cesuboffer.js';
 
 import customevents, { actionClickSelector, actionParamSelector } from '../../../redux/reducers/customevents.js';
-import { dictProductGroupSelector, dictCategorySelector, dictEventsSelector } from '../../../redux/reducers/dictionaries.js';
+import { dictProductGroupSelector, dictCategorySelector, dictEventsSelector, dictUnusedEventsSelector } from '../../../redux/reducers/dictionaries.js';
 import { cesubofferPageReselector } from '../../../redux/reducers/cesuboffer.js';
 
 
@@ -55,12 +55,14 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
         this.categoryDict = [];
         this.productGroupDict = [];
         this.eventsDict = [];
+        this.unusedEventsDict = [];
         this.subOfferDetails = {};
     }
 
     static get properties() {
         return {
             eventsDict: { type: Array },
+            unusedEventsDict: { type: Array },
             categoryDict: { type: Array },
             productGroupDict: { type: Array },
             subOfferDetails: { type: Object },
@@ -83,6 +85,7 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
                 
                 <borsuk-events-modal
                     id="eventModal"
+                    .events=${this.unusedEventsDict}
                     @ev-confirm-event-chosen=${this.confirmModal}>
                 </borsuk-events-modal>
             </iron-form>
@@ -246,6 +249,7 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
         if (this.productGroupDict !== dictProductGroupSelector(state)) { this.productGroupDict = dictProductGroupSelector(state); }
         if (this.categoryDict !== dictCategorySelector(state)) { this.categoryDict = dictCategorySelector(state); }
         if (this.eventsDict !== dictEventsSelector(state)) { this.eventsDict = dictEventsSelector(state); }
+        if (this.unusedEventsDict !== dictUnusedEventsSelector(state)) { this.unusedEventsDict = dictUnusedEventsSelector(state); }
         if (this.subOfferDetails !== cesubofferPageReselector(state)) { this.subOfferDetails = cesubofferPageReselector(state); }
 
         if (actionClickSelector(state) === validateSubofferAction) { this.validateForm(state, this._page); }

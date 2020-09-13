@@ -365,6 +365,7 @@ export class BorsukLinkToast extends connect(store)(LitElement) {
         let buttonRadioGroup = this.shadowRoot.querySelector('#buttonRadioGroup');
         let newWindowCheckbox = this.shadowRoot.querySelector('#newWindowCheckbox');
 
+        let content = {};
         let attribs = {};
 
         linkText.validate();
@@ -375,7 +376,7 @@ export class BorsukLinkToast extends connect(store)(LitElement) {
         } else {
 
             if (linkText.value) {
-                attribs["text"] = linkText.value;
+                content["text"] = linkText.value;
             }
             if (linkTitle.value) {
                 attribs["title"] = linkTitle.value;
@@ -430,7 +431,7 @@ export class BorsukLinkToast extends connect(store)(LitElement) {
             toastResponseCode.contentElement.set('selected', null);
 
             this.quitLinkToast();
-            this.dispatchEvent(new CustomEvent('ev-confirm-link-chosen', { detail: { chosenLink: attribs } }));
+            this.dispatchEvent(new CustomEvent('ev-confirm-link-chosen', { detail: { chosenLinkContent: content, chosenLinkAttribs: attribs } }));
         }
     }
 

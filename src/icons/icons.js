@@ -46,3 +46,6 @@ export { default as borsukDone } from './borsuk-done/borsuk-done.js';
 export { default as borsukMinusSign } from './borsuk-minus-sign/borsuk-minus-sign.js';
 export { default as borsukPlusSign } from './borsuk-plus-sign/borsuk-plus-sign.js';
 export { default as borsukSchedule } from './borsuk-schedule/borsuk-schedule.js';
+export { default as borsukChevronOpenLeft } from './borsuk-chevron-open-left/borsuk-chevron-open-left.js';
+export { default as borsukChevronOpenRight } from './borsuk-chevron-open-right/borsuk-chevron-open-right.js';
+export { default as borsukCalendar } from './borsuk-calendar/borsuk-calendar.js';

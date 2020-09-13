@@ -374,18 +374,18 @@ export class BorsukEditor extends connect(store)(LitElement) {
 
             if (selection.ops.length === 0) {
                 this.editor.deleteText(range.index - offset, leaf.domNode.length);
-                this.editor.insertText(range.index - offset, event.detail.chosenLink.text, {
-                    'borlink': event.detail.chosenLink
+                this.editor.insertText(range.index - offset, event.detail.chosenLinkContent.text, {
+                    'borlink': event.detail.chosenLinkAttribs
                 }, Quill.sources.USER);
             } else {
                 this.editor.deleteText(range.index, range.length);
-                this.editor.insertText(range.index, event.detail.chosenLink.text, {
-                    'borlink': event.detail.chosenLink
+                this.editor.insertText(range.index, event.detail.chosenLinkContent.text, {
+                    'borlink': event.detail.chosenLinkAttribs
                 }, Quill.sources.USER);
             }
         } else {
-            this.editor.insertText(range.index, event.detail.chosenLink.text, {
-                'borlink': event.detail.chosenLink
+            this.editor.insertText(range.index, event.detail.chosenLinkContent.text, {
+                'borlink': event.detail.chosenLinkAttribs
             }, Quill.sources.USER);
         }
     }

@@ -11,6 +11,7 @@ export const GET_RESPONSE_CODES_DICT = 'GET_RESPONSE_CODES_DICT';
 export const GET_CONTENT_PARAMS_DICT = 'GET_CONTENT_PARAMS_DICT';
 export const GET_ACTIONS_PARAMS_DICT = 'GET_ACTIONS_PARAMS_DICT';
 export const UPDATE_ACTPARAMS_VISIBLE = 'UPDATE_ACTPARAMS_VISIBLE';
+export const GET_UNUSED_EVENTS_DICT = 'GET_UNUSED_EVENTS_DICT';
 
 export const getProductGroupDict = (results) => (dispatch) => {
     const prdgrpdict = results.reduce((obj, option) => {
@@ -45,6 +46,18 @@ export const getEventsDict = (results) => (dispatch) => {
     dispatch({
       type: GET_EVENTS_DICT,
       eventsdict
+    });
+  };
+
+export const getUnusedEventsDict = (results) => (dispatch) => {
+    const uneventsdict = results.reduce((obj, option) => {
+      obj[option.index] = option
+      return obj
+    }, {});
+  
+    dispatch({
+      type: GET_UNUSED_EVENTS_DICT,
+      uneventsdict
     });
   };
 

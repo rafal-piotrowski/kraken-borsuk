@@ -1,3 +1,4 @@
+/* eslint-disable import/named */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-plusplus */
 /* eslint-disable guard-for-in */
@@ -34,6 +35,9 @@ import '../../components/borsuk-alert.js';
 import '../../components/collections/borsuk-dialog.js';
 import '../../components/collections/borsuk-preloader.js'
 
+// import { registerIconSet } from '../../components/packages/icon/register-default-icon-set.js';
+import { registerDefaultIconsets } from '../../components/packages/icon/registerDefaultIconSet.js';
+
 import { titles } from '../../properties/titles.js';
 import { actions } from '../../properties/actions.js';
 import { events } from '../../properties/events.js';
@@ -48,7 +52,7 @@ import { getUserInfo } from '../../redux/actions/menu.js';
 import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSlots, getSidebarTypes, getSidebarNames, getSearchResults, 
         navigate, changeStatus, getVersionsList, getSchedulesList, getPublicationsList, getChannelActionsParams, updateHtmlFlg, getButtonsFlags } from '../../redux/actions/cesuboffer.js';
 import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict, 
-        getResponseCodesDict, getContentParamsDict, getActionsParamsDict } from '../../redux/actions/dictionaries.js';
+        getResponseCodesDict, getContentParamsDict, getActionsParamsDict, getUnusedEventsDict } from '../../redux/actions/dictionaries.js';
 import { setClickAction } from '../../redux/actions/customevents.js';
 
 // podłączenie reducer-a.
@@ -151,6 +155,7 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         this._setProductGroupDict();
         this._setCategoryDict();
         this._setEventsDict();
+        this._setUnusedEventsDict();
         this._setPushActionDict();
         this._setPeriodsDict();
         this._setPhoneTypeDict();
@@ -163,6 +168,8 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
         // setTimeout(() => {
         //     this._forceActivePage('1845', 'S02');
         //   }, 7000);
+
+        registerDefaultIconsets();
     }
 
     // setUserInfo do wycięcia po wdrożeniu do projektu
@@ -244,6 +251,11 @@ export class BorsukCesubofferApp extends connect(store)(LitElement) {
     _setEventsDict(jsonData) {
         if (jsonData) { store.dispatch(getEventsDict(jsonData.eventsDict)); } 
         else { loadJSON('/src/properties/_eventsDict.json').then(data => { store.dispatch(getEventsDict(data.eventsDict)); }) }
+    }
+
+    _setUnusedEventsDict(jsonData) {
+        if (jsonData) { store.dispatch(getUnusedEventsDict(jsonData.unusedEventsDict)); } 
+        else { loadJSON('/src/properties/_unusedEventsDict.json').then(data => { store.dispatch(getUnusedEventsDict(data.unusedEventsDict)); }) }
     }
 
     _setPushActionDict(jsonData) {

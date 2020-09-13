@@ -37,6 +37,7 @@ import { store } from '../redux/store.js';
 import { setClickAction } from '../redux/actions/customevents.js';
 // podłączenie reducer-a.
 import { ceSearchResultsSelector } from '../redux/reducers/cesuboffer.js';
+import { dictEventsSelector } from '../redux/reducers/dictionaries.js';
 
 export class BorsukFilterForm extends connect(store)(LitElement) {
     static get styles() {
@@ -148,6 +149,7 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
 
             <borsuk-events-modal
                 id="eventModal"
+                .events=${this.eventsDict}
                 @ev-confirm-event-chosen=${this.confirmModal}>
             </borsuk-events-modal>
 
@@ -195,12 +197,14 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
             _page: { type: String },
             _slot: { type: String },
             searchResults: { type: Array },
+            eventsDict: { type: Array },
         };
     }
 
     constructor() {
         super();
         this.searchResults = [];
+        this.eventsDict = [];
     }
 
     chooseEventFromDict() {
@@ -270,6 +274,7 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
 
     stateChanged(state) {
         if (this.searchResults !== ceSearchResultsSelector(state)) { this.searchResults = ceSearchResultsSelector(state); }
+        if (this.eventsDict !== dictEventsSelector(state)) { this.eventsDict = dictEventsSelector(state); }
         
         this._page = state.cesuboffer.page;
         this._slot = state.cesuboffer.slot;
