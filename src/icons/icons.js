@@ -49,3 +49,4 @@ export { default as borsukSchedule } from './borsuk-schedule/borsuk-schedule.js'
 export { default as borsukChevronOpenLeft } from './borsuk-chevron-open-left/borsuk-chevron-open-left.js';
 export { default as borsukChevronOpenRight } from './borsuk-chevron-open-right/borsuk-chevron-open-right.js';
 export { default as borsukCalendar } from './borsuk-calendar/borsuk-calendar.js';
+export { default as borsukAdd } from './borsuk-add/borsuk-add.js';

@@ -25,7 +25,7 @@
 import { LitElement, html, css } from 'lit-element';
 import { BorsukSidebarStyle } from './BorsukSidebarStyle.js';
 import { BorsukSidebarCollapseStyle } from './collections/sidebar-collapse/BorsukSidebarCollapseStyle.js';
-import { borsukAddSuboffer, borsukAddVersion, borsukApprove, borsukCopySuboffer, borsukCopyVersion, 
+import { borsukAddSuboffer, borsukAdd, borsukAddVersion, borsukApprove, borsukCopySuboffer, borsukCopyVersion, 
         borsukEditSuboffer, borsukEditVersion, borsukPublic, borsukChevronDown, borsukChevronUp,
         borsukRemoveSuboffer, borsukRemoveVersion, borsukSaveSuboffer, borsukSaveVersion } from '../icons/icons.js';
 import '@polymer/paper-tooltip/paper-tooltip';
@@ -52,7 +52,8 @@ import { store } from '../redux/store.js';
 import { setClickAction } from '../redux/actions/customevents.js';
 
 // podłączenie reducer-a.
-import cesuboffer, { cesubofferTypesSelector, cesubofferNamesSelector } from '../redux/reducers/cesuboffer.js';
+// import cesuboffer, { cesubofferTypesSelector, cesubofferNamesSelector } from '../redux/reducers/cesuboffer.js';
+import globals, { globalAppSelector } from '../redux/reducers/globals.js';
 
 export class BorsukSidebar extends connect(store)(LitElement) {
     static get styles() {
@@ -72,7 +73,7 @@ export class BorsukSidebar extends connect(store)(LitElement) {
         return html`
             <div class="flexbuttons">
                 <borsuk-button smicon animate id="addSuboffer" class="btn-icon-animated btn-icon-ing" @click="${this.addSuboffer}">
-                    <borsuk-icon .svg=${borsukAddSuboffer}></borsuk-icon>
+                    <borsuk-icon .svg=${borsukAdd}></borsuk-icon>
                 </borsuk-button>
                 <paper-tooltip id="addSubofferTooltip" for="addSuboffer">${tooltips.get('addSubofferTooltip')}</paper-tooltip>
             </div>
@@ -183,8 +184,12 @@ export class BorsukSidebar extends connect(store)(LitElement) {
     }
 
     stateChanged(state) {
-        if (this.sidebarSubtypes !== cesubofferTypesSelector(state)) { this.sidebarSubtypes = cesubofferTypesSelector(state); }
-        if (this.sidebarSubnames !== cesubofferNamesSelector(state)) { this.sidebarSubnames = cesubofferNamesSelector(state); }
+        if (this.app !== globalAppSelector(state)) { this.app = globalAppSelector(state) }
+
+        import('../redux/reducers/'+this.app+'.js').then((module) => {
+            if (this.sidebarSubtypes !== module.cesubofferTypesSelector(state)) { this.sidebarSubtypes = module.cesubofferTypesSelector(state); }
+            if (this.sidebarSubnames !== module.cesubofferNamesSelector(state)) { this.sidebarSubnames = module.cesubofferNamesSelector(state); }
+        });
     }
 
     static get properties() {
@@ -198,7 +203,8 @@ export class BorsukSidebar extends connect(store)(LitElement) {
             _suboffer_status: String,
             sidebarSubtypes: { type: Array },
             sidebarSubnames: { type: Array },
-            allCollapseFlg: { type: Boolean }
+            allCollapseFlg: { type: Boolean },
+            app: { type: String }
         };
     }
 

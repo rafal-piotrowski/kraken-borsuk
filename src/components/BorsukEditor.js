@@ -40,6 +40,7 @@ import { borsukTypographyBold, borsukTypographyItalic, borsukTypographyUnderline
         borsukEmbedAttachment, borsukEmbedImage, borsukEmbedParam, borsukNonBreakingSpace } from '../icons/icons.js';
 
 import  { actions } from '../properties/actions.js';
+import { titles } from '../properties/titles.js';
 
 import './packages/borsuk-button.js';
 import './packages/borsuk-icon.js';
@@ -48,6 +49,7 @@ import './collections/borsuk-colors-toast.js';
 import './collections/borsuk-header-toast.js';
 import './collections/borsuk-link-toast.js';
 import './collections/borsuk-param-toast.js';
+import './collections/borsuk-dialog.js';
 import '../helpers/quillRegisterBlots.js';
 
 // import 'html2json';
@@ -130,6 +132,10 @@ export class BorsukEditor extends connect(store)(LitElement) {
             <borsuk-header-toast id="headerToast" @ev-confirm-header-chosen=${this.confirmHeader}></borsuk-header-toast>
             <borsuk-link-toast id="linkToast" @ev-confirm-link-chosen=${this.confirmLink}></borsuk-link-toast>
             <borsuk-param-toast id="paramToast" @ev-confirm-param-chosen=${this.confirmParam}></borsuk-param-toast>
+            <borsuk-dialog  id="dialogWindow" 
+                            @confirm-dialog-fired=${this.confirmModal} 
+                            @cancel-dialog-fired=${this.cancelModal}>
+            </borsuk-dialog>
         `;
     }
 
@@ -159,6 +165,10 @@ export class BorsukEditor extends connect(store)(LitElement) {
 
     get navSourceTamplete() {
         return html`${this.sourceButtons ? html`${this.sourceButtons.map(i => html`<borsuk-form-buttons .valuesButton="${i}"></borsuk-form-buttons>`)}` : nothing }`;
+    }
+
+    get dialogWindow() {
+        return this.shadowRoot.getElementById("dialogWindow");
     }
 
     firstUpdated() {
@@ -354,7 +364,7 @@ export class BorsukEditor extends connect(store)(LitElement) {
 
             let customSelection = this.editor.getContents(range.index, range.length);
             if (customSelection.ops.length > 1) {
-                dialogWindow.openDialog('A', "Zaznaczono zbyt duży zakres danych","","");
+                this.dialogWindow.openDialog('A', "Zaznaczono zbyt duży zakres danych");
             } else {
                 if (customSelection.ops.length == 1) {
                     attribs["selectionLinkText"] = (customSelection.ops[0].insert) ? this.editor.getText(range.index, range.length) : '';

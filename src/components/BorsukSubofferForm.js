@@ -32,6 +32,8 @@ import './collections/borsuk-versions-list.js';
 import './collections/borsuk-publications-list.js';
 import './collections/borsuk-dialog.js';
 
+import { titles } from '../properties/titles.js';
+
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
 
@@ -199,7 +201,7 @@ export class BorsukSubofferForm extends connect(store)(LitElement) {
         if (validateStatus) {
             this.saveSuboffer(state, page);
         } else {
-            this.shadowRoot.getElementById('dialogWindow').openDialog('A',"Formularz zawiera błędy !","Sprawdź i popraw wszystkie pola zaznaczone na czerwono","");
+            this.shadowRoot.getElementById('dialogWindow').openDialog('A',"", titles.get('errorFormLabel'), "");
         }
     }
 

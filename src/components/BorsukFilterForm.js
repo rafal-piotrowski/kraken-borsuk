@@ -1,3 +1,4 @@
+/* eslint-disable prefer-template */
 /* eslint-disable prefer-object-spread */
 /* eslint-disable prefer-const */
 /* eslint-disable max-classes-per-file */
@@ -36,8 +37,9 @@ import { store } from '../redux/store.js';
 // załadowanie kreatorów akcji.
 import { setClickAction } from '../redux/actions/customevents.js';
 // podłączenie reducer-a.
-import { ceSearchResultsSelector } from '../redux/reducers/cesuboffer.js';
+// import { ceSearchResultsSelector } from '../redux/reducers/cesuboffer.js';
 import { dictEventsSelector } from '../redux/reducers/dictionaries.js';
+import globals, { globalAppSelector } from '../redux/reducers/globals.js';
 
 export class BorsukFilterForm extends connect(store)(LitElement) {
     static get styles() {
@@ -198,6 +200,7 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
             _slot: { type: String },
             searchResults: { type: Array },
             eventsDict: { type: Array },
+            app: { type: String }
         };
     }
 
@@ -273,11 +276,15 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
     }
 
     stateChanged(state) {
-        if (this.searchResults !== ceSearchResultsSelector(state)) { this.searchResults = ceSearchResultsSelector(state); }
+        if (this.app !== globalAppSelector(state)) { this.app = globalAppSelector(state) }
+        
+        import('../redux/reducers/'+this.app+'.js').then((module) => {
+            if (this.searchResults !== module.ceSearchResultsSelector(state)) { this.searchResults = module.ceSearchResultsSelector(state); }
+        });
         if (this.eventsDict !== dictEventsSelector(state)) { this.eventsDict = dictEventsSelector(state); }
         
-        this._page = state.cesuboffer.page;
-        this._slot = state.cesuboffer.slot;
+        // this._page = state.cesuboffer.page;
+        // this._slot = state.cesuboffer.slot;
     }
 
 }

@@ -1,6 +1,6 @@
 import { css } from 'lit-element';
 
-export const BorsukActionformsStyle = css`
+export const BorsukAppStyle = css`
 
     @font-face {
         font-family: 'INGMeWeb';
@@ -204,4 +204,4 @@ export const BorsukActionformsStyle = css`
         }
     }
 
-`; 
+`;

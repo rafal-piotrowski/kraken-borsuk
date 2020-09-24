@@ -1,5 +1,5 @@
 {
-    "sidebarAFTypes": [{
+    "sidebarCampFormTypes": [{
         "subtypeId": 1,
         "text": "Zaakceptowane",
         "show": true,

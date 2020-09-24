@@ -15,6 +15,10 @@ export const ckeyLabel = 'Użytkownik: ';
 export const lastLoginSuccessLabel = 'Ostatnie logowanie: ';
 export const lastLoginFailureLabel = 'Ostatnie niepoprawne logowanie: ';
 
+// Labelki okien dialogowych z błędami
+export const errorFormLabel = "{\"node\":\"root\",\"child\":[{\"node\":\"element\",\"tag\":\"p\",\"attr\":{\"style\":[\"text-align:\",\"center;\",\"line-height:\",\"3\"]},\"child\":[{\"node\":\"element\",\"tag\":\"strong\",\"attr\":{\"style\":[\"color:\",\"rgb(255,\",\"0,\",\"0);\"]},\"child\":[{\"node\":\"text\",\"text\":\"Formularz zawiera błędy !\"}]}]},{\"node\":\"element\",\"tag\":\"p\",\"attr\":{\"style\":[\"text-align:\",\"center;\"]},\"child\":[{\"node\":\"text\",\"text\":\"Sprawdź i popraw wszystkie pola zaznaczone na czerwono\"}]}]}";
+export const errorSavingLabel = "{\"node\":\"root\",\"child\":[{\"node\":\"element\",\"tag\":\"p\",\"attr\":{\"style\":[\"text-align:\",\"center;\",\"line-height:\",\"3\"]},\"child\":[{\"node\":\"element\",\"tag\":\"strong\",\"attr\":{\"style\":[\"color:\",\"rgb(255,\",\"0,\",\"0);\"]},\"child\":[{\"node\":\"text\",\"text\":\"Nie zapisano wszystkich zmian\"}]}]},{\"node\":\"element\",\"tag\":\"p\",\"attr\":{\"style\":[\"text-align:\",\"center;\"]},\"child\":[{\"node\":\"text\",\"text\":\"Czy jesteś pewien, że chcesz je utracić ?\"}]}]}";
+
 // Labelki okna logowania
 export const headingLoginLabel = "Witamy w aplikacji Borsuk 2";
 export const versionLoginLabel = "1.0.1.0";
@@ -119,3 +123,5 @@ titles.set('timeAllowedPattern', timeAllowedPattern);
 titles.set('timePattern', timePattern);
 titles.set('errorMessageLinkField', errorMessageLinkField);
 titles.set('errorMessageEmptyText', errorMessageEmptyText);
+titles.set('errorFormLabel', errorFormLabel);
+titles.set('errorSavingLabel', errorSavingLabel);

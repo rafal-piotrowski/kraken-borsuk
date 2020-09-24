@@ -3,18 +3,18 @@
         {
             "versionId": "1845021",
             "intervalId": "102",
-            "intervalStart": "2019-11-01",
-            "intervalEnd": "2019-11-30"
+            "intervalStart": "1572562800000",
+            "intervalEnd": "1575068400000"
         }, {
             "versionId": "1845021",
             "intervalId": "103",
-            "intervalStart": "2019-12-01",
-            "intervalEnd": "2019-12-15"
+            "intervalStart": "1575154800000",
+            "intervalEnd": "1576364400000"
         }, {
             "versionId": "1845121",
             "intervalId": "115",
-            "intervalStart": "2019-11-20",
-            "intervalEnd": "2020-01-30"
+            "intervalStart": "1574204400000",
+            "intervalEnd": "1580338800000"
         }
     ]
 }

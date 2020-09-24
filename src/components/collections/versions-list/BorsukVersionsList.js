@@ -1,3 +1,4 @@
+/* eslint-disable no-unneeded-ternary */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable prefer-object-spread */
 /* eslint-disable object-shorthand */
@@ -43,7 +44,7 @@ import '@polymer/iron-form/iron-form';
 import '../../packages/borsuk-button.js';
 import '../../packages/borsuk-datepicker.js';
 
-import { MinMaxDate } from '@lion/form-core';
+import { MinMaxDate, Required, IsDate, MinDate, MaxDate } from '@lion/form-core';
 // import '@lion/input-datepicker/lion-input-datepicker.js';
 import '@polymer/paper-input/paper-input';
 import moment from 'moment/dist/moment';
@@ -63,11 +64,41 @@ import { setClickAction } from '../../../redux/actions/customevents.js';
 
 import { ceVersionsListReselector, ceVersionsListSelector, ceSchedulesListSelector } from '../../../redux/reducers/cesuboffer.js';
 
-class IsMinMaxDate extends MinMaxDate {
+// class IsMinMaxDate extends MinMaxDate {
+//     static getMessage({ fieldName }) {
+//         return `Wprowadź poprawną datę ${fieldName} z określonego zakresu.`;
+//     }
+// }
+ 
+class IsRealDate extends IsDate {
     static getMessage({ fieldName }) {
-        return `Please enter a valid ${fieldName} in the format "Rok/Miesiac/Dzien".`;
-    } 
+        return `Wprowadź poprawną datę ${fieldName} w formacie "Dzien.Miesiąc.Rok".`;
+    }
 }
+ 
+class IsRequired extends Required {
+    static getMessage({ fieldName }) {
+        return `Pole ${fieldName} jest wymagane.`;
+    }
+}
+ 
+class IsMinDate extends MinDate {
+    static getMessage({ fieldName }) {
+        return `Pole ${fieldName} nie może być mniejsza od Daty od.`;
+    }
+}
+ 
+const beginDate = new Date();
+ 
+const IsMinDateRef = new IsMinDate(beginDate, {
+        message: `Data do nie może być mniejsza od Daty od.`
+    });
+ 
+// class IsMaxDate extends MaxDate {
+//     static getMessage({ fieldName }) {
+//         return `Nieprawidłowy zakres dat.`;
+//     }
+// }
 
 export class BorsukVersionsList extends connect(store)(LitElement) {
 
@@ -84,7 +115,8 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
             addScheduleToastTitle: {
                 type: String,
                 hasChanged: () => true
-            }
+            },
+            today: { type: Date, reflect: true }
         }
     }
    
@@ -92,6 +124,7 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
         super();
         this.versionsData = {};
         this.pubsData = [];
+        this.today = new Date();
 
         this.addScheduleToastTitle = "";
 
@@ -158,26 +191,31 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
                                 <paper-input id="datePickerEnd" label="Data do" required></paper-input> -->
                                 <borsuk-datepicker
                                     id="datePickerStart"
-                                    label="MinMaxDate"
-                                    .modelValue=${new Date('2018/05/30')}
-                                    .validators=${[new IsMinMaxDate({ min: new Date('2018/05/24'), max: new Date('2018/06/24') })]}>
+                                    label="Data od"
+                                    .modelValue=${beginDate}
+                                    @model-value-changed="${({ target: { modelValue, errorState } }) => {
+                                        if (!errorState) {
+                                            IsMinDateRef.param = modelValue;
+                                        }
+                                    }}"
+                                    .validators=${[new IsRequired(), new IsRealDate()]}>
                                     <div slot="help-text">
-                                        Wprowadz poprawna date.
+                                       
                                     </div>
                                 </borsuk-datepicker>
                                 <borsuk-datepicker
                                     id="datePickerEnd"
-                                    label="MinMaxDate"
-                                    .modelValue=${new Date('2018/05/30')}
-                                    .validators=${[new IsMinMaxDate({ min: new Date('2018/05/24'), max: new Date('2018/06/24') })]}>
+                                    label="Data do"
+                                    .modelValue=${this.today}
+                                    .validators=${[new IsRequired(), new IsRealDate(), IsMinDateRef]}>
                                     <div slot="help-text">
-                                        Wprowadz poprawna date.
+                                    
                                     </div>
                                 </borsuk-datepicker>
                             </div>
                             <div class="flexbuttons">
-                                <paper-button id="addScheduleConfirmButton" @click=${this._changeScheduleConfirm} class="btn btn-warning" data-item>OK</paper-button>
-                                <paper-button @click=${this._changeScheduleCancel} class="btn btn-warning">Anuluj</paper-button>
+                                <borsuk-button id="addScheduleConfirmButton" @click=${this._changeScheduleConfirm} class="btn btn-warning" data-item>OK</borsuk-button>
+                                <borsuk-button white @click=${this._changeScheduleCancel} class="btn btn-warning">Anuluj</borsuk-button>
                             </div>
                         </div>
                     </paper-toast>
@@ -240,8 +278,8 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
                                 const pub = this.pubsData[subkey];
                                 return html`
                                     <tr>
-                                        <td class="tg-cly1">${pub.intervalStart}</td>
-                                        <td class="tg-cly1">${pub.intervalEnd}</td>
+                                        <td class="tg-cly1">${moment.unix(pub.intervalStart/1000).format("DD.MM.YYYY")}</td>
+                                        <td class="tg-cly1">${moment.unix(pub.intervalEnd/1000).format("DD.MM.YYYY")}</td>
                                         <td class="tg-cly1">
                                         <borsuk-button smicon animate 
                                             class="btn-icon-animated btn-icon-ing">
@@ -346,20 +384,27 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
 
     _changeScheduleConfirm() {
         const action = this.addScheduleConfirmButton.getAttribute('data-action');
-        switch(action) {
-            case 'R':
-                this.removeSchedule();
-                break;
-            case 'A':
-                this.addSchedule();
-                break;
-            case 'E':
-                this.editSchedule();
-                break;
+        const error = (this.datePickerStart.getAttribute('shows-feedback-for') === 'error') ||
+                        (this.datePickerEnd.getAttribute('shows-feedback-for') === 'error') ? true : false;
+ 
+        if (!error) {
+            switch(action) {
+                case 'R':
+                    this.removeSchedule();
+                    break;
+                case 'A':
+                    this.addSchedule();
+                    break;
+                case 'E':
+                    this.editSchedule();
+                    break;
+            }
         }
     }
 
     addSchedule() {
+
+        console.log('Walidacja OK');
         const dateStartDate = moment(this.datePickerStart.value, 'YYYY-MM-DD', true);
         const dateEndDate = moment(this.datePickerEnd.value, 'YYYY-MM-DD', true);
         (!dateStartDate.isValid()) ? this.datePickerStart.invalid = true : this.datePickerStart.invalid = false;
@@ -416,12 +461,14 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
         // console.log('%%%%%%%%%%%% addVersionToSchedule %%%%%%%%%%%%%%');
         // console.log(item);
 
+        this.resetDatepickerInputValidation();
+ 
         this.addScheduleToastTitle = 'Dodawanie pozycji do harmonogramu';
         this.addScheduleToast.open();
-
-        this.datePickerStart.value = '';
+ 
+        this.datePickerStart.value = moment(new Date()).format("DD.MM.YYYY");
         this.datePickerStart.removeAttribute("readonly");
-        this.datePickerEnd.value = '';
+        this.datePickerEnd.value = moment(new Date()).format("DD.MM.YYYY");
         this.datePickerEnd.removeAttribute("readonly");
 
         this.addScheduleConfirmButton.setAttribute("data-item", item.versionId);
@@ -434,17 +481,27 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
         // console.log(item);
         // console.log(publication);
 
+        this.resetDatepickerInputValidation();
+ 
         this.addScheduleToastTitle = 'Zmiana pozycji w harmonogramie';
         this.addScheduleToast.open();
-
-        this.datePickerStart.value = publication.intervalStart;
+ 
+        this.datePickerStart.value = moment.unix(publication.intervalStart/1000).format("DD.MM.YYYY");
         this.datePickerStart.removeAttribute("readonly");
-        this.datePickerEnd.value = publication.intervalEnd;
+        this.datePickerEnd.value = moment.unix(publication.intervalEnd/1000).format("DD.MM.YYYY");
         this.datePickerEnd.removeAttribute("readonly");
 
         this.addScheduleConfirmButton.setAttribute("data-item", item.versionId);
         this.addScheduleConfirmButton.setAttribute("data-pub", publication.intervalId);
         this.addScheduleConfirmButton.setAttribute("data-action", "E");
+    }
+
+    resetDatepickerInputValidation() {
+        // const datePickerStart = this.shadowRoot.getElementById('datePickerStart');
+        // const datePickerEnd = this.shadowRoot.getElementById('datePickerEnd');
+ 
+        this.datePickerStart.reset();
+        this.datePickerEnd.reset();
     }
 
     _remVersionFromSchedule(item, publication) {
@@ -455,9 +512,9 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
         this.addScheduleToastTitle = 'Czy na pewno chcesz usunąć pozycję z harmonogramu ?';
         this.addScheduleToast.open();
 
-        this.datePickerStart.value = publication.intervalStart;
+        this.datePickerStart.value = moment.unix(publication.intervalStart/1000).format("DD.MM.YYYY");
         this.datePickerStart.setAttribute("readonly", "");
-        this.datePickerEnd.value = publication.intervalEnd;
+        this.datePickerEnd.value = moment.unix(publication.intervalEnd/1000).format("DD.MM.YYYY");
         this.datePickerEnd.setAttribute("readonly", "");
 
         this.addScheduleConfirmButton.setAttribute("data-item", item.versionId);

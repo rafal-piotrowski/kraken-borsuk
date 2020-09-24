@@ -129,8 +129,8 @@ export const BorsukVersionsListStyle = css`
         /* margin-left: calc(var(--borsuk-sidebar-width) + 25px); */
         top: 25% !important;
         left: 40% !important;
-        max-width: 550px;
-        max-height: 350px;
+        max-width: 550px !important;
+        max-height: 415px !important;
         /* margin-bottom: 25vh; */
     }
 
@@ -299,5 +299,17 @@ export const BorsukVersionsListStyle = css`
         background-color: transparent;
         border: 0;
         font-size: 0.875rem;
+    }
+
+    .flexbuttons {
+        bottom: 0;
+        margin: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn {
+        margin: 0 5px;
     }
 `;

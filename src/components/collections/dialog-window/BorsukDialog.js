@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-lone-blocks */
 /* eslint-disable prefer-template */
@@ -53,6 +54,14 @@ export class BorsukDialog extends LitElement {
         `;
     }
 
+    get dialogText2() {
+        return this.shadowRoot.getElementById("dialogText2");
+    }
+
+    firstUpdated() {
+        console.log('______________________ WOW _____________________');
+    }
+
     openToast(mode, text, jsonToken) {
         let infoToast = this.shadowRoot.getElementById('infoToast');
         if (jsonToken) {
@@ -102,7 +111,8 @@ export class BorsukDialog extends LitElement {
         }
 
         this.textDialog1 = textLine1;
-        this.textDialog2 = textLine2;
+        // this.textDialog2 = textLine2;
+        if (textLine2) { this.dialogText2.innerHTML = json2html(JSON.parse(textLine2)); }
         this.textDialog3 = textLine3;
 
         dialogCancelButton.setAttribute("class", (mode == 'C') ? 'btn btn-warning btn-modal' : 'btn btn-warning btn-modal btn-novisible');

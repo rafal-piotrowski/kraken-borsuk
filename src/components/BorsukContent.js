@@ -30,14 +30,15 @@ import './borsuk-info.js';
 import { store } from '../redux/store.js';
 
 // załadowanie kreatorów akcji.
-import { navigate } from '../redux/actions/cesuboffer.js';
+// import { navigate } from '../redux/actions/cesuboffer.js';
 
-// podłączenie reducer-a.
-import cesuboffer, { cesubofferTabsSelector, getActivePage, getActiveSlot, cesubofferPageReselector, 
-                    cesubofferPageBckpReselector, ceChannelsSlotReselector, ceChannelsSlotBckpReselector } from '../redux/reducers/cesuboffer.js';
+// // podłączenie reducer-a.
+// import cesuboffer, { cesubofferTabsSelector, getActivePage, getActiveSlot, cesubofferPageReselector, 
+//                     cesubofferPageBckpReselector, ceChannelsSlotReselector, ceChannelsSlotBckpReselector } from '../redux/reducers/cesuboffer.js';
 // store.addReducers({
 //     cesuboffer
 // });
+import globals, { globalAppSelector } from '../redux/reducers/globals.js';
 
 export class BorsukContent extends connect(store)(LitElement) {
     static get styles() {
@@ -79,7 +80,8 @@ export class BorsukContent extends connect(store)(LitElement) {
             ceSlotValues: { type: Array },
             ceChannelsValues: { type: Array },
             ceSlotBckpValues: { type: Array },
-            ceChannelsBckpValues: { type: Array }
+            ceChannelsBckpValues: { type: Array },
+            app: { type: String }
         };
     }
 
@@ -91,6 +93,16 @@ export class BorsukContent extends connect(store)(LitElement) {
         this.ceChannelsValues = [];
         this.ceSlotBckpValues = [];
         this.ceChannelsBckpValues = [];
+
+        // załadowanie kreatorów akcji.
+        // import('../redux/actions/cesuboffer.js').then((navigate) => {
+            
+        // });
+
+        // podłączenie reducer-a.
+        // import('../redux/reducers/cesuboffer.js').then((module) => {
+
+        // });
     }
 
     firstUpdated() {
@@ -99,9 +111,15 @@ export class BorsukContent extends connect(store)(LitElement) {
         //   }, 1000);
     }
 
+    navi(page, slot) {
+        import('../redux/actions/'+this.app+'.js').then((module) => {
+            store.dispatch(module.navigate(page, slot));
+        });
+    }
+
     updated(changedProps) {
         if (changedProps.has('_page')) {
-            this.inspectStateChanges();
+            // this.inspectStateChanges();
             const pageTitle = this.appTitle + ' - ' + this._page;
             updateMetadata({
                 title: pageTitle,
@@ -112,28 +130,35 @@ export class BorsukContent extends connect(store)(LitElement) {
 
         if (changedProps.has('_slot')) {
             setTimeout(() => {
-                    store.dispatch(navigate(this._page, this._slot));
+                    // store.dispatch(navigate(this._page, this._slot));
+                    this.navi(this._page, this._slot);
                   }, 1000);
         }
     }
 
     changeTab(event) {
         // console.log(event.detail);
-        store.dispatch(navigate(event.detail.pageId, event.detail.slotId));
+        // store.dispatch(navigate(event.detail.pageId, event.detail.slotId));
+        this.navi(event.detail.pageId, event.detail.slotId);
     }
 
     stateChanged(state) {
-        if (this.cesubofferTabsList !== cesubofferTabsSelector(state)) { this.cesubofferTabsList = cesubofferTabsSelector(state); }
-        if (this.ceSlotValues !== cesubofferPageReselector(state)) { this.ceSlotValues = cesubofferPageReselector(state); this.inspectStateChanges(); }
-        if (this.ceChannelsValues !== ceChannelsSlotReselector(state)) { this.ceChannelsValues = ceChannelsSlotReselector(state); this.inspectStateChanges(); }
-        if (this.ceSlotBckpValues !== cesubofferPageBckpReselector(state)) { this.ceSlotBckpValues = cesubofferPageBckpReselector(state) }
-        if (this.ceChannelsBckpValues !== ceChannelsSlotBckpReselector(state)) { this.ceChannelsBckpValues = ceChannelsSlotBckpReselector(state) }
-        // if (this._page !== getActivePageFromFlag(state)) { this._page = getActivePageFromFlag(state); }
-        // if (this._slot !== getActiveSlotFromFlag(state)) { this._slot = getActiveSlotFromFlag(state); }
-        // this._page = getActivePage(state);
-        this._page = getActivePage(state);
-        this._slot = getActiveSlot(state);
-        
+        if (this.app !== globalAppSelector(state)) { this.app = globalAppSelector(state) }
+
+        import('../redux/reducers/'+this.app+'.js').then((module) => {
+            if (this.cesubofferTabsList !== module.cesubofferTabsSelector(state)) { this.cesubofferTabsList = module.cesubofferTabsSelector(state); }
+            if (this.ceSlotValues !== module.cesubofferPageReselector(state)) { this.ceSlotValues = module.cesubofferPageReselector(state); 
+                this.inspectStateChanges(); 
+            }
+            if (this.ceChannelsValues !== module.ceChannelsSlotReselector(state)) { this.ceChannelsValues = module.ceChannelsSlotReselector(state); this.inspectStateChanges(); }
+            if (this.ceSlotBckpValues !== module.cesubofferPageBckpReselector(state)) { this.ceSlotBckpValues = module.cesubofferPageBckpReselector(state) }
+            if (this.ceChannelsBckpValues !== module.ceChannelsSlotBckpReselector(state)) { this.ceChannelsBckpValues = module.ceChannelsSlotBckpReselector(state) }
+            // if (this._page !== getActivePageFromFlag(state)) { this._page = getActivePageFromFlag(state); }
+            // if (this._slot !== getActiveSlotFromFlag(state)) { this._slot = getActiveSlotFromFlag(state); }
+            // this._page = getActivePage(state);
+            this._page = module.getActivePage(state);
+            this._slot = module.getActiveSlot(state);
+        });
     }
 
     inspectStateChanges() {
