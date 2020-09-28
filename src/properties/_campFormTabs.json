@@ -29,7 +29,7 @@
             "tabActive": false
         },{
             "tabPageId": "5002",
-            "tabSlotId": "S22",
+            "tabSlotId": "S21",
             "tabTitle": "formatka akcji marketingowej",
             "tabSubtitle": "zaakceptowana",
             "tabPageType": "E",
@@ -38,7 +38,7 @@
             "tabActive": false
         },{
             "tabPageId": "-1",
-            "tabSlotId": "S02",
+            "tabSlotId": "S21",
             "tabTitle": "NOWA FORMATKA operacyjna",
             "tabSubtitle": "",
             "tabPageType": "A",
@@ -47,7 +47,7 @@
             "tabActive": false
         },{
             "tabPageId": "-2",
-            "tabSlotId": "S01",
+            "tabSlotId": "S21",
             "tabTitle": "NOWA FORMATKA marketingowa",
             "tabSubtitle": "",
             "tabPageType": "A",

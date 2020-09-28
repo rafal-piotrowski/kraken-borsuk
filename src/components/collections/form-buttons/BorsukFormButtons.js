@@ -1,3 +1,4 @@
+/* eslint-disable prefer-template */
 /* eslint-disable prefer-object-spread */
 /* eslint-disable prefer-const */
 /* eslint-disable spaced-comment */
@@ -31,9 +32,10 @@ import { store } from '../../../redux/store.js';
 
 // załadowanie kreatorów akcji.
 import { setClickAction } from '../../../redux/actions/customevents.js';
+import globals, { globalAppSelector } from '../../../redux/reducers/globals.js';
 
 // podłączenie reducer-a.
-import cesuboffer, { getActivePage } from '../../../redux/reducers/cesuboffer.js';
+// import cesuboffer, { getActivePage } from '../../../redux/reducers/cesuboffer.js';
 
 export class BorsukFormButtons extends connect(store)(LitElement) {
     static get styles() {
@@ -43,6 +45,7 @@ export class BorsukFormButtons extends connect(store)(LitElement) {
     static get properties() {
         return {
             _page: { type: String },
+            app: { type: String }
         };
     }
 
@@ -91,7 +94,11 @@ export class BorsukFormButtons extends connect(store)(LitElement) {
     }
 
     stateChanged(state) {
-        this._page = getActivePage(state);
+        if (this.app !== globalAppSelector(state)) { this.app = globalAppSelector(state) }
+
+        import('../../../redux/reducers/'+this.app+'.js').then((module) => {
+            this._page = module.getActivePage(state);
+        });
     }
 
 }

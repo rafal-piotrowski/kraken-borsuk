@@ -54,10 +54,10 @@ const loadPage = (page, slot) => (dispatch) => {
       });
       break;
     case 'S21':
-      // import('../../components/borsuk-suboffer-form.js').then((module) => {
-        // import('../../components/collections/borsuk-suboffer-input-form.js');
+      import('../../components/borsuk-camp-form.js').then((module) => {
+        import('../../components/collections/borsuk-camp-input-form.js');
         // console.log('loading ... '+slot+' - '+page);
-      // });
+      });
       break;
     case 'S22':
       // import('../../components/borsuk-version-form.js').then((module) => {

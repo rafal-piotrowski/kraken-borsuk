@@ -64,6 +64,9 @@ export class BorsukContent extends connect(store)(LitElement) {
                 <borsuk-welcome class="page" ?active="${this._slot === 'S00'}" .page=${this._page}></borsuk-welcome>
                 <borsuk-suboffer-form id="subofferContent" class="page" ?active="${this._slot === 'S01'}" .page=${this._page}></borsuk-suboffer-form>
                 <borsuk-version-form id="versionContent" class="page" ?active="${this._slot === 'S02'}" .page=${this._page}></borsuk-version-form>
+
+                <borsuk-camp-form id="campaignContent" class="page" ?active="${this._slot === 'S21'}" .page=${this._page}></borsuk-camp-form>
+
                 <borsuk-filter-form class="page" ?active="${this._slot === 'S99'}" .page=${this._page}></borsuk-filter-form>
                 <borsuk-info class="page" ?active="${this._slot === 'S__'}" .page=${this._page}></borsuk-info>
                 <borsuk-page404 class="page" ?active="${this._slot === 'S404'}" .page=${this._page}></borsuk-page404>

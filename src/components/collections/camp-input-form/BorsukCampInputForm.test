@@ -1,0 +1,302 @@
+/* eslint-disable lit/no-useless-template-literals */
+/* eslint-disable max-classes-per-file */
+/* eslint-disable consistent-return */
+/* eslint-disable no-else-return */
+/* eslint-disable no-console */
+/* eslint-disable prefer-template */
+/* eslint-disable lit/no-value-attribute */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable func-names */
+/* eslint-disable spaced-comment */
+/* eslint-disable no-lone-blocks */
+/* eslint-disable babel/no-unused-expressions */
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/order */
+/* eslint-disable lit/binding-positions */
+/* eslint-disable import/first */
+/* eslint-disable import/newline-after-import */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-unused-vars */
+/* eslint-disable import/no-extraneous-dependencies */
+
+import { LitElement, html, css } from 'lit-element';
+import { BorsukCampInputFormStyle } from './BorsukCampInputFormStyle.js';
+
+import 'web-animations-js/web-animations.min.js';
+import '@polymer/iron-form/iron-form';
+import '@polymer/paper-input/paper-input';
+// import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
+// import '@polymer/paper-item/paper-item';
+// import '@polymer/paper-listbox/paper-listbox';
+// import '@polymer/paper-checkbox/paper-checkbox';
+
+import '../borsuk-events-modal.js';
+import '../../packages/borsuk-button.js';
+import '../../packages/borsuk-input.js';
+import '../../packages/borsuk-select.js';
+import '../../packages/borsuk-checkbox-group.js';
+import '../../packages/borsuk-checkbox.js';
+import '../../packages/borsuk-radio-group.js';
+import '../../packages/borsuk-radio.js';
+import '../../packages/borsuk-textarea.js';
+import '../../packages/borsuk-range.js';
+import '../../packages/borsuk-datepicker.js';
+import '../../packages/borsuk-icon.js';
+import { IngIcon } from '../../packages/icon/ing-icon.js';
+
+import { MinMaxDate, Required, IsDate, MinDate, MaxDate } from '@lion/form-core';
+
+import { events } from '../../../properties/events.js';
+import { titles } from '../../../properties/titles.js';
+
+import { validateSubofferAction } from '../../../properties/actions.js';
+
+// konektor do store-a
+import { connect } from 'pwa-helpers/connect-mixin.js';
+
+// podłączenie do Redux store.
+import { store } from '../../../redux/store.js';
+
+// załadowanie kreatorów akcji.
+// import { changeFormValue } from '../../../redux/actions/cesuboffer.js';
+
+import customevents, { actionClickSelector, actionParamSelector } from '../../../redux/reducers/customevents.js';
+import { dictProductGroupSelector, dictCategorySelector, dictEventsSelector, dictUnusedEventsSelector } from '../../../redux/reducers/dictionaries.js';
+import { cesubofferPageReselector } from '../../../redux/reducers/campform.js';
+
+class IsRealDate extends IsDate {
+    static getMessage({ fieldName }) {
+        return `Wprowadź poprawną datę ${fieldName} w formacie "Dzien.Miesiąc.Rok".`;
+    }
+}
+ 
+class IsRequired extends Required {
+    static getMessage({ fieldName }) {
+        return `Pole ${fieldName} jest wymagane.`;
+    }
+}
+
+export class BorsukCampInputForm extends connect(store)(LitElement) {
+    constructor() {
+        super();       
+        this.categoryDict = [];
+        this.productGroupDict = [];
+        this.eventsDict = [];
+        this.unusedEventsDict = [];
+        this.subOfferDetails = {};
+    }
+
+    static get properties() {
+        return {
+            eventsDict: { type: Array },
+            unusedEventsDict: { type: Array },
+            categoryDict: { type: Array },
+            productGroupDict: { type: Array },
+            subOfferDetails: { type: Object },
+            _page: { type: String }
+        }
+    }
+
+    static get styles() {
+        return [BorsukCampInputFormStyle];
+    }
+
+    firstUpdated() {
+        this.dispatchEvent(new CustomEvent('input-form-rendered', { detail: true }));
+    }
+
+    render() {
+        return html`
+            <iron-form id="formSuboffer">
+                ${this.formTemplate}
+                
+                <borsuk-events-modal
+                    id="eventModal"
+                    .events=${this.unusedEventsDict}
+                    @ev-confirm-event-chosen=${this.confirmModal}>
+                </borsuk-events-modal>
+            </iron-form>
+        `;
+    }
+
+    get formTemplate() {
+        return html`
+            <form>
+                <div class="formGrid formGrid12">
+
+                    ${Object.keys(this.subOfferDetails).map((key) => {
+                        const i = this.subOfferDetails[key];
+                        return html`
+
+                            <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
+                                <borsuk-input
+                                    class="input90"
+                                    label="BorsukInput">
+                                        <div slot="help-text">To jest Borsuk Input.</div>
+                                        <div slot="prefix">prefix</div>
+                                        <div slot="suffix">suffix</div>
+                                        <div slot="before">before</div>
+                                        <div slot="after">%</div>
+                                </borsuk-input>
+                            </div>
+
+                            <div class="inputGrid inputFrame formSpanGrid6 formBorder formBottomShadow">
+                                <borsuk-select
+                                    class="input90"
+                                    label="BorsukSelect">
+                                    <select slot="input">
+                                        <option selected hidden>Wybierz kategorie</option>
+                                        ${this.categoryDict ? html`
+                                            ${Object.keys(this.categoryDict).map((subkey) => {
+                                                const j = this.categoryDict[subkey];
+                                                return html`
+                                                    <option>${j.name}</option>
+                                                `})
+                                        }` : html`` }
+                                    </select>
+                                </borsuk-select>
+                            </div>
+
+                            <div class="inputGrid inputFrame formSpanGrid6 formBorder formBottomShadow">
+                                <borsuk-datepicker
+                                    id="datePickerStart"
+                                    label="DatePicker"
+                                    .validators=${[new IsRequired(), new IsRealDate()]}>
+                                    <div slot="help-text">
+                                        
+                                    </div>
+                                </borsuk-datepicker>
+                            </div>
+
+                            <!-- <div class="inputGrid formSpanGrid6 formGrid formGrid12 checkboxContener"> -->
+                            <div class="inputGrid inputFrame formSpanGrid6 formBorder formBottomShadow">
+                                <borsuk-checkbox-group label="Czekboks" name="status">
+                                    <borsuk-checkbox label="w przygotowaniu" .modelValue=${{ value: 'w przygotowaniu', checked: true }}></borsuk-checkbox>
+                                    <borsuk-checkbox label="zaakceptowane" .modelValue=${{ value: 'zaakceptowane', checked: false }}></borsuk-checkbox>
+                                </borsuk-checkbox-group>
+                            </div>
+
+                            <div class="inputGrid inputFrame formSpanGrid6 formBorder formBottomShadow">
+                                <borsuk-radio-group label="Radyjko" name="status">
+                                    <borsuk-radio label="w przygotowaniu" .modelValue=${{ value: 'w przygotowaniu', checked: true }}></borsuk-radio>
+                                    <borsuk-radio label="zaakceptowane" .modelValue=${{ value: 'zaakceptowane', checked: false }}></borsuk-radio>
+                                </borsuk-radio-group>
+                            </div>
+
+                            <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
+                                <borsuk-input
+                                    label="ModalInput"
+                                    id="eventId"
+                                    class="input90"
+                                    @focus="${this.chooseEventFromDict}"
+                                    value="${(i.eventId) ? this.eventsDict[Object.values(this.eventsDict).findIndex(p => p.id === i.eventId)].name : ''}"
+                                    required>
+                                        <div slot="help-text">Wybierz wartość z modala.</div>
+                                        <button slot="suffix" type="button" @click="${this.clearEventInput}">
+                                            USUŃ
+                                            <!-- <ing-icon icon-id="borsuk:filledin-functionalities:calendar" class="invoker-icon"></ing-icon> -->
+                                        </button>
+                                </borsuk-input>
+                            </div>
+
+                            <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
+                                <borsuk-textarea
+                                    class="input90"
+                                    label="BorsukTextarea"
+                                    max-rows="4">
+                                </borsuk-textarea>
+                            </div>
+
+                            <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
+                                <borsuk-range
+                                    class="input90"
+                                    label="BorsukRange"
+                                    min="20"
+                                    max="50"
+                                    .modelValue="${30}">
+                                </borsuk-range>
+                            </div>
+                    `})}
+                </div>
+            </form>
+        `;
+    }
+
+    chooseEventFromDict() {
+        this.shadowRoot.getElementById("eventModal").openModal();
+    }
+
+    subofferNameChanged(param) {
+        this.shadowRoot.getElementById(param).validate();
+        if (this.shadowRoot.getElementById(param).invalid === false) {
+            // store.dispatch(changeFormValue(this._page, param, this.shadowRoot.getElementById(param).value));
+        }
+    }
+
+    productGroupChanged(param) {
+        this.shadowRoot.getElementById("formProductGroup").validate();
+        if (this.shadowRoot.getElementById("formProductGroup").invalid === false) {
+            // store.dispatch(changeFormValue(this._page, param, this.productGroupDict[this.shadowRoot.getElementById(param).selected].id));
+        }
+    }
+
+    categoryChanged(param) {
+        this.shadowRoot.getElementById("formCategory").validate();
+        if (this.shadowRoot.getElementById("formCategory").invalid === false) {
+            // store.dispatch(changeFormValue(this._page, param, this.categoryDict[this.shadowRoot.getElementById(param).selected].id));
+        }
+    }
+
+    clearEventInput() {
+        console.log('usuwam event');
+    }
+
+    confirmModal(event) {
+        const chosenEvent = JSON.parse(event.detail.chosenEvent);
+        // store.dispatch(changeFormValue(this._page, 'eventId', chosenEvent.event.id));
+        this.shadowRoot.getElementById("eventId").invalid = false;
+    }
+
+    clearValidateStatus() {
+        // this.shadowRoot.getElementById("subofferName").invalid = false;
+        // this.shadowRoot.getElementById("formCategory").invalid = false;
+        // this.shadowRoot.getElementById("formProductGroup").invalid = false;
+        // this.shadowRoot.getElementById("eventId").invalid = false;
+    }
+
+    validateForm(page) {
+        if (page === this._page) {
+            this.shadowRoot.getElementById("subofferName").validate();
+            this.shadowRoot.getElementById("formCategory").validate();
+            this.shadowRoot.getElementById("formProductGroup").validate();
+            this.shadowRoot.getElementById("eventId").validate();
+
+            if (this.shadowRoot.getElementById("subofferName").invalid === false &&
+                this.shadowRoot.getElementById("formCategory").invalid === false &&
+                this.shadowRoot.getElementById("formProductGroup").invalid === false &&
+                this.shadowRoot.getElementById("eventId").invalid === false) {
+                    return true;
+                } else {
+                    return false;
+                }
+        }
+    }
+                
+    updated(changedProps) {
+        if (changedProps.has('_page')) {
+            this.clearValidateStatus();
+        }
+    }
+
+    stateChanged(state) {
+        if (this.productGroupDict !== dictProductGroupSelector(state)) { this.productGroupDict = dictProductGroupSelector(state); }
+        if (this.categoryDict !== dictCategorySelector(state)) { this.categoryDict = dictCategorySelector(state); }
+        if (this.eventsDict !== dictEventsSelector(state)) { this.eventsDict = dictEventsSelector(state); }
+        if (this.unusedEventsDict !== dictUnusedEventsSelector(state)) { this.unusedEventsDict = dictUnusedEventsSelector(state); }
+        if (this.subOfferDetails !== cesubofferPageReselector(state)) { this.subOfferDetails = cesubofferPageReselector(state); }
+
+        if (actionClickSelector(state) === validateSubofferAction) { this.validateForm(state, this._page); }
+        this._page = state.campform.page;
+        this._slot = state.campform.slot;
+    }
+}

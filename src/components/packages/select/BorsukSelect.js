@@ -5,15 +5,15 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { LitElement, html, css } from 'lit-element';
-import { LionInput } from '@lion/input';
+import { LionSelect } from '@lion/select';
 import { IngFieldMixin } from '../../mixins/field-mixin/IngFieldMixin.js';
-import { BorsukInputStyle } from './BorsukInputStyle.js';
+import { BorsukSelectStyle } from './BorsukSelectStyle.js';
 
 // export class BorsukButton extends customElements.get('paper-button') {
-export class BorsukInput extends IngFieldMixin(LionInput) {
+export class BorsukSelect extends IngFieldMixin(LionSelect) {
     static get styles() {
         return [
             super.styles,
-            BorsukInputStyle];
+            BorsukSelectStyle];
     }
 }
