@@ -1,0 +1,65 @@
+{
+    "cfSecondLevelTabs": [
+        {
+            "tabPageId": "18451",
+            "parentPageId": "1845",
+            "tabSlotId": "S30",
+            "tabTitle": "Grupa wzorcowa",
+            "tabSubtitle": "",
+            "channelActive": true,
+            "tabIndex": 1,
+            "tabClose": false,
+            "tabActive": true
+        },{
+            "tabPageId": "18452",
+            "parentPageId": "1845",
+            "tabSlotId": "S31",
+            "tabTitle": "Grupa 1",
+            "tabSubtitle": "",
+            "channelActive": true,
+            "tabIndex": 2,
+            "tabClose": false,
+            "tabActive": false
+        },{
+            "tabPageId": "18453",
+            "parentPageId": "1845",
+            "tabSlotId": "S31",
+            "tabTitle": "Grupa 2",
+            "tabSubtitle": "",
+            "channelActive": true,
+            "tabIndex": 3,
+            "tabClose": false,
+            "tabActive": false
+        },{
+            "tabPageId": "50021",
+            "parentPageId": "5002",
+            "tabSlotId": "S30",
+            "tabTitle": "Grupa wzorcowa",
+            "tabSubtitle": "",
+            "channelActive": true,
+            "tabIndex": 1,
+            "tabClose": false,
+            "tabActive": true
+        },{
+            "tabPageId": "50022",
+            "parentPageId": "5002",
+            "tabSlotId": "S31",
+            "tabTitle": "Grupa 1",
+            "tabSubtitle": "",
+            "channelActive": true,
+            "tabIndex": 2,
+            "tabClose": false,
+            "tabActive": false
+        },{
+            "tabPageId": "50023",
+            "parentPageId": "5002",
+            "tabSlotId": "S31",
+            "tabTitle": "Grupa 2",
+            "tabSubtitle": "",
+            "channelActive": true,
+            "tabIndex": 3,
+            "tabClose": false,
+            "tabActive": false
+        }
+    ]
+}

@@ -127,6 +127,7 @@ export const BorsukAppStyle = css`
     .flex-navbar {
         display: flex;
         flex-direction: row;
+        /* padding-left: var(--borsuk-sidebar-width); */
         max-width: 100%;
         height: 80px;
         -ms-flex: 1 1 0.000000001px;
@@ -202,6 +203,17 @@ export const BorsukAppStyle = css`
             height: 80%;
             margin-top: 25px;
         }
+    }
+
+
+
+    .closebtn {
+        position: absolute;
+        top: 10px;
+        left: var(--borsuk-sidebar-width);
+        /* font-size: 36px; */
+        margin-left: 15px;
+        z-index: 10;
     }
 
 `;

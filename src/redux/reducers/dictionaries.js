@@ -10,7 +10,11 @@ import {
     GET_CONTENT_PARAMS_DICT,
     GET_ACTIONS_PARAMS_DICT,
     UPDATE_ACTPARAMS_VISIBLE,
-    GET_UNUSED_EVENTS_DICT
+    GET_UNUSED_EVENTS_DICT,
+    GET_ACTION_TYPE_DICT,
+    GET_EMPLOYEE_DICT,
+    GET_PERS_LEVEL_DICT,
+    GET_SQUADS_DICT
   } from '../actions/dictionaries.js';
 
   const INITIAL_STATE = {
@@ -24,7 +28,11 @@ import {
     rescodesdict: {},
     conpardict: {},
     actpardict: {},
-    uneventsdict: {}
+    uneventsdict: {},
+    actiontypedict: {},
+    employeedict: {},
+    persleveldict: {},
+    squadsdict: {}
 };
 
 const dictionaries = (state = INITIAL_STATE, action) => {
@@ -38,6 +46,21 @@ const dictionaries = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 categorydict: action.categorydict
+            }
+        case GET_PERS_LEVEL_DICT:
+            return {
+                ...state,
+                persleveldict: action.persleveldict
+            }
+        case GET_SQUADS_DICT:
+            return {
+                ...state,
+                squadsdict: action.squadsdict
+            }
+        case GET_EMPLOYEE_DICT:
+            return {
+                ...state,
+                employeedict: action.employeedict
             }
         case GET_EVENTS_DICT:
             return {
@@ -84,6 +107,11 @@ const dictionaries = (state = INITIAL_STATE, action) => {
                 ...state,
                 actpardict: action.actpardict
             }
+        case GET_ACTION_TYPE_DICT:
+            return {
+                ...state,
+                actiontypedict: action.actiontypedict
+            }
         case UPDATE_ACTPARAMS_VISIBLE:
             return {
                 ...state,
@@ -107,3 +135,7 @@ export const dictResponseCodesSelector = state => state.dictionaries.rescodesdic
 export const dictContentParamsSelector = state => state.dictionaries.conpardict;
 export const dictActionsParamsSelector = state => state.dictionaries.actpardict;
 export const dictUnusedEventsSelector = state => state.dictionaries.uneventsdict;
+export const dictActionTypeSelector = state => state.dictionaries.actiontypedict;
+export const dictEmployeeSelector = state => state.dictionaries.employeedict;
+export const dictPersLevelSelector = state => state.dictionaries.persleveldict;
+export const dictSquadsSelector = state => state.dictionaries.squadsdict;

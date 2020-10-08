@@ -1,0 +1,47 @@
+{
+    "employeeDict": [
+        {
+            "id": "1",
+            "name": "Wiesław",
+            "surname": "Lech",
+            "ckey": "KX99PB",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "Piotr",
+            "surname": "Kmiotczyk",
+            "ckey": "RX07PM",
+            "index": 1
+        },{
+            "id": "3",
+            "name": "Mateusz",
+            "surname": "Skrzydło",
+            "ckey": "RG58FV",
+            "index": 2
+        },{
+            "id": "4",
+            "name": "Gabriela",
+            "surname": "Habrat",
+            "ckey": "HI04QA",
+            "index": 3
+        },{
+            "id": "5",
+            "name": "Rafał",
+            "surname": "Piotrowski",
+            "ckey": "PF83WS",
+            "index": 4
+        },{
+            "id": "6",
+            "name": "Kinga",
+            "surname": "Kajfosz",
+            "ckey": "NN68OR",
+            "index": 5
+        },{
+            "id": "7",
+            "name": "Wiktor",
+            "surname": "Pagacz",
+            "ckey": "HT31AB",
+            "index": 6
+        }
+    ]
+}

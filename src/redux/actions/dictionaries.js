@@ -12,6 +12,10 @@ export const GET_CONTENT_PARAMS_DICT = 'GET_CONTENT_PARAMS_DICT';
 export const GET_ACTIONS_PARAMS_DICT = 'GET_ACTIONS_PARAMS_DICT';
 export const UPDATE_ACTPARAMS_VISIBLE = 'UPDATE_ACTPARAMS_VISIBLE';
 export const GET_UNUSED_EVENTS_DICT = 'GET_UNUSED_EVENTS_DICT';
+export const GET_ACTION_TYPE_DICT = 'GET_ACTION_TYPE_DICT';
+export const GET_EMPLOYEE_DICT = 'GET_EMPLOYEE_DICT';
+export const GET_PERS_LEVEL_DICT = 'GET_PERS_LEVEL_DICT';
+export const GET_SQUADS_DICT = 'GET_SQUADS_DICT';
 
 export const getProductGroupDict = (results) => (dispatch) => {
     const prdgrpdict = results.reduce((obj, option) => {
@@ -25,6 +29,30 @@ export const getProductGroupDict = (results) => (dispatch) => {
     });
   };
 
+export const getPersLevelDict = (results) => (dispatch) => {
+  const persleveldict = results.reduce((obj, option) => {
+    obj[option.index] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_PERS_LEVEL_DICT,
+    persleveldict
+  });
+};
+
+export const getSquadsDict = (results) => (dispatch) => {
+  const squadsdict = results.reduce((obj, option) => {
+    obj[option.index] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_SQUADS_DICT,
+    squadsdict
+  });
+};
+
 export const getCategoryDict = (results) => (dispatch) => {
     const categorydict = results.reduce((obj, option) => {
       obj[option.index] = option
@@ -36,6 +64,18 @@ export const getCategoryDict = (results) => (dispatch) => {
       categorydict
     });
   };
+
+export const getEmployeeDict = (results) => (dispatch) => {
+  const employeedict = results.reduce((obj, option) => {
+    obj[option.index] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_EMPLOYEE_DICT,
+    employeedict
+  });
+};
 
 export const getEventsDict = (results) => (dispatch) => {
     const eventsdict = results.reduce((obj, option) => {
@@ -150,4 +190,16 @@ export const updateActparamsVisible = (paramId, paramStatus) => {
     type: UPDATE_ACTPARAMS_VISIBLE,
     paramId, paramStatus
   };
+};
+
+export const getActionTypeDict = (results) => (dispatch) => {
+  const actiontypedict = results.reduce((obj, option) => {
+    obj[option.index] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: GET_ACTION_TYPE_DICT,
+    actiontypedict
+  });
 };

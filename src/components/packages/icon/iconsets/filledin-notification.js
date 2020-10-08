@@ -1,1 +1,2 @@
 export { default as notificationInformation } from '../../../../icons/borsuk-notification/borsuk-notification.js';
+export { default as notificationError } from '../../../../icons/borsuk-notification-error/borsuk-notification-error.js';

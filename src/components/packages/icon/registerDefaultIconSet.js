@@ -13,6 +13,8 @@ function resolveIngIcon(iconset, name) {
         return import('./iconsets/filledin-notification.js').then(module => module[name]);
     case 'outline-characters':
       return import('./iconsets/outline-characters.js').then(module => module[name]);
+    case 'filledin-feedback':
+      return import('./iconsets/filledin-feedback.js').then(module => module[name]);
     default:
         throw new Error(`Unknown iconset ${iconset}`);
   }

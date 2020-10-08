@@ -10,18 +10,18 @@
             "tabClose": false,
             "tabActive": true
         },{
-            "tabPageId": "4512",
-            "tabSlotId": "S99",
-            "tabTitle": "Szukanie",
-            "tabSubtitle": "zaawansowane",
-            "tabPageType": "F",
+            "tabPageId": "4041",
+            "tabSlotId": "S21",
+            "tabTitle": "Lion Web Components",
+            "tabSubtitle": "prezetacja komponentów",
+            "tabPageType": "E",
             "tabIndex": 1,
             "tabClose": true,
             "tabActive": false
         },{
             "tabPageId": "1845",
-            "tabSlotId": "S21",
-            "tabTitle": "formatka akcji operacyjnej",
+            "tabSlotId": "S22",
+            "tabTitle": "formatka akcji",
             "tabSubtitle": "wersja robocza",
             "tabPageType": "E",
             "tabIndex": 2,
@@ -29,29 +29,20 @@
             "tabActive": false
         },{
             "tabPageId": "5002",
-            "tabSlotId": "S21",
-            "tabTitle": "formatka akcji marketingowej",
-            "tabSubtitle": "zaakceptowana",
+            "tabSlotId": "S23",
+            "tabTitle": "formatka akcji",
+            "tabSubtitle": "wersja zagregowana",
             "tabPageType": "E",
             "tabIndex": 3,
             "tabClose": true,
             "tabActive": false
         },{
-            "tabPageId": "-1",
-            "tabSlotId": "S21",
-            "tabTitle": "NOWA FORMATKA operacyjna",
-            "tabSubtitle": "",
-            "tabPageType": "A",
+            "tabPageId": "4512",
+            "tabSlotId": "S99",
+            "tabTitle": "Szukanie",
+            "tabSubtitle": "zaawansowane",
+            "tabPageType": "F",
             "tabIndex": 4,
-            "tabClose": true,
-            "tabActive": false
-        },{
-            "tabPageId": "-2",
-            "tabSlotId": "S21",
-            "tabTitle": "NOWA FORMATKA marketingowa",
-            "tabSubtitle": "",
-            "tabPageType": "A",
-            "tabIndex": 5,
             "tabClose": true,
             "tabActive": false
         }

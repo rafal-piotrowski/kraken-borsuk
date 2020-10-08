@@ -56,14 +56,12 @@ const loadPage = (page, slot) => (dispatch) => {
     case 'S21':
       import('../../components/borsuk-camp-form.js').then((module) => {
         import('../../components/collections/borsuk-camp-input-form.js');
-        // console.log('loading ... '+slot+' - '+page);
       });
       break;
     case 'S22':
-      // import('../../components/borsuk-version-form.js').then((module) => {
-        // import('../../components/collections/borsuk-version-input-form.js');
-        // console.log('loading ... '+slot+' - '+page);
-      // });
+      import('../../components/borsuk-action-form.js').then((module) => {
+        import('../../components/collections/borsuk-action-input-form.js');
+      });
       break;
     case 'S99':
       import('../../components/borsuk-filter-form.js').then((module) => {
@@ -87,21 +85,16 @@ const updatePage = (page, slot) => {
 
 export const switchannel = (prev, page, slot) => (dispatch) => {
   switch(slot) {
-    case 'S11':
-      import('../../components/collections/borsuk-push-input-form.js').then((module) => {
+    case 'S30':
+      import('../../components/collections/borsuk-group-pattern-form.js').then((module) => {
         // console.log('loading ... '+slot+' - '+page);
       });
       break;
-    case 'S12':
-      import('../../components/collections/borsuk-sms-input-form.js').then((module) => {
+    case 'S31':
+      import('../../components/collections/borsuk-group-input-form.js').then((module) => {
         // console.log('loading ... '+slot+' - '+page);
       });
       break;
-    case 'S13':
-        import('../../components/collections/borsuk-message-input-form.js').then((module) => {
-          // console.log('loading ... '+slot+' - '+page);
-        });
-        break;
     default:
       slot = 'S404';
       import('../../components/borsuk-page404.js');

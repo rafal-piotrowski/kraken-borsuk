@@ -193,4 +193,12 @@ export const BorsukNavbarStyle = css`
     .buttonsOper {
         padding-top: 10px;
     }
+
+    .sidewrpbtn {
+        padding: 20px 0 0 20px;
+    }
+
+    #invokericon {
+        fill: #ff6200;
+    }
 `;

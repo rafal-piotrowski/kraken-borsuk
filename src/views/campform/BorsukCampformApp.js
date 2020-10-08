@@ -40,8 +40,8 @@ import { store } from '../../redux/store.js';
 // załadowanie kreatorów akcji.
 import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSlots, getSidebarTypes, getSidebarNames, getSearchResults, 
     navigate, changeStatus, getVersionsList, getSchedulesList, getPublicationsList, getChannelActionsParams, updateHtmlFlg, getButtonsFlags } from '../../redux/actions/campform.js';
-// import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict, 
-//         getResponseCodesDict, getContentParamsDict, getActionsParamsDict, getUnusedEventsDict } from '../../redux/actions/dictionaries.js';
+import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict, 
+        getResponseCodesDict, getSquadsDict, getPersLevelDict, getUnusedEventsDict, getActionTypeDict, getEmployeeDict } from '../../redux/actions/dictionaries.js';
 // import { setClickAction } from '../../redux/actions/customevents.js';
 import { setGlobalVar } from '../../redux/actions/globals.js';
 
@@ -73,14 +73,15 @@ export class BorsukCampformApp extends BorsukApp {
 
     firstUpdated() {
         
+        console.log('_______________ campFormApp - firstUpdated __________________');
+
         // poniższe do wycięcia po wdrożeniu do projektu
         // this._setUserInfo();
-        store.dispatch(setGlobalVar('app', this._app));
 
         this._setCampFormTabs();
         this._setCampFormSlots();
-        // this._setCeChannelTabs();
-        // this._setCeChannelSlots();
+        this._setCeChannelTabs();
+        this._setCeChannelSlots();
         this._setSidebarCampFormTypes();
         this._setSidebarCampFormNames();
         // this._setVersionsList();
@@ -90,10 +91,14 @@ export class BorsukCampformApp extends BorsukApp {
         // this._setButtonsFlags();
 
         // ładowanie słowników
-        // this._setProductGroupDict();
+        this._setProductGroupDict();
         // this._setCategoryDict();
-        // this._setEventsDict();
-        // this._setUnusedEventsDict();
+        this._setPersLevelDict();
+        this._setSquadsDict();
+        this._setActionTypeDict();
+        this._setEmployeeDict();
+        this._setEventsDict();
+        this._setUnusedEventsDict();
         // this._setPushActionDict();
         // this._setPeriodsDict();
         // this._setPhoneTypeDict();
@@ -106,6 +111,7 @@ export class BorsukCampformApp extends BorsukApp {
         // setTimeout(() => {
         //     this._forceActivePage('1845', 'S02');
         //   }, 7000);
+        store.dispatch(setGlobalVar('app', this._app));
 
         registerDefaultIconsets();
 
@@ -113,24 +119,28 @@ export class BorsukCampformApp extends BorsukApp {
 
     // metody do zasilenia tabów
     _setCampFormTabs(jsonData) {
+        console.log('_______________ campFormApp - setCampFormTabs __________________');
+
         if (jsonData) { store.dispatch(getCesubofferTabs(jsonData.campFormTabs)); } 
         else { loadJSON('/src/properties/_campFormTabs.json').then(data => { store.dispatch(getCesubofferTabs(data.campFormTabs)); }) }
     }
 
     _setCampFormSlots(jsonData) {
+        console.log('_______________ campFormApp - setCampFormTabs __________________');
+
         if (jsonData) { store.dispatch(getCesubofferSlots(jsonData.campFormSlots)); } 
         else { loadJSON('/src/properties/_campFormSlots.json').then(data => { store.dispatch(getCesubofferSlots(data.campFormSlots)); }) }
     }
 
-    // _setCeChannelTabs(jsonData) {
-    //     if (jsonData) { store.dispatch(getCeChannelTabs(jsonData.ceChannelTabs)); } 
-    //     else { loadJSON('/src/properties/_ceChannelTabs.json').then(data => { store.dispatch(getCeChannelTabs(data.ceChannelTabs)); }) }
-    // }
+    _setCeChannelTabs(jsonData) {
+        if (jsonData) { store.dispatch(getCeChannelTabs(jsonData.cfSecondLevelTabs)); } 
+        else { loadJSON('/src/properties/_cfSecondLevelTabs.json').then(data => { store.dispatch(getCeChannelTabs(data.cfSecondLevelTabs)); }) }
+    }
 
-    // _setCeChannelSlots(jsonData) {
-    //     if (jsonData) { store.dispatch(getCeChannelSlots(jsonData.ceChannelSlots)); } 
-    //     else { loadJSON('/src/properties/_ceChannelSlots.json').then(data => { store.dispatch(getCeChannelSlots(data.ceChannelSlots)); }) }
-    // }
+    _setCeChannelSlots(jsonData) {
+        if (jsonData) { store.dispatch(getCeChannelSlots(jsonData.cfSecondLevelSlots)); } 
+        else { loadJSON('/src/properties/_cfSecondLevelSlots.json').then(data => { store.dispatch(getCeChannelSlots(data.cfSecondLevelSlots)); }) }
+    }
 
     // _setChannelActionsParams(jsonData) {
     //     if (jsonData) { store.dispatch(getChannelActionsParams(jsonData.channelActionsParams)); } 
@@ -171,25 +181,45 @@ export class BorsukCampformApp extends BorsukApp {
     // }
 
     // metody do zasilenia słowników
-    // _setProductGroupDict(jsonData) {
-    //     if (jsonData) { store.dispatch(getProductGroupDict(jsonData.productGroupDict)); } 
-    //     else { loadJSON('/src/properties/_productGroupDict.json').then(data => { store.dispatch(getProductGroupDict(data.productGroupDict)); }) }
-    // }
+    _setProductGroupDict(jsonData) {
+        if (jsonData) { store.dispatch(getProductGroupDict(jsonData.productGroupDict)); } 
+        else { loadJSON('/src/properties/_productGroupDict.json').then(data => { store.dispatch(getProductGroupDict(data.productGroupDict)); }) }
+    }
 
     // _setCategoryDict(jsonData) {
     //     if (jsonData) { store.dispatch(getCategoryDict(jsonData.categoryDict)); } 
     //     else { loadJSON('/src/properties/_categoryDict.json').then(data => { store.dispatch(getCategoryDict(data.categoryDict)); }) }
     // }
 
-    // _setEventsDict(jsonData) {
-    //     if (jsonData) { store.dispatch(getEventsDict(jsonData.eventsDict)); } 
-    //     else { loadJSON('/src/properties/_eventsDict.json').then(data => { store.dispatch(getEventsDict(data.eventsDict)); }) }
-    // }
+    _setPersLevelDict(jsonData) {
+        if (jsonData) { store.dispatch(getPersLevelDict(jsonData.persLevelDict)); } 
+        else { loadJSON('/src/properties/_persLevelDict.json').then(data => { store.dispatch(getPersLevelDict(data.persLevelDict)); }) }
+    }
 
-    // _setUnusedEventsDict(jsonData) {
-    //     if (jsonData) { store.dispatch(getUnusedEventsDict(jsonData.unusedEventsDict)); } 
-    //     else { loadJSON('/src/properties/_unusedEventsDict.json').then(data => { store.dispatch(getUnusedEventsDict(data.unusedEventsDict)); }) }
-    // }
+    _setSquadsDict(jsonData) {
+        if (jsonData) { store.dispatch(getSquadsDict(jsonData.squadsDict)); } 
+        else { loadJSON('/src/properties/_squadsDict.json').then(data => { store.dispatch(getSquadsDict(data.squadsDict)); }) }
+    }
+
+    _setActionTypeDict(jsonData) {
+        if (jsonData) { store.dispatch(getActionTypeDict(jsonData.actionTypeDict)); } 
+        else { loadJSON('/src/properties/_actionTypeDict.json').then(data => { store.dispatch(getActionTypeDict(data.actionTypeDict)); }) }
+    }
+
+    _setEmployeeDict(jsonData) {
+        if (jsonData) { store.dispatch(getEmployeeDict(jsonData.employeeDict)); } 
+        else { loadJSON('/src/properties/_employeeDict.json').then(data => { store.dispatch(getEmployeeDict(data.employeeDict)); }) }
+    }
+
+    _setEventsDict(jsonData) {
+        if (jsonData) { store.dispatch(getEventsDict(jsonData.eventsDict)); } 
+        else { loadJSON('/src/properties/_eventsDict.json').then(data => { store.dispatch(getEventsDict(data.eventsDict)); }) }
+    }
+
+    _setUnusedEventsDict(jsonData) {
+        if (jsonData) { store.dispatch(getUnusedEventsDict(jsonData.unusedEventsDict)); } 
+        else { loadJSON('/src/properties/_unusedEventsDict.json').then(data => { store.dispatch(getUnusedEventsDict(data.unusedEventsDict)); }) }
+    }
 
     // _setPushActionDict(jsonData) {
     //     if (jsonData) { store.dispatch(getPushActionDict(jsonData.pushActionDict)); } 
@@ -245,6 +275,14 @@ export class BorsukCampformApp extends BorsukApp {
     //     else { loadJSON('/src/properties/_ceBtnsFlags.json').then(data => { store.dispatch(getButtonsFlags(data.ceBtnsFlags)); }) }
     // }
 
+    get navbarTemplate() {
+        return html`
+            <div id="navLayout" class="flex-navbar">
+                <borsuk-navbar id="navbarApp" .mainNavTitle=${"Formatki akcji"}></borsuk-navbar>
+            </div>
+        `;
+    }
+
     static get properties() {
         return {
             _app: { type: String }
@@ -254,6 +292,7 @@ export class BorsukCampformApp extends BorsukApp {
     constructor() {
         super();
         this._app = "campform";
+        this.cesubofferNavbarTitle = 'Formatki akcji';
     }
 
 }

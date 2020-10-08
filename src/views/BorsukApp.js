@@ -24,6 +24,9 @@
 import { LitElement, html, css } from 'lit-element';
 import { until } from 'lit-html/directives/until';
 import { BorsukAppStyle } from './BorsukAppStyle.js';
+// import { borsukAddSuboffer, borsukAdd, borsukClose, borsukAddVersion, borsukApprove, borsukCopySuboffer, borsukCopyVersion, 
+//     borsukEditSuboffer, borsukEditVersion, borsukPublic, borsukChevronDown, borsukChevronUp,
+//     borsukRemoveSuboffer, borsukRemoveVersion, borsukSaveSuboffer, borsukSaveVersion } from '../icons/icons.js';
 import { loadJSON } from '../helpers/asyncFunctions.js';
 
 // konektor służący podłączaniu się do store-a
@@ -32,6 +35,8 @@ import '../components/borsuk-navbar.js';
 import '../components/borsuk-sidebar.js';
 import '../components/borsuk-content.js';
 import '../components/borsuk-alert.js';
+import '../components/packages/borsuk-button.js';
+import '../components/packages/borsuk-icon.js';
 import '../components/collections/borsuk-dialog.js';
 import '../components/collections/borsuk-preloader.js'
 
@@ -89,8 +94,11 @@ export class BorsukApp extends connect(store)(LitElement) {
 
             <div id="subofferOper" class="wrapper flex-stretch-align">
                 ${until(this.sidebarTemplate, html`<borsuk-preloader></borsuk-preloader>`)}
+
                 <div id="workLayout" class="stretch-right">
-                    ${this.navbarTemplate}
+                    <div id="navLayout" class="flex-navbar">
+                        <borsuk-navbar id="navbarApp" .mainNavTitle="${this.cesubofferNavbarTitle}" @change-collapse-sidebar=${this.collapseSidebar}></borsuk-navbar>
+                    </div>
                     ${this.contentTemplate}
                 </div>
             </div>
@@ -105,7 +113,7 @@ export class BorsukApp extends connect(store)(LitElement) {
     get sidebarTemplate() {
         return html`
             <div id="treeLayout" class="sidebar flex-leftbar" data-color="orange" data-background-color="white">
-                <div class="sidebar-wrapper">
+                <div id="sidewrapLayout" class="sidebar-wrapper">
                     <borsuk-sidebar id="treeView"></borsuk-sidebar>
                 </div>
             </div>
@@ -115,7 +123,7 @@ export class BorsukApp extends connect(store)(LitElement) {
     get navbarTemplate() {
         return html`
             <div id="navLayout" class="flex-navbar">
-                <borsuk-navbar id="navbarApp" .mainNavTitle="${titles.get('cesubofferNavbarTitle')}"></borsuk-navbar>
+                <borsuk-navbar id="navbarApp" @change-collapse-sidebar=${this.collapseSidebar} .mainNavTitle="${titles.get('cesubofferNavbarTitle')}"></borsuk-navbar>
             </div>
         `;
     }
@@ -126,6 +134,23 @@ export class BorsukApp extends connect(store)(LitElement) {
                 <borsuk-content id="contentApp"></borsuk-content>
             </div>
         `;
+    }
+
+    collapseSidebar(event) {
+
+        if (this.shadowRoot.getElementById("treeLayout").style.width === "0px") {
+            this.shadowRoot.getElementById("treeLayout").style.width = "325px";
+            setTimeout(() => { 
+                this.shadowRoot.getElementById("sidewrapLayout").style.width = "325px";
+                this.shadowRoot.getElementById("workLayout").style.paddingLeft = "325px";
+            }, 300);
+        } else {
+            this.shadowRoot.getElementById("treeLayout").style.width = "0px";
+            setTimeout(() => { 
+                this.shadowRoot.getElementById("sidewrapLayout").style.width = "0px";
+                this.shadowRoot.getElementById("workLayout").style.paddingLeft = "0px";
+            }, 300);
+        }
     }
 
     firstUpdated() {
@@ -218,7 +243,7 @@ export class BorsukApp extends connect(store)(LitElement) {
         } else {
             this.fireCustomEvent(state, actionClickSelector(state), actionParamSelector(state) ? actionParamSelector(state) : null)
         }
-        this._page = getActivePage(state);
+        // this._page = getActivePage(state);
     }
 
     openModal(type, mode, textLine1, textLine2, textLine3, jsonToken, scale) {
@@ -298,8 +323,10 @@ export class BorsukApp extends connect(store)(LitElement) {
             title: { type: String },
             userInfo: { type: Object },
             _page: { type: String },
+            _slot: { type: String },
             closingPage: { type: Object },
-            currentActionClick: { type: String }
+            currentActionClick: { type: String },
+            cesubofferNavbarTitle: { type: String }
         };
     }
 
@@ -310,6 +337,8 @@ export class BorsukApp extends connect(store)(LitElement) {
         this.heading = titles.get('headRwdAlert');
         this.footing = titles.get('footRwdAlert');
         this.title = titles.get('titleRwdAlert');
+        this.cesubofferNavbarTitle = 'BORSUK';
+
         // this._app = "actionforms";
 
         // do celow produkcyjnych potrzebny będzie tylko listener dla infoEvent w celu otwarcia modala z info o użytkowniku

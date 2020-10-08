@@ -1,0 +1,63 @@
+{
+    "cfSecondLevelSlots": [
+        {
+            "tabPageId": "18451",
+            "parentPageId": "1845",
+            "tabSlotId": "S30",
+            "content": "treść wysyłanego pusha ...",
+            "actionId": "12",
+            "inLink": "link wewnętrzny",
+            "outLink": "link zewnętrzny",
+            "sendPeriodId": "1",
+            "sendFrom": "8",
+            "sendTo": "21"
+        },{
+            "tabPageId": "18452",
+            "parentPageId": "1845",
+            "tabSlotId": "S31",
+            "content": "treść wysyłanego smsa ...",
+            "phoneTypeId": "1",
+            "sendPeriodId": "2",
+            "sendFrom": "8",
+            "sendTo": "21"
+        },{
+            "tabPageId": "18453",
+            "parentPageId": "1845",
+            "tabSlotId": "S31",
+            "content": "{\"node\":\"root\",\"child\":[{\"node\":\"element\",\"tag\":\"p\",\"child\":[{\"node\":\"text\",\"text\":\"to jest akapit\"}]},{\"node\":\"element\",\"tag\":\"div\",\"child\":[{\"node\":\"text\",\"text\":\"to jest div\"}]},{\"node\":\"element\",\"tag\":\"h1\",\"child\":[{\"node\":\"text\",\"text\":\"to jest nagłówek\"}]},{\"node\":\"element\",\"tag\":\"p\",\"child\":[{\"node\":\"element\",\"tag\":\"span\",\"attr\":{\"style\":[\"color:\",\"rgb(52,\",\"150,\",\"81);\"]},\"child\":[{\"node\":\"element\",\"tag\":\"span\",\"attr\":{\"style\":[\"text-decoration:\",\"underline\"]},\"child\":[{\"node\":\"text\",\"text\":\"a to jest kolor\"}]}]}]},{\"node\":\"element\",\"tag\":\"p\",\"attr\":{\"class\":\"ql-align-center\"},\"child\":[{\"node\":\"element\",\"tag\":\"span\",\"attr\":{\"style\":[\"color:\",\"rgb(52,\",\"150,\",\"81);\"]},\"child\":[{\"node\":\"element\",\"tag\":\"span\",\"attr\":{\"style\":[\"text-decoration:\",\"underline\"]},\"child\":[{\"node\":\"text\",\"text\":\"a to jest wyśrodkowane\"}]}]}]},{\"node\":\"element\",\"tag\":\"p\",\"child\":[{\"node\":\"element\",\"tag\":\"br\"}]}]}",
+            "title": "wiadomość testowa",
+            "groupId": "2",
+            "eventId": "70",
+            "expire": 1
+        },{
+            "tabPageId": "50021",
+            "parentPageId": "5002",
+            "tabSlotId": "S30",
+            "content": "treść wysyłanego pusha ...",
+            "actionId": "24",
+            "inLink": "link wewnętrzny",
+            "outLink": "link zewnętrzny",
+            "sendPeriodId": "1",
+            "sendFrom": "10",
+            "sendTo": "15"
+        },{
+            "tabPageId": "50022",
+            "parentPageId": "5002",
+            "tabSlotId": "S31",
+            "content": "treść wysyłanego smsa ...",
+            "phoneTypeId": "1",
+            "sendPeriodId": "2",
+            "sendFrom": "8",
+            "sendTo": "21"
+        },{
+            "tabPageId": "50023",
+            "parentPageId": "5002",
+            "tabSlotId": "S31",
+            "content": "{\"node\":\"root\",\"child\":[{\"node\":\"element\",\"tag\":\"p\",\"child\":[{\"node\":\"text\",\"text\":\"----------------\"}]},{\"node\":\"element\",\"tag\":\"div\",\"child\":[{\"node\":\"text\",\"text\":\"--------- div-----------\"}]},{\"node\":\"element\",\"tag\":\"h1\",\"child\":[{\"node\":\"text\",\"text\":\"FUCK YOU\"}]},{\"node\":\"element\",\"tag\":\"p\",\"child\":[{\"node\":\"element\",\"tag\":\"span\",\"attr\":{\"style\":[\"color:\",\"rgb(52,\",\"150,\",\"81);\"]},\"child\":[{\"node\":\"element\",\"tag\":\"span\",\"attr\":{\"style\":[\"text-decoration:\",\"underline\"]},\"child\":[{\"node\":\"text\",\"text\":\"a to jest chuj wie co\"}]}]}]},{\"node\":\"element\",\"tag\":\"p\",\"attr\":{\"class\":\"ql-align-center\"},\"child\":[{\"node\":\"element\",\"tag\":\"span\",\"attr\":{\"style\":[\"color:\",\"rgb(52,\",\"150,\",\"81);\"]},\"child\":[{\"node\":\"element\",\"tag\":\"span\",\"attr\":{\"style\":[\"text-decoration:\",\"underline\"]},\"child\":[{\"node\":\"text\",\"text\":\"a to jest wyśrodkowane\"}]}]}]},{\"node\":\"element\",\"tag\":\"p\",\"child\":[{\"node\":\"element\",\"tag\":\"br\"}]}]}",
+            "title": "nowa wiadomość testowa",
+            "groupId": "1",
+            "eventId": "666",
+            "expire": 1
+        }
+    ]
+}

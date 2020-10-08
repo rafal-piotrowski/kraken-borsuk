@@ -1,0 +1,17 @@
+{
+    "persLevelDict": [
+        {
+            "id": "1",
+            "name": "Client driven",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "Bank driven",
+            "index": 1
+        },{
+            "id": "3",
+            "name": "Default",
+            "index": 2
+        }
+    ]
+}

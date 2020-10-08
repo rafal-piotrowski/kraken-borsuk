@@ -19,7 +19,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/no-extraneous-dependencies */
 
-import { LitElement, html, css } from '@lion/core';
+import { LitElement, html, css } from 'lit-element';
 import { BorsukCampInputFormStyle } from './BorsukCampInputFormStyle.js';
 
 import 'web-animations-js/web-animations.min.js';
@@ -44,7 +44,7 @@ import '../../packages/borsuk-datepicker.js';
 import '../../packages/borsuk-icon.js';
 import { IngIcon } from '../../packages/icon/ing-icon.js';
 
-import { MinMaxDate, Required, MinLength, MaxLength, IsDate, MinDate, MaxDate } from '@lion/form-core';
+import { MinMaxDate, Required, IsDate, MinDate, MaxDate } from '@lion/form-core';
 
 import { events } from '../../../properties/events.js';
 import { titles } from '../../../properties/titles.js';
@@ -61,7 +61,7 @@ import { store } from '../../../redux/store.js';
 // import { changeFormValue } from '../../../redux/actions/cesuboffer.js';
 
 import customevents, { actionClickSelector, actionParamSelector } from '../../../redux/reducers/customevents.js';
-import { dictProductGroupSelector, dictCategorySelector, dictEventsSelector, dictUnusedEventsSelector, dictActionTypeSelector, dictEmployeeSelector } from '../../../redux/reducers/dictionaries.js';
+import { dictProductGroupSelector, dictCategorySelector, dictEventsSelector, dictUnusedEventsSelector, dictActionTypeSelector, dictEmployeeSelector, dictSquadsSelector } from '../../../redux/reducers/dictionaries.js';
 import { cesubofferPageReselector } from '../../../redux/reducers/campform.js';
 
 class IsRealDate extends IsDate {
@@ -76,13 +76,7 @@ class IsRequired extends Required {
     }
 }
 
-class IsAreaRequired extends Required {
-    static getMessage() {
-        return `Pole jest wymagane.`;
-    }
-}
-
-export class BorsukCampInputForm extends connect(store)(LitElement) {
+export class BorsukActionInputForm extends connect(store)(LitElement) {
     constructor() {
         super();       
         this.categoryDict = [];
@@ -92,6 +86,7 @@ export class BorsukCampInputForm extends connect(store)(LitElement) {
         this.actionTypeDict = [];
         this.subOfferDetails = {};
         this.employeesDict = [];
+        this.squadsDict = [];
     }
 
     static get properties() {
@@ -103,7 +98,8 @@ export class BorsukCampInputForm extends connect(store)(LitElement) {
             subOfferDetails: { type: Object },
             _page: { type: String },
             actionTypeDict: { type: Array },
-            employeesDict: { type: Array }
+            employeesDict: { type: Array },
+            squadsDict: { type: Array },
         }
     }
 
@@ -155,7 +151,6 @@ export class BorsukCampInputForm extends connect(store)(LitElement) {
                             <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
                                 <borsuk-input
                                     class="input90"
-                                    placeholder="jakiśtam placeholder"
                                     label="Nazwa akcji">
                                         <div slot="help-text">podaj nazwę zgłaszanej akcji</div>
                                         <div slot="before" style="color: red;">*</div>
@@ -200,8 +195,42 @@ export class BorsukCampInputForm extends connect(store)(LitElement) {
                             </div>
 
                             <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
+                                <borsuk-select
+                                    class="input90"
+                                    label="Scrum / Squad">
+                                    <div slot="help-text"></div>
+                                    <select slot="input">
+                                        <option selected hidden></option>
+                                        ${this.squadsDict ? html`
+                                            ${Object.keys(this.squadsDict).map((subkey) => {
+                                                const j = this.squadsDict[subkey];
+                                                return html`
+                                                    <option>${j.name}</option>
+                                                `})
+                                        }` : html`` }
+                                    </select>
+                                </borsuk-select>
+                            </div>
+
+                            <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
+                                <borsuk-input
+                                    label="Osoba odpowiedzialna za akcję biznesową"
+                                    id="employeeId"
+                                    class="input90"
+                                    @focus="${this.chooseEmployeeFromDict}"
+                                    value="${(i.employeeId) ? this.employeesDict[Object.values(this.employeesDict).findIndex(p => p.id === i.employeeId)].name : ''}"
+                                    required>
+                                        <div slot="help-text">Wybierz wartość z modala.</div>
+                                        <button slot="suffix" type="button" @click="${this.clearEventInput}">
+                                            USUŃ
+                                            <!-- <ing-icon icon-id="borsuk:filledin-functionalities:calendar" class="invoker-icon"></ing-icon> -->
+                                        </button>
+                                </borsuk-input>
+                            </div>
+
+                            <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
                                 <borsuk-textarea
-                                    .validators="${[new IsAreaRequired({}, { type: 'error' })]}"
+                                    .validators="${[new IsRequired({}, { type: 'error' })]}"
                                     label="Uzasadnienie"
                                     .modelValue=${'uzasadnienie: Lorem ipsum dolor sit amet'}
                                     class="input90"
@@ -222,7 +251,41 @@ export class BorsukCampInputForm extends connect(store)(LitElement) {
                             </div>
 
                             <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
+                                <borsuk-textarea
+                                    class="input90"
+                                    label="Cel akcji"
+                                    max-rows="4">
+                                        <div slot="help-text">poinformowanie klientów o..., sprzedaż produktu X, zachęcenie do..., spełnienie obowiązku informacyjnego etc.</div>
+                                </borsuk-textarea>
+                            </div>
+
+                            <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
+                                <borsuk-textarea
+                                    class="input90"
+                                    label="Główny przekaz"
+                                    max-rows="4">
+                                        <div slot="help-text">wpisz jaki jest główny przekaz akcji</div>
+                                </borsuk-textarea>
+                            </div>
+
+                            <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
+                                <borsuk-textarea
+                                    class="input90"
+                                    label="Dodatkowe uwagi zgłaszającego"
+                                    max-rows="4">
+                                        <div slot="help-text">wpisz ewentualne inne uwagi istotne dla realizacji akcji</div>
+                                </borsuk-textarea>
+                            </div>
+
+                            <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
                                 <borsuk-button gap id="attachmentButton">Dodaj załącznik</borsuk-button>
+                            </div>
+
+                            <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
+                                <borsuk-input
+                                    class="input90"
+                                    label="ING Campaign">
+                                </borsuk-input>
                             </div>
 
                             <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
@@ -241,48 +304,31 @@ export class BorsukCampInputForm extends connect(store)(LitElement) {
                                 </borsuk-input>
                             </div>
 
-                            <div class="inputGrid inputFrame formSpanGrid6 formBorder formBottomShadow">
-                                <borsuk-datepicker
-                                    id="datePickerStart"
-                                    label="Oczekiwany termin rozpoczęcia akcji"
-                                    .validators=${[new IsRequired(), new IsRealDate()]}>
-                                    <div slot="help-text">
-                                        
-                                    </div>
-                                </borsuk-datepicker>
+                            <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
+                                <borsuk-textarea
+                                    class="input90"
+                                    label="Warunki obligatoryjne"
+                                    max-rows="4">
+                                        <div slot="help-text">Zgoda na profilowanie. Zgody na marketing. Grupy Globalne. Klient archiwalny. Zgon. Flaga HM.</div>
+                                        <div slot="before" style="color: red;">*</div>
+                                </borsuk-textarea>
                             </div>
 
-                            <div class="inputGrid inputFrame formSpanGrid6 formBorder formBottomShadow">
-                                <borsuk-datepicker
-                                    id="datePickerStart"
-                                    label="Termin ważności oferty"
-                                    .validators=${[new IsRequired(), new IsRealDate()]}>
-                                    <div slot="help-text">
-                                        Wprowadź termin ważności oferty.
-                                    </div>
-                                </borsuk-datepicker>
+                            <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
+                                <borsuk-textarea
+                                    class="input90"
+                                    label="Warunki wspólne dla wszystkich grup"
+                                    max-rows="4">
+                                        <div slot="before" style="color: red;">*</div>
+                                </borsuk-textarea>
                             </div>
 
-                            <!-- <div class="inputGrid formSpanGrid6 formGrid formGrid12 checkboxContener"> -->
-                            <div class="inputGrid inputFrame formSpanGrid6 formBorder formBottomShadow">
-                                <borsuk-checkbox-group label="Segment" name="status">
-                                    <div slot="help-text">zaznacz jakich segmentów dotyczy akcja.</div>
-                                    <borsuk-checkbox label="MASS" .modelValue=${{ value: 'MASS', checked: true }}></borsuk-checkbox>
-                                    <borsuk-checkbox label="SB" .modelValue=${{ value: 'SB', checked: false }}></borsuk-checkbox>
-                                    <borsuk-checkbox label="PB" .modelValue=${{ value: 'PB', checked: false }}></borsuk-checkbox>
-                                    <borsuk-checkbox label="PvB" .modelValue=${{ value: 'PvB', checked: false }}></borsuk-checkbox>
-                                    <borsuk-checkbox label="WM" .modelValue=${{ value: 'WM', checked: false }}></borsuk-checkbox>
-                                </borsuk-checkbox-group>
+                            <!-- <hr>
+                            <h2>GRUPY</h2> -->
+                            <div class="inputGrid inputFrame formSpanGrid12">
+                                <borsuk-button gap id="addGroupButton">Dodaj grupę</borsuk-button>
                             </div>
-
-                            <div class="inputGrid inputFrame formSpanGrid6 formBorder formBottomShadow">
-                                <borsuk-radio-group label="Cykl akcji" name="status">
-                                    <borsuk-radio label="brak" .modelValue=${{ value: 'brak', checked: true }}></borsuk-radio>
-                                    <borsuk-radio label="dzienna" .modelValue=${{ value: 'dzienna', checked: false }}></borsuk-radio>
-                                    <borsuk-radio label="tygodniowa" .modelValue=${{ value: 'tygodniowa', checked: false }}></borsuk-radio>
-                                    <borsuk-radio label="miesieczna" .modelValue=${{ value: 'miesieczna', checked: false }}></borsuk-radio>
-                                </borsuk-radio-group>
-                            </div>
+                            
 
                     `})}
                 </div>
@@ -365,6 +411,7 @@ export class BorsukCampInputForm extends connect(store)(LitElement) {
 
         if (this.actionTypeDict !== dictActionTypeSelector(state)) { this.actionTypeDict = dictActionTypeSelector(state) }
         if (this.employeesDict !== dictEmployeeSelector(state)) { this.employeesDict = dictEmployeeSelector(state) }
+        if (this.squadsDict !== dictSquadsSelector(state)) { this.squadsDict = dictSquadsSelector(state) } 
 
         if (actionClickSelector(state) === validateSubofferAction) { this.validateForm(state, this._page); }
         this._page = state.campform.page;

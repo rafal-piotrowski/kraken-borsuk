@@ -20,6 +20,8 @@ export { default as borsukChevronDown } from './borsuk-chevron-down/borsuk-chevr
 export { default as borsukChevronUp } from './borsuk-chevron-up/borsuk-chevron-up.js';
 export { default as borsukDoubleChevronDown } from './borsuk-dchevron-down/borsuk-dchevron-down.js';
 export { default as borsukDoubleChevronUp } from './borsuk-dchevron-up/borsuk-dchevron-up.js';
+export { default as borsukDoubleChevronLeft } from './borsuk-dchevron-left/borsuk-dchevron-left.js';
+export { default as borsukDoubleChevronRight } from './borsuk-dchevron-right/borsuk-dchevron-right.js';
 export { default as borsukTypographyBold } from './borsuk-typography-bold/borsuk-typography-bold.js';
 export { default as borsukTypographyItalic } from './borsuk-typography-italic/borsuk-typography-italic.js';
 export { default as borsukTypographyUnderline } from './borsuk-typography-underline/borsuk-typography-underline.js';
@@ -50,3 +52,5 @@ export { default as borsukChevronOpenLeft } from './borsuk-chevron-open-left/bor
 export { default as borsukChevronOpenRight } from './borsuk-chevron-open-right/borsuk-chevron-open-right.js';
 export { default as borsukCalendar } from './borsuk-calendar/borsuk-calendar.js';
 export { default as borsukAdd } from './borsuk-add/borsuk-add.js';
+export { default as borsukSave } from './borsuk-save/borsuk-save.js';
+export { default as borsukCopy } from './borsuk-copy/borsuk-copy.js';

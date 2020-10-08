@@ -1,0 +1,41 @@
+{
+    "actionTypeDict": [
+        {
+            "id": "1",
+            "name": "Cold Event",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "Warm Event",
+            "index": 1
+        },{
+            "id": "3",
+            "name": "Hot Event",
+            "index": 2
+        },{
+            "id": "4",
+            "name": "Honeymoon",
+            "index": 3
+        },{
+            "id": "5",
+            "name": "Follow up",
+            "index": 4
+        },{
+            "id": "6",
+            "name": "Information",
+            "index": 5
+        },{
+            "id": "7",
+            "name": "Matrix",
+            "index": 6
+        },{
+            "id": "8",
+            "name": "NPS",
+            "index": 7
+        },{
+            "id": "9",
+            "name": "Schemat klienta",
+            "index": 8
+        }
+    ]
+}

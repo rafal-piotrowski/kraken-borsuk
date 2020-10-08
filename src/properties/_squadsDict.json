@@ -1,0 +1,17 @@
+{
+    "squadsDict": [
+        {
+            "id": "1",
+            "name": "Squad 1",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "Squad 9",
+            "index": 1
+        },{
+            "id": "3",
+            "name": "Expert Team",
+            "index": 2
+        }
+    ]
+}

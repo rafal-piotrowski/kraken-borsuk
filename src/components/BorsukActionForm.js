@@ -17,9 +17,9 @@ import { LitElement, html, css } from 'lit-element';
 import { until } from 'lit-html/directives/until';
 import { render } from 'lit-html';
 import { BorsukCampFormStyle } from './BorsukCampFormStyle.js';
-import { borsukAddSuboffer, borsukAddVersion, borsukApprove, borsukCopySuboffer, borsukCopyVersion, 
+import { borsukAddSuboffer, borsukAddVersion, borsukApprove, borsukCopySuboffer, borsukCopy, 
     borsukPublishTest, borsukPublishProd, borsukPublic, borsukChevronDown, borsukChevronUp,
-    borsukRemoveSuboffer, borsukRemoveVersion, borsukSaveSuboffer, borsukSaveVersion } from '../icons/icons.js';
+    borsukRemoveSuboffer, borsukRemove, borsukSaveSuboffer, borsukSave } from '../icons/icons.js';
 import { saveSubofferAction, removeSubofferAction, copySubofferAction, 
     addVersionAction, publishTestAction, publishProdAction, validateVersionAction,
     saveVersionAction, removeVersionAction, copyVersionAction, approveVersionAction } from '../properties/actions.js';
@@ -28,7 +28,7 @@ import { saveSubofferAction, removeSubofferAction, copySubofferAction,
 import './collections/borsuk-form-buttons.js';
 import './collections/borsuk-preloader.js'
 import './collections/borsuk-tabs.js';
-// import './borsuk-channels-section.js';
+import './borsuk-action-groups-section.js';
 // import './collections/borsuk-version-status.js';
 import './collections/borsuk-dialog.js';
 
@@ -49,7 +49,7 @@ import customevents, { actionClickSelector, actionParamSelector } from '../redux
 import { cesubofferPageReselector, ceChannelsSlotReselector, ceChannelsPageReselector, ceChnActParamsReselector, 
         getActivePage, getActiveSlot, getActiveChannelTabs, ceBtnsFlagsReselector } from '../redux/reducers/campform.js';
 
-export class BorsukCampForm extends connect(store)(LitElement) {
+export class BorsukActionForm extends connect(store)(LitElement) {
     static get styles() {
         return [BorsukCampFormStyle];
     }
@@ -62,11 +62,9 @@ export class BorsukCampForm extends connect(store)(LitElement) {
         `;
     }
 
-
-    // ${this.headerTemplate}
-
     get campaignFormTemplate() {
         return html`
+            ${this.headerTemplate}
             ${this.formInputTemplate}
             ${this.channelsTemplate}
             <borsuk-dialog  id="dialogWindow" 
@@ -103,7 +101,7 @@ export class BorsukCampForm extends connect(store)(LitElement) {
 
     get formInputTemplate() {
         return html`
-            <borsuk-camp-input-form id="versionInputForm"></borsuk-camp-input-form>
+            <borsuk-action-input-form id="versionInputForm"></borsuk-action-input-form>
         `;
     }
 
@@ -113,7 +111,7 @@ export class BorsukCampForm extends connect(store)(LitElement) {
                 <div class="container-fluid">
                     <div id="tabsVerForm" class="card card-nav-tabs text-center">
                         <div id="headerTabsVerForm" class="card-header card-header-warning">
-                            <!-- <borsuk-channels-section id="channelsForms"></borsuk-channels-section> -->
+                            <borsuk-action-groups-section id="actionGroupsForms"></borsuk-action-groups-section>
                         </div>
                     </div>
                 </div>
@@ -138,21 +136,21 @@ export class BorsukCampForm extends connect(store)(LitElement) {
         this.formButtons = [{
             buttonId: validateVersionAction,
             buttonTooltip: 'Zapisz wersję',
-            buttonIcon: borsukSaveVersion,
+            buttonIcon: borsukSave,
             buttonActive: true,
             buttonList: [{
             }],
         },{
             buttonId: removeVersionAction,
             buttonTooltip: 'Usuń wersję',
-            buttonIcon: borsukRemoveVersion,
+            buttonIcon: borsukRemove,
             buttonActive: true,
             buttonList: [{
             }],
         },{
             buttonId: copyVersionAction,
             buttonTooltip: 'Kopiuj wersję',
-            buttonIcon: borsukCopyVersion,
+            buttonIcon: borsukCopy,
             buttonActive: true,
             buttonList: [{
             }],

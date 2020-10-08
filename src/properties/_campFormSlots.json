@@ -5,11 +5,7 @@
             "tabSlotId": "S00",
             "status": 0
         },{
-            "tabPageId": "4512",
-            "tabSlotId": "S99",
-            "status": 0
-        },{
-            "tabPageId": "1845",
+            "tabPageId": "4041",
             "tabSlotId": "S21",
             "subofferName": "suboferta batchBMawaria...",
             "versionName": "wersja_191007_JR",
@@ -17,8 +13,16 @@
             "status": 2,
             "statusDesc": "zaakceptowana"
         },{
+            "tabPageId": "1845",
+            "tabSlotId": "S22",
+            "subofferName": "suboferta batchBMawaria...",
+            "versionName": "wersja_191007_JR",
+            "pushAndSms": "bothChannels",
+            "status": 2,
+            "statusDesc": "zaakceptowana"
+        },{
             "tabPageId": "5002",
-            "tabSlotId": "S21",
+            "tabSlotId": "S23",
             "subofferName": "suboferta_likwidacja...",
             "groupId": "123",
             "categoryId": "2",
@@ -26,12 +30,8 @@
             "status": 2,
             "statusDesc": "opublikowano na teście"
         },{
-            "tabPageId": "-1",
-            "tabSlotId": "S21",
-            "status": 0
-        },{
-            "tabPageId": "-2",
-            "tabSlotId": "S21",
+            "tabPageId": "4512",
+            "tabSlotId": "S99",
             "status": 0
         }
     ]
