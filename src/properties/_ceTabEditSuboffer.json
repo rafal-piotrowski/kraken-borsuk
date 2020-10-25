@@ -1,0 +1,14 @@
+{
+    "ceTabEditSuboffer": [
+        {
+            "tabPageId": "5002",
+            "tabSlotId": "S01",
+            "tabTitle": "suboferta_likwidacja...",
+            "tabSubtitle": "",
+            "tabPageType": "E",
+            "tabIndex": 9,
+            "tabClose": true,
+            "tabActive": false
+        }
+    ]
+}

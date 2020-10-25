@@ -30,6 +30,12 @@ export const ADD_CHANNEL_ACTIONS_PARAM = 'ADD_CHANNEL_ACTIONS_PARAM';
 export const UPDATE_HTML_FLG = 'UPDATE_HTML_FLG';
 export const GET_BUTTONS_FLAGS = 'GET_BUTTONS_FLAGS';
 
+export const REMOVE_CE_TAB = 'REMOVE_CE_TAB';
+export const ADD_CE_TAB = 'ADD_CE_TAB';
+export const REMOVE_CE_SLOT = 'REMOVE_CE_SLOT';
+export const ADD_CE_SLOT = 'ADD_CE_SLOT';
+export const UPDATE_CE_TAB = 'UPDATE_CE_TAB';
+
 export const navigate = (path, search) => (dispatch) => {
 
   // console.log('_PATH is: ' + path);
@@ -137,6 +143,53 @@ const activateChannelTab = (page, slot) => {
   return {
     type: ACTIVATE_CHANNEL_TAB,
     page, slot
+  };
+};
+
+export const removeCeTab = (page) => {
+  return {
+    type: REMOVE_CE_TAB,
+    page
+  };
+};
+
+export const addCeTab = (ceTab) => (dispatch) => {
+  const cetab = ceTab.reduce((obj, option) => {
+    obj[option.tabIndex] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: ADD_CE_TAB,
+    cetab
+  });
+};
+
+export const removeCeSlot = (page) => {
+  return {
+    type: REMOVE_CE_SLOT,
+    page
+  };
+};
+
+export const addCeSlot = (ceSlot) => (dispatch) => {
+  const ceslot = ceSlot.reduce((obj, option) => {
+    obj[option.tabIndex] = option
+    return obj
+  }, {});
+
+  dispatch({
+    type: ADD_CE_SLOT,
+    ceslot
+  });
+};
+
+export const updateCeTab = (page, title, subtitle) => {
+  return {
+    type: UPDATE_CE_TAB,
+    page,
+    title,
+    subtitle
   };
 };
 

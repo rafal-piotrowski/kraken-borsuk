@@ -15,7 +15,7 @@
 
 import { LitElement, html, css } from 'lit-element';
 import { until } from 'lit-html/directives/until';
-import { render } from 'lit-html';
+import { render, Template } from 'lit-html';
 import { BorsukCampFormStyle } from './BorsukCampFormStyle.js';
 import { borsukAddSuboffer, borsukAddVersion, borsukApprove, borsukCopySuboffer, borsukCopy, 
     borsukPublishTest, borsukPublishProd, borsukPublic, borsukChevronDown, borsukChevronUp,
@@ -29,6 +29,8 @@ import './collections/borsuk-form-buttons.js';
 import './collections/borsuk-preloader.js'
 import './collections/borsuk-tabs.js';
 import './borsuk-action-groups-section.js';
+import './packages/borsuk-pagination.js';
+
 // import './collections/borsuk-version-status.js';
 import './collections/borsuk-dialog.js';
 
@@ -67,6 +69,9 @@ export class BorsukActionForm extends connect(store)(LitElement) {
             ${this.headerTemplate}
             ${this.formInputTemplate}
             ${this.channelsTemplate}
+
+            <borsuk-pagination count="10" id="pagePaginator" @current-changed="${this.onPageChange}"></borsuk-pagination>
+
             <borsuk-dialog  id="dialogWindow" 
                             @confirm-dialog-fired=${this.confirmModal} 
                             @cancel-dialog-fired=${this.cancelModal}>
@@ -99,10 +104,22 @@ export class BorsukActionForm extends connect(store)(LitElement) {
         `;
     }
 
-    get formInputTemplate() {
+    // get formInputTemplate() {
+    //     return html`${this.actionInputTemplate}`;
+    // }
+
+    get actionInputTemplate() {
         return html`
             <borsuk-action-input-form id="versionInputForm"></borsuk-action-input-form>
         `;
+    }
+
+    get startInputTemplate() {
+        return html`<h2>Start template</h2>`;
+    }
+
+    get summaryInputTemplate() {
+        return html`<h2>Summary template</h2>`;
     }
 
     get channelsTemplate() {
@@ -127,12 +144,13 @@ export class BorsukActionForm extends connect(store)(LitElement) {
             campaignFormContent: { type: String },
             formButtons: { type: Array },
             buttonsFlags: { type: Array },
+            formInputTemplate: { type: String, reflect: true }
         };
     }
 
     constructor() {
         super();
-
+        this.formInputTemplate = this.actionInputTemplate;
         this.formButtons = [{
             buttonId: validateVersionAction,
             buttonTooltip: 'Zapisz wersję',
@@ -177,6 +195,40 @@ export class BorsukActionForm extends connect(store)(LitElement) {
     updated(changedProps) {
         if (changedProps.has('_page')) {
             // this.shadowRoot.getElementById("channelsForms").clearValidateStatus();
+        }
+
+        if (changedProps.has('formInputTemplate')) {
+            this.campaignFormContent =  this.campaignFormTemplate;
+        }
+
+        // changedProps.forEach((oldValue, propName) => {
+        //     console.log(`${propName} changed. oldValue: ${oldValue}`);
+        //   });
+
+        // this.campaignFormContent = new Promise((resolve) => {
+        //     setTimeout(() => resolve(this.campaignFormTemplate), 2000);
+        // });
+    }
+
+    onPageChange(event) {
+        console.log('Zmieniam strone');
+        console.log(event.target.current);
+
+        switch(event.target.current) {
+            case 1:
+                this.formInputTemplate = this.startInputTemplate;
+                console.log('______ ustawiam startInputTemplate ______');
+                break;
+            case 2:
+                this.formInputTemplate = this.actionInputTemplate;
+                console.log('______ ustawiam actionInputTemplate ______');
+                break;
+            case 3:
+                this.formInputTemplate = this.summaryInputTemplate;
+                console.log('______ ustawiam summaryInputTemplate ______');
+                break;
+            default:
+                this.formInputTemplate = this.actionInputTemplate;
         }
     }
 

@@ -1,0 +1,14 @@
+{
+    "ceSlotEditSuboffer": [
+        {
+            "tabPageId": "5002",
+            "tabSlotId": "S01",
+            "subofferName": "suboferta_likwidacja...",
+            "groupId": "123",
+            "categoryId": "2",
+            "eventId": "666",
+            "status": 2,
+            "statusDesc": "opublikowano na teście"
+        }
+    ]
+}

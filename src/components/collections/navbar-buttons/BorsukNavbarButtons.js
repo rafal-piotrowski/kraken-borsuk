@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable spaced-comment */
 /* eslint-disable no-lone-blocks */
 /* eslint-disable babel/no-unused-expressions */
@@ -12,7 +13,8 @@
 
 import { LitElement, html, css } from 'lit-element';
 import { BorsukNavbarButtonsStyle } from './BorsukNavbarButtonsStyle.js';
-
+import { Router } from '@vaadin/router';
+import { homeAction, infoAction, logoutAction } from '../../../properties/actions.js';
 // konektor do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import '@polymer/paper-tooltip/paper-tooltip';
@@ -73,6 +75,11 @@ export class BorsukNavbarButtons extends connect(store)(LitElement) {
 
     clickAction() {
         store.dispatch(setClickAction(this.valuesButton.buttonId));
+        if (this.valuesButton.buttonId == homeAction) {
+            Router.go(`/menu`);
+        } else if (this.valuesButton.buttonId == logoutAction) {
+            Router.go(`/`);
+        }
     }
 
 }

@@ -54,15 +54,6 @@
             "tabIndex": 5,
             "tabClose": true,
             "tabActive": false
-        },{
-            "tabPageId": "100",
-            "tabSlotId": "S__",
-            "tabTitle": "Borsuk 2",
-            "tabSubtitle": "",
-            "tabPageType": "I",
-            "tabIndex": 6,
-            "tabClose": false,
-            "tabActive": true
         }
     ]
 }

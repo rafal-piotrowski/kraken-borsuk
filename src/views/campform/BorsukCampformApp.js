@@ -29,10 +29,10 @@ import { BorsukApp } from '../BorsukApp.js';
 
 import { registerDefaultIconsets } from '../../components/packages/icon/registerDefaultIconSet.js';
 
-// import { titles } from '../../properties/titles.js';
-// import { actions } from '../../properties/actions.js';
-// import { events } from '../../properties/events.js';
-// import { actions2events } from '../../properties/actions2events.js';
+import { titles } from '../../properties/titles.js';
+import { actions } from '../../properties/actions.js';
+import { events } from '../../properties/events.js';
+import { actions2events } from '../../properties/actions2events.js';
 
 // podłączenie do Redux store.
 import { store } from '../../redux/store.js';
@@ -42,7 +42,7 @@ import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSl
     navigate, changeStatus, getVersionsList, getSchedulesList, getPublicationsList, getChannelActionsParams, updateHtmlFlg, getButtonsFlags } from '../../redux/actions/campform.js';
 import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict, 
         getResponseCodesDict, getSquadsDict, getPersLevelDict, getUnusedEventsDict, getActionTypeDict, getEmployeeDict } from '../../redux/actions/dictionaries.js';
-// import { setClickAction } from '../../redux/actions/customevents.js';
+import { setClickAction } from '../../redux/actions/customevents.js';
 import { setGlobalVar } from '../../redux/actions/globals.js';
 
 // podłączenie reducer-a.
@@ -73,7 +73,7 @@ export class BorsukCampformApp extends BorsukApp {
 
     firstUpdated() {
         
-        console.log('_______________ campFormApp - firstUpdated __________________');
+        // console.log('_______________ campFormApp - firstUpdated __________________');
 
         // poniższe do wycięcia po wdrożeniu do projektu
         // this._setUserInfo();
@@ -283,8 +283,66 @@ export class BorsukCampformApp extends BorsukApp {
         `;
     }
 
+    stateChanged(state) {
+        if (this.userInfo !== userInfoSelector(state)) { this.userInfo = userInfoSelector(state); }
+        // if (actionClickSelector(state) === actions.get('logoutAction')) { localStorage.clear(); location.reload(); }
+        if (this.currentActionClick !== actionClickSelector(state)) { this.currentActionClick = actionClickSelector(state)}
+        if (actionClickSelector(state) === actions.get('closeTabAction') ||
+            actionClickSelector(state) === actions.get('homeAction') ||
+            actionClickSelector(state) === actions.get('logoutAction') ||
+            actionClickSelector(state) === actions.get('addSubofferAction') ||
+            actionClickSelector(state) === actions.get('editSubofferAction') ||
+            actionClickSelector(state) === actions.get('editVersionAction') ||
+            actionClickSelector(state) === actions.get('addVersionAction') ||
+            actionClickSelector(state) === actions.get('copySubofferAction') ||
+            actionClickSelector(state) === actions.get('copyVersionAction') ||
+            actionClickSelector(state) === actions.get('removeVersionAction') ||
+            actionClickSelector(state) === actions.get('removeSubofferAction') ||
+            actionClickSelector(state) === actions.get('filterOpenAction')) {
+            this.fireProtectEvent(state, actionClickSelector(state), actionParamSelector(state) ? actionParamSelector(state) : null);
+        } else {
+            this.fireCustomEvent(state, actionClickSelector(state), actionParamSelector(state) ? actionParamSelector(state) : null)
+        }
+        // this._page = getActivePage(state);
+    }
+
+    fireProtectEvent(state, type, param) {
+
+        let checkingState = Object.values(cesubofferSlotsSelector(state));
+        let originState = Object.values(cesubofferSlotsBckpSelector(state));
+        let checkingChannelsState = Object.values(ceChannelSlotsSelector(state));
+        let originChannelsState = Object.values(ceChannelSlotsBckpSelector(state));
+
+        let token = {"tokenKey": type}
+        this.closingPage = param;
+
+        if (JSON.stringify(checkingState) === JSON.stringify(originState) &&
+            JSON.stringify(checkingChannelsState) === JSON.stringify(originChannelsState))
+        {
+            this.fireCustomEvent(state, type, param);
+        } else {
+            this.openModal( 'M', 'C',
+                        "",
+                        titles.get('errorSavingLabel'),
+                        "", JSON.stringify(token));
+        }
+    }
+
+    fireCustomEvent(state, type, param) {
+        if (this.currentActionClick !== '') {
+            setTimeout(() => store.dispatch(setClickAction('')), 200);    
+        }
+        
+        if (!param) {
+            this.dispatchEvent(new CustomEvent(actions2events.get(type)));
+        } else {
+            this.dispatchEvent(new CustomEvent(actions2events.get(type), { detail: JSON.stringify(Object.assign(param)) }));
+        }
+    }
+
     static get properties() {
         return {
+            _page: { type: String },
             _app: { type: String }
         };
     }

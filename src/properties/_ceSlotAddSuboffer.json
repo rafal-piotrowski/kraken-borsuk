@@ -1,0 +1,14 @@
+{
+    "ceSlotAddSuboffer": [
+        {
+            "tabPageId": "-2",
+            "tabSlotId": "S01",
+            "subofferName": "NOWA SUBOFERTA",
+            "groupId": "",
+            "categoryId": "",
+            "eventId": "",
+            "status": 6,
+            "statusDesc": "błędna publikacja na produkcji"
+        }
+    ]
+}

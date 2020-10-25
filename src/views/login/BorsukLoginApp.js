@@ -8,6 +8,7 @@
 import { LitElement, html, css } from 'lit-element';
 import { installRouter } from 'pwa-helpers/router.js';
 // import { installMediaQueryWatcher } from 'pwa-helpers/media-query.js';
+import { Router } from '@vaadin/router';
 import { BorsukLoginStyle } from './BorsukLoginStyle.js';
 import '../../components/packages/borsuk-button.js';
 import '@polymer/paper-input/paper-input';
@@ -86,7 +87,8 @@ export class BorsukLoginApp extends LitElement {
     this.username.validate();
     this.password.validate();
     if (!this.username.invalid && !this.password.invalid) {
-      this.form.submit();
+      // this.form.submit();
+      Router.go(`/menu`);
     } else {
       this.loginErrorMsg = titles.get('emptyLogin');
       this.passErrorMsg = titles.get('emptyPassword');

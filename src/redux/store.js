@@ -29,6 +29,8 @@ store.subscribe(() => {
   saveState(store.getState());
 });
 
+window.store = store;
+
 // store.addReducers({
 //     cesuboffer
 // });

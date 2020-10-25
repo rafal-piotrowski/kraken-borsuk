@@ -100,7 +100,7 @@ export const BorsukGroupInputFormStyle = css`
   }
 
   .inputFrame {
-    padding: 20px 5px;
+    padding: 5px 5px 0 0;
   }
 
   .inputCollapseFrame {

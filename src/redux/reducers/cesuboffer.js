@@ -29,7 +29,12 @@ import {
     GET_CHANNEL_ACTIONS_PARAMS,
     ADD_CHANNEL_ACTIONS_PARAM,
     UPDATE_HTML_FLG,
-    GET_BUTTONS_FLAGS
+    GET_BUTTONS_FLAGS,
+    REMOVE_CE_TAB,
+    ADD_CE_TAB,
+    REMOVE_CE_SLOT,
+    ADD_CE_SLOT,
+    UPDATE_CE_TAB
 } from '../actions/cesuboffer.js';
 
 import { createSelector } from 'reselect';
@@ -234,6 +239,36 @@ const cesuboffer = (state = INITIAL_STATE, action) => {
             return { 
                 ...state,
                 cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], statusDesc: action.statusDesc } : state.cesubslots[key])
+            }
+
+        case REMOVE_CE_TAB:
+            return {
+                ...state,
+                cesubtabs: Object.values(state.cesubtabs).filter(subtab => subtab.tabPageId !== action.page)
+            }
+
+        case ADD_CE_TAB:
+            return {
+                ...state,
+                cesubtabs: state.cesubtabs.concat(...Object.values(action.cetab))
+            }
+
+        case REMOVE_CE_SLOT:
+            return {
+                ...state,
+                cesubslots: Object.values(state.cesubslots).filter(subslot => subslot.tabPageId !== action.page)
+            }
+
+        case ADD_CE_SLOT:
+            return {
+                ...state,
+                cesubslots: state.cesubslots.concat(...Object.values(action.ceslot))
+            }
+
+        case UPDATE_CE_TAB:
+            return {
+                ...state,
+                cesubtabs: Object.keys(state.cesubtabs).map((key) => state.cesubtabs[key].tabPageId === action.page ? { ...state.cesubtabs[key], tabTitle: action.title, tabSubtitle: action.subtitle } : { ...state.cesubtabs[key] })
             }
 
         default:

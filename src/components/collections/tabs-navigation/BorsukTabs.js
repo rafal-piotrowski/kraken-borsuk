@@ -94,7 +94,7 @@ export class BorsukTabs extends connect(store)(LitElement) {
                 </paper-tab>
             `;
             } else {
-              return html`dupa`;
+              return html`${nothing}`;
             }
         })}
 

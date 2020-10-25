@@ -43,5 +43,17 @@ export const BorsukCampFormStyle = css`
         border-radius: 5px;
         box-shadow: 0px 0px 5px 1px rgba(255,0,0,0.5);
     }
+
+    #pagePaginator {
+        position: fixed;
+        left: 50%;
+        bottom: 0;
+        /* width: 100%; */
+        background-color: rgba(255,255,255,0.9);
+        border-radius: 10px;
+        padding: 0 10px;
+        /* color: white; */
+        text-align: center;
+    }
     
 `;

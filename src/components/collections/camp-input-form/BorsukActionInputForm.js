@@ -402,6 +402,17 @@ export class BorsukActionInputForm extends connect(store)(LitElement) {
         }
     }
 
+    connectedCallback() {
+        super.connectedCallback()
+        console.log('___________________________podłączony_________________________');
+    }
+
+    disconnectedCallback() {
+        console.log('___________________________rozłączony_________________________');
+        super.disconnectedCallback();
+    }
+      
+
     stateChanged(state) {
         if (this.productGroupDict !== dictProductGroupSelector(state)) { this.productGroupDict = dictProductGroupSelector(state); }
         if (this.categoryDict !== dictCategorySelector(state)) { this.categoryDict = dictCategorySelector(state); }

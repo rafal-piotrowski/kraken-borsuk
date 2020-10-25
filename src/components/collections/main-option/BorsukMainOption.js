@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable prefer-object-spread */
 /* eslint-disable prefer-template */
 /* eslint-disable prefer-const */
@@ -14,6 +15,7 @@
 
 import { LitElement, html, css } from 'lit-element';
 import { BorsukMainOptionStyle } from './BorsukMainOptionStyle.js';
+import { Router } from '@vaadin/router';
 
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -91,6 +93,11 @@ export class BorsukMainOption extends connect(store)(LitElement) {
     clickAction(event) {
         let eventParams = Object.assign({actionRedirect: this.valuesMenu.optionId});
         store.dispatch(setClickAction(actions.get('buttonClickAction'), eventParams));
+        if (this.valuesMenu.optionId == 1) {
+            Router.go(`/cesuboffer`);
+        } else if (this.valuesMenu.optionId == 3) {
+            Router.go(`/campform`);
+        }
     }
 
     constructor() {

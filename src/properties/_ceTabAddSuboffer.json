@@ -1,0 +1,14 @@
+{
+    "ceTabAddSuboffer": [
+        {
+            "tabPageId": "-2",
+            "tabSlotId": "S01",
+            "tabTitle": "NOWA SUBOFERTA",
+            "tabSubtitle": "",
+            "tabPageType": "A",
+            "tabIndex": 8,
+            "tabClose": true,
+            "tabActive": false
+        }
+    ]
+}

@@ -27,7 +27,7 @@ import { BorsukAppStyle } from './BorsukAppStyle.js';
 // import { borsukAddSuboffer, borsukAdd, borsukClose, borsukAddVersion, borsukApprove, borsukCopySuboffer, borsukCopyVersion, 
 //     borsukEditSuboffer, borsukEditVersion, borsukPublic, borsukChevronDown, borsukChevronUp,
 //     borsukRemoveSuboffer, borsukRemoveVersion, borsukSaveSuboffer, borsukSaveVersion } from '../icons/icons.js';
-import { loadJSON } from '../helpers/asyncFunctions.js';
+// import { loadJSON } from '../helpers/asyncFunctions.js';
 
 // konektor służący podłączaniu się do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -45,7 +45,7 @@ import '../components/collections/borsuk-preloader.js'
 import { titles } from '../properties/titles.js';
 import { actions } from '../properties/actions.js';
 import { events } from '../properties/events.js';
-import { actions2events } from '../properties/actions2events.js';
+// import { actions2events } from '../properties/actions2events.js';
 
 // podłączenie do Redux store.
 import { store } from '../redux/store.js';
@@ -62,8 +62,8 @@ import { setClickAction } from '../redux/actions/customevents.js';
 
 // podłączenie reducer-a.
 import menu, { userInfoSelector } from '../redux/reducers/menu.js';
-import actionforms, { getActivePage, cesubofferSlotsSelector, cesubofferSlotsBckpSelector, ceChannelSlotsSelector, ceChannelSlotsBckpSelector,
-    cesubofferPageReselector, cesubofferPageBckpReselector, ceChannelsSlotReselector, ceChannelsSlotBckpReselector } from '../redux/reducers/campform.js';
+// import actionforms, { getActivePage, cesubofferSlotsSelector, cesubofferSlotsBckpSelector, ceChannelSlotsSelector, ceChannelSlotsBckpSelector,
+//     cesubofferPageReselector, cesubofferPageBckpReselector, ceChannelsSlotReselector, ceChannelsSlotBckpReselector } from '../redux/reducers/campform.js';
 import customevents, { actionClickSelector, actionParamSelector } from '../redux/reducers/customevents.js';
 import dictionaries from '../redux/reducers/dictionaries.js';
 import globals from '../redux/reducers/globals.js';
@@ -224,26 +224,26 @@ export class BorsukApp extends connect(store)(LitElement) {
     _setButtonsFlags(jsonData) {}
 
     stateChanged(state) {
-        if (this.userInfo !== userInfoSelector(state)) { this.userInfo = userInfoSelector(state); }
-        // if (actionClickSelector(state) === actions.get('logoutAction')) { localStorage.clear(); location.reload(); }
-        if (this.currentActionClick !== actionClickSelector(state)) { this.currentActionClick = actionClickSelector(state)}
-        if (actionClickSelector(state) === actions.get('closeTabAction') ||
-            actionClickSelector(state) === actions.get('homeAction') ||
-            actionClickSelector(state) === actions.get('logoutAction') ||
-            actionClickSelector(state) === actions.get('addSubofferAction') ||
-            actionClickSelector(state) === actions.get('editSubofferAction') ||
-            actionClickSelector(state) === actions.get('editVersionAction') ||
-            actionClickSelector(state) === actions.get('addVersionAction') ||
-            actionClickSelector(state) === actions.get('copySubofferAction') ||
-            actionClickSelector(state) === actions.get('copyVersionAction') ||
-            actionClickSelector(state) === actions.get('removeVersionAction') ||
-            actionClickSelector(state) === actions.get('removeSubofferAction') ||
-            actionClickSelector(state) === actions.get('filterOpenAction')) {
-            this.fireProtectEvent(state, actionClickSelector(state), actionParamSelector(state) ? actionParamSelector(state) : null);
-        } else {
-            this.fireCustomEvent(state, actionClickSelector(state), actionParamSelector(state) ? actionParamSelector(state) : null)
-        }
-        // this._page = getActivePage(state);
+        // if (this.userInfo !== userInfoSelector(state)) { this.userInfo = userInfoSelector(state); }
+        // // if (actionClickSelector(state) === actions.get('logoutAction')) { localStorage.clear(); location.reload(); }
+        // if (this.currentActionClick !== actionClickSelector(state)) { this.currentActionClick = actionClickSelector(state)}
+        // if (actionClickSelector(state) === actions.get('closeTabAction') ||
+        //     actionClickSelector(state) === actions.get('homeAction') ||
+        //     actionClickSelector(state) === actions.get('logoutAction') ||
+        //     actionClickSelector(state) === actions.get('addSubofferAction') ||
+        //     actionClickSelector(state) === actions.get('editSubofferAction') ||
+        //     actionClickSelector(state) === actions.get('editVersionAction') ||
+        //     actionClickSelector(state) === actions.get('addVersionAction') ||
+        //     actionClickSelector(state) === actions.get('copySubofferAction') ||
+        //     actionClickSelector(state) === actions.get('copyVersionAction') ||
+        //     actionClickSelector(state) === actions.get('removeVersionAction') ||
+        //     actionClickSelector(state) === actions.get('removeSubofferAction') ||
+        //     actionClickSelector(state) === actions.get('filterOpenAction')) {
+        //     this.fireProtectEvent(state, actionClickSelector(state), actionParamSelector(state) ? actionParamSelector(state) : null);
+        // } else {
+        //     this.fireCustomEvent(state, actionClickSelector(state), actionParamSelector(state) ? actionParamSelector(state) : null)
+        // }
+        // // this._page = getActivePage(state);
     }
 
     openModal(type, mode, textLine1, textLine2, textLine3, jsonToken, scale) {
@@ -284,36 +284,36 @@ export class BorsukApp extends connect(store)(LitElement) {
 
     fireProtectEvent(state, type, param) {
 
-        let checkingState = Object.values(cesubofferSlotsSelector(state));
-        let originState = Object.values(cesubofferSlotsBckpSelector(state));
-        let checkingChannelsState = Object.values(ceChannelSlotsSelector(state));
-        let originChannelsState = Object.values(ceChannelSlotsBckpSelector(state));
+        // let checkingState = Object.values(cesubofferSlotsSelector(state));
+        // let originState = Object.values(cesubofferSlotsBckpSelector(state));
+        // let checkingChannelsState = Object.values(ceChannelSlotsSelector(state));
+        // let originChannelsState = Object.values(ceChannelSlotsBckpSelector(state));
 
-        let token = {"tokenKey": type}
-        this.closingPage = param;
+        // let token = {"tokenKey": type}
+        // this.closingPage = param;
 
-        if (JSON.stringify(checkingState) === JSON.stringify(originState) &&
-            JSON.stringify(checkingChannelsState) === JSON.stringify(originChannelsState))
-        {
-            this.fireCustomEvent(state, type, param);
-        } else {
-            this.openModal( 'M', 'C',
-                        "",
-                        titles.get('errorSavingLabel'),
-                        "", JSON.stringify(token));
-        }
+        // if (JSON.stringify(checkingState) === JSON.stringify(originState) &&
+        //     JSON.stringify(checkingChannelsState) === JSON.stringify(originChannelsState))
+        // {
+        //     this.fireCustomEvent(state, type, param);
+        // } else {
+        //     this.openModal( 'M', 'C',
+        //                 "",
+        //                 titles.get('errorSavingLabel'),
+        //                 "", JSON.stringify(token));
+        // }
     }
 
     fireCustomEvent(state, type, param) {
-        if (this.currentActionClick !== '') {
-            setTimeout(() => store.dispatch(setClickAction('')), 200);    
-        }
+        // if (this.currentActionClick !== '') {
+        //     setTimeout(() => store.dispatch(setClickAction('')), 200);    
+        // }
         
-        if (!param) {
-            this.dispatchEvent(new CustomEvent(actions2events.get(type)));
-        } else {
-            this.dispatchEvent(new CustomEvent(actions2events.get(type), { detail: JSON.stringify(Object.assign(param)) }));
-        }
+        // if (!param) {
+        //     this.dispatchEvent(new CustomEvent(actions2events.get(type)));
+        // } else {
+        //     this.dispatchEvent(new CustomEvent(actions2events.get(type), { detail: JSON.stringify(Object.assign(param)) }));
+        // }
     }
 
     static get properties() {

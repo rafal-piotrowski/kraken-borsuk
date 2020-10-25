@@ -9,13 +9,13 @@
         },{
             "optionId": 2,
             "optionTitle": "SUBOFERTY MARKETINGOWE",
-            "active": true,
+            "active": false,
             "index": 2,
             "newIndex": 2
         },{
             "optionId": 3,
             "optionTitle": "FORMATKI OPERACYJNE",
-            "active": false,
+            "active": true,
             "index": 1,
             "newIndex": 1
         }
