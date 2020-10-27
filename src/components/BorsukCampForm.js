@@ -67,6 +67,7 @@ export class BorsukCampForm extends connect(store)(LitElement) {
 
     get campaignFormTemplate() {
         return html`
+            ${this.headerTemplate}
             ${this.formInputTemplate}
             ${this.channelsTemplate}
             <borsuk-dialog  id="dialogWindow" 
@@ -184,103 +185,105 @@ export class BorsukCampForm extends connect(store)(LitElement) {
 
     stateChanged(state) {
         if (actionClickSelector(state) === validateVersionAction) { this.validateVersion(state, this._page); }
-        if (this.buttonsFlags !== ceBtnsFlagsReselector(state)) { 
-            this.buttonsFlags = ceBtnsFlagsReselector(state); 
+        // if (this.buttonsFlags !== ceBtnsFlagsReselector(state)) { 
+        //     this.buttonsFlags = ceBtnsFlagsReselector(state); 
 
-            // ustawienia aktywnosci przyciskow
-            for (let i=0; i < this.formButtons.length; i++) {
-                this.formButtons[i].buttonActive = 
-                    (Object.values(this.buttonsFlags).filter(button => button.buttonId === this.formButtons[i].buttonId).length > 0) ?
-                    Object.values(this.buttonsFlags).filter(button => button.buttonId === this.formButtons[i].buttonId)[0].buttonFlg : true;
-            }
-        }
+        //     // ustawienia aktywnosci przyciskow
+        //     for (let i=0; i < this.formButtons.length; i++) {
+        //         this.formButtons[i].buttonActive = 
+        //             (Object.values(this.buttonsFlags).filter(button => button.buttonId === this.formButtons[i].buttonId).length > 0) ?
+        //             Object.values(this.buttonsFlags).filter(button => button.buttonId === this.formButtons[i].buttonId)[0].buttonFlg : true;
+        //     }
+        // }
 
         this._page = getActivePage(state);
         this._slot = getActiveSlot(state);
     }
 
     validateVersion(state, page) {
-        const validateVersionStatus = this.shadowRoot.getElementById("versionInputForm").validateForm(page);
-        const validateChannelsStatus = this.shadowRoot.getElementById("channelsForms").validateForms(page);
-        if (validateVersionStatus && validateChannelsStatus) {
-            this.saveVersion(state, page);
-        } else {
-            this.shadowRoot.getElementById('dialogWindow').openDialog('A',"", titles.get('errorFormLabel'), "");
-        }
+        console.log('Tu będzie walidacja formatki akcji');
+        
+    //     const validateVersionStatus = this.shadowRoot.getElementById("versionInputForm").validateForm(page);
+    //     const validateChannelsStatus = this.shadowRoot.getElementById("channelsForms").validateForms(page);
+    //     if (validateVersionStatus && validateChannelsStatus) {
+    //         this.saveVersion(state, page);
+    //     } else {
+    //         this.shadowRoot.getElementById('dialogWindow').openDialog('A',"", titles.get('errorFormLabel'), "");
+    //     }
     }
 
     saveVersion(state, param) {
         
-        let formInfo = [];
-        let pushInfo = [];
-        let smsInfo = [];
-        let messageInfo = [];
-        let actionsParamInfo =[];
-        let pushActiveFlg = false;
-        let smsActiveFlg = false;
-        let messageActiveFlg = false;
+        // let formInfo = [];
+        // let pushInfo = [];
+        // let smsInfo = [];
+        // let messageInfo = [];
+        // let actionsParamInfo =[];
+        // let pushActiveFlg = false;
+        // let smsActiveFlg = false;
+        // let messageActiveFlg = false;
 
-        for(let i = 0; i < Object.keys(cesubofferPageReselector(state)).length; i++){
-            formInfo.push({ versionName: cesubofferPageReselector(state)[i].versionName, 
-                            pushAndSms: cesubofferPageReselector(state)[i].pushAndSms
-                        });
-        }
+        // for(let i = 0; i < Object.keys(cesubofferPageReselector(state)).length; i++){
+        //     formInfo.push({ versionName: cesubofferPageReselector(state)[i].versionName, 
+        //                     pushAndSms: cesubofferPageReselector(state)[i].pushAndSms
+        //                 });
+        // }
 
-        for(let i = 0; i < Object.keys(ceChnActParamsReselector(state)).length; i++){
-            actionsParamInfo.push({
-                paramName: ceChnActParamsReselector(state)[i].paramName,
-                paramValue: ceChnActParamsReselector(state)[i].paramValue
-            });
-        }
+        // for(let i = 0; i < Object.keys(ceChnActParamsReselector(state)).length; i++){
+        //     actionsParamInfo.push({
+        //         paramName: ceChnActParamsReselector(state)[i].paramName,
+        //         paramValue: ceChnActParamsReselector(state)[i].paramValue
+        //     });
+        // }
 
-        for(let i = 0; i < Object.keys(ceChannelsPageReselector(state)).length; i++){
-            if (ceChannelsPageReselector(state)[i].tabSlotId === 'S11') { pushActiveFlg = ceChannelsPageReselector(state)[i].channelActive }
-            if (ceChannelsPageReselector(state)[i].tabSlotId === 'S12') { smsActiveFlg = ceChannelsPageReselector(state)[i].channelActive }
-            if (ceChannelsPageReselector(state)[i].tabSlotId === 'S13') { messageActiveFlg = ceChannelsPageReselector(state)[i].channelActive }
-        }
+        // for(let i = 0; i < Object.keys(ceChannelsPageReselector(state)).length; i++){
+        //     if (ceChannelsPageReselector(state)[i].tabSlotId === 'S11') { pushActiveFlg = ceChannelsPageReselector(state)[i].channelActive }
+        //     if (ceChannelsPageReselector(state)[i].tabSlotId === 'S12') { smsActiveFlg = ceChannelsPageReselector(state)[i].channelActive }
+        //     if (ceChannelsPageReselector(state)[i].tabSlotId === 'S13') { messageActiveFlg = ceChannelsPageReselector(state)[i].channelActive }
+        // }
 
-        for(let i = 0; i < Object.keys(ceChannelsSlotReselector(state)).length; i++){
-            if (ceChannelsSlotReselector(state)[i].tabSlotId === 'S11') {
-                if (pushActiveFlg) {
-                    pushInfo.push({ channelActive: pushActiveFlg,
-                                    content: ceChannelsSlotReselector(state)[i].content, 
-                                    inLink: ceChannelsSlotReselector(state)[i].inLink,
-                                    outLink: ceChannelsSlotReselector(state)[i].outLink,
-                                    sendFrom: ceChannelsSlotReselector(state)[i].sendFrom,
-                                    sendTo: ceChannelsSlotReselector(state)[i].sendTo,
-                                    sendPeriodId: ceChannelsSlotReselector(state)[i].sendPeriodId,
-                                    actionParams: actionsParamInfo
-                                });
-                } else { pushInfo.push({ channelActive: pushActiveFlg }); }
-            } else if (ceChannelsSlotReselector(state)[i].tabSlotId === 'S12') {
-                if (smsActiveFlg) {
-                    smsInfo.push({ channelActive: smsActiveFlg,
-                                    content: ceChannelsSlotReselector(state)[i].content, 
-                                    phoneTypeId: ceChannelsSlotReselector(state)[i].phoneTypeId,
-                                    sendFrom: ceChannelsSlotReselector(state)[i].sendFrom,
-                                    sendTo: ceChannelsSlotReselector(state)[i].sendTo,
-                                    sendPeriodId: ceChannelsSlotReselector(state)[i].sendPeriodId
-                    });
-                } else { smsInfo.push({ channelActive: smsActiveFlg }); }
-            } else if (ceChannelsSlotReselector(state)[i].tabSlotId === 'S13') {
-                if (messageActiveFlg) {
-                    messageInfo.push({ channelActive: messageActiveFlg,
-                                    content: ceChannelsSlotReselector(state)[i].content, 
-                                    eventId: ceChannelsSlotReselector(state)[i].eventId,
-                                    expire: ceChannelsSlotReselector(state)[i].expire,
-                                    groupId: ceChannelsSlotReselector(state)[i].groupId,
-                                    title: ceChannelsSlotReselector(state)[i].title
-                    });
-                } else { messageInfo.push({ channelActive: messageActiveFlg }); }
-            }
-        }
+        // for(let i = 0; i < Object.keys(ceChannelsSlotReselector(state)).length; i++){
+        //     if (ceChannelsSlotReselector(state)[i].tabSlotId === 'S11') {
+        //         if (pushActiveFlg) {
+        //             pushInfo.push({ channelActive: pushActiveFlg,
+        //                             content: ceChannelsSlotReselector(state)[i].content, 
+        //                             inLink: ceChannelsSlotReselector(state)[i].inLink,
+        //                             outLink: ceChannelsSlotReselector(state)[i].outLink,
+        //                             sendFrom: ceChannelsSlotReselector(state)[i].sendFrom,
+        //                             sendTo: ceChannelsSlotReselector(state)[i].sendTo,
+        //                             sendPeriodId: ceChannelsSlotReselector(state)[i].sendPeriodId,
+        //                             actionParams: actionsParamInfo
+        //                         });
+        //         } else { pushInfo.push({ channelActive: pushActiveFlg }); }
+        //     } else if (ceChannelsSlotReselector(state)[i].tabSlotId === 'S12') {
+        //         if (smsActiveFlg) {
+        //             smsInfo.push({ channelActive: smsActiveFlg,
+        //                             content: ceChannelsSlotReselector(state)[i].content, 
+        //                             phoneTypeId: ceChannelsSlotReselector(state)[i].phoneTypeId,
+        //                             sendFrom: ceChannelsSlotReselector(state)[i].sendFrom,
+        //                             sendTo: ceChannelsSlotReselector(state)[i].sendTo,
+        //                             sendPeriodId: ceChannelsSlotReselector(state)[i].sendPeriodId
+        //             });
+        //         } else { smsInfo.push({ channelActive: smsActiveFlg }); }
+        //     } else if (ceChannelsSlotReselector(state)[i].tabSlotId === 'S13') {
+        //         if (messageActiveFlg) {
+        //             messageInfo.push({ channelActive: messageActiveFlg,
+        //                             content: ceChannelsSlotReselector(state)[i].content, 
+        //                             eventId: ceChannelsSlotReselector(state)[i].eventId,
+        //                             expire: ceChannelsSlotReselector(state)[i].expire,
+        //                             groupId: ceChannelsSlotReselector(state)[i].groupId,
+        //                             title: ceChannelsSlotReselector(state)[i].title
+        //             });
+        //         } else { messageInfo.push({ channelActive: messageActiveFlg }); }
+        //     }
+        // }
         
-        if (!param) {
-            this.formElements = Object.assign({formValues: formInfo});
-        } else {
-            this.formElements = Object.assign({pageId: param}, {formValues: formInfo}, {pushValues: pushInfo}, {smsValues: smsInfo}, {messageValues: messageInfo});
-        }
-        store.dispatch(setClickAction(saveVersionAction, this.formElements));
+        // if (!param) {
+        //     this.formElements = Object.assign({formValues: formInfo});
+        // } else {
+        //     this.formElements = Object.assign({pageId: param}, {formValues: formInfo}, {pushValues: pushInfo}, {smsValues: smsInfo}, {messageValues: messageInfo});
+        // }
+        // store.dispatch(setClickAction(saveVersionAction, this.formElements));
     }
 
     confirmModal() {}
