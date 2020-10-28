@@ -189,4 +189,25 @@ export const BorsukCampInputFormStyle = css`
     .input90 {
       width: 90%;
     }
+
+    #pagePaginator {
+        position: fixed;
+        left: 50%;
+        bottom: 0;
+        /* width: 100%; */
+        background-color: rgba(255,255,255,0.9);
+        border-radius: 10px;
+        padding: 0 10px;
+        /* color: white; */
+        text-align: center;
+        z-index: 1;
+    }
+
+    .subpage {
+          display: none;
+        }
+
+    .subpage[active] {
+        display: block;
+    }
 `;

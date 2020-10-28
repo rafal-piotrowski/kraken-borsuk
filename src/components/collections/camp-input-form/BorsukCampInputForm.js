@@ -65,7 +65,7 @@ import { store } from '../../../redux/store.js';
 // import { changeFormValue } from '../../../redux/actions/cesuboffer.js';
 
 import customevents, { actionClickSelector, actionParamSelector } from '../../../redux/reducers/customevents.js';
-import { dictProductGroupSelector, dictCategorySelector, dictEventsSelector, dictUnusedEventsSelector, dictActionTypeSelector, dictEmployeeSelector } from '../../../redux/reducers/dictionaries.js';
+import { dictProductGroupSelector, dictCategorySelector, dictEventsSelector, dictUnusedEventsSelector, dictActionTypeSelector, dictEmployeeSelector, dictSquadsSelector } from '../../../redux/reducers/dictionaries.js';
 import { cesubofferPageReselector } from '../../../redux/reducers/campform.js';
 
 class IsRealDate extends IsDate {
@@ -201,6 +201,7 @@ export class BorsukCampInputForm extends connect(store)(LitElement) {
         this.actionTypeDict = [];
         this.subOfferDetails = {};
         this.employeesDict = [];
+        this.squadsDict = [];
     }
 
     static get properties() {
@@ -212,7 +213,8 @@ export class BorsukCampInputForm extends connect(store)(LitElement) {
             subOfferDetails: { type: Object },
             _page: { type: String },
             actionTypeDict: { type: Array },
-            employeesDict: { type: Array }
+            employeesDict: { type: Array },
+            squadsDict: { type: Array }
         }
     }
 
@@ -437,6 +439,7 @@ export class BorsukCampInputForm extends connect(store)(LitElement) {
 
         if (this.actionTypeDict !== dictActionTypeSelector(state)) { this.actionTypeDict = dictActionTypeSelector(state) }
         if (this.employeesDict !== dictEmployeeSelector(state)) { this.employeesDict = dictEmployeeSelector(state) }
+        if (this.squadsDict !== dictSquadsSelector(state)) { this.squadsDict = dictSquadsSelector(state) }
 
         if (actionClickSelector(state) === validateSubofferAction) { this.validateForm(state, this._page); }
         this._page = state.campform.page;

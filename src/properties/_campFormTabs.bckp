@@ -10,12 +10,30 @@
             "tabClose": false,
             "tabActive": true
         },{
+            "tabPageId": "4041",
+            "tabSlotId": "S21",
+            "tabTitle": "Lion Web Components",
+            "tabSubtitle": "prezetacja komponentów",
+            "tabPageType": "E",
+            "tabIndex": 1,
+            "tabClose": true,
+            "tabActive": false
+        },{
             "tabPageId": "1845",
             "tabSlotId": "S22",
             "tabTitle": "formatka akcji",
             "tabSubtitle": "wersja robocza",
             "tabPageType": "E",
             "tabIndex": 2,
+            "tabClose": true,
+            "tabActive": false
+        },{
+            "tabPageId": "5002",
+            "tabSlotId": "S23",
+            "tabTitle": "formatka akcji",
+            "tabSubtitle": "wersja zagregowana",
+            "tabPageType": "E",
+            "tabIndex": 3,
             "tabClose": true,
             "tabActive": false
         },{

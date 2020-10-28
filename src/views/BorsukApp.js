@@ -58,7 +58,7 @@ import { getUserInfo } from '../redux/actions/menu.js';
 // import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict, 
 //         getResponseCodesDict, getContentParamsDict, getActionsParamsDict, getUnusedEventsDict } from '../redux/actions/dictionaries.js';
 import { setClickAction } from '../redux/actions/customevents.js';
-// import { setGlobalVar } from '../redux/actions/globals.js';
+import { setGlobalVar } from '../redux/actions/globals.js';
 
 // podłączenie reducer-a.
 import menu, { userInfoSelector } from '../redux/reducers/menu.js';
@@ -137,18 +137,19 @@ export class BorsukApp extends connect(store)(LitElement) {
     }
 
     collapseSidebar(event) {
-
         if (this.shadowRoot.getElementById("treeLayout").style.width === "0px") {
             this.shadowRoot.getElementById("treeLayout").style.width = "325px";
             setTimeout(() => { 
                 this.shadowRoot.getElementById("sidewrapLayout").style.width = "325px";
                 this.shadowRoot.getElementById("workLayout").style.paddingLeft = "325px";
+                store.dispatch(setGlobalVar('sidebar', true));
             }, 300);
         } else {
             this.shadowRoot.getElementById("treeLayout").style.width = "0px";
             setTimeout(() => { 
                 this.shadowRoot.getElementById("sidewrapLayout").style.width = "0px";
                 this.shadowRoot.getElementById("workLayout").style.paddingLeft = "0px";
+                store.dispatch(setGlobalVar('sidebar', false));
             }, 300);
         }
     }
@@ -156,6 +157,7 @@ export class BorsukApp extends connect(store)(LitElement) {
     firstUpdated() {
         // poniższe do wycięcia po wdrożeniu do projektu
         this._setUserInfo();
+        store.dispatch(setGlobalVar('sidebar', true));
     }
 
     // setUserInfo do wycięcia po wdrożeniu do projektu

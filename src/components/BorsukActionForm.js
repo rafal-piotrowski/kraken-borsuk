@@ -24,12 +24,13 @@ import { saveSubofferAction, removeSubofferAction, copySubofferAction,
     addVersionAction, publishTestAction, publishProdAction, validateVersionAction,
     saveVersionAction, removeVersionAction, copyVersionAction, approveVersionAction } from '../properties/actions.js';
 
+import './collections/borsuk-actionform-status.js';
 // import '@vaadin/vaadin-progress-bar/vaadin-progress-bar';
 import './collections/borsuk-form-buttons.js';
 import './collections/borsuk-preloader.js'
 import './collections/borsuk-tabs.js';
 import './borsuk-action-groups-section.js';
-import './packages/borsuk-pagination.js';
+// import './packages/borsuk-pagination.js';
 
 // import './collections/borsuk-version-status.js';
 import './collections/borsuk-dialog.js';
@@ -68,9 +69,7 @@ export class BorsukActionForm extends connect(store)(LitElement) {
         return html`
             ${this.headerTemplate}
             ${this.formInputTemplate}
-            ${this.channelsTemplate}
-
-            <borsuk-pagination count="10" id="pagePaginator" @current-changed="${this.onPageChange}"></borsuk-pagination>
+            ${this.footerTemplate}
 
             <borsuk-dialog  id="dialogWindow" 
                             @confirm-dialog-fired=${this.confirmModal} 
@@ -88,6 +87,12 @@ export class BorsukActionForm extends connect(store)(LitElement) {
         `;
     }
 
+    get footerTemplate() {
+        return html`
+            <div class="footer"></div>
+        `;
+    }
+
     get navigationTamplete() {
         return html`
             <div class="gridButtons formGrid6">
@@ -99,7 +104,7 @@ export class BorsukActionForm extends connect(store)(LitElement) {
     get statusTemplate() {
         return html`
             <div class="rightProgressBar formSpanGrid1">
-                <!-- <borsuk-version-status></borsuk-version-status> -->
+                <borsuk-actionform-status></borsuk-actionform-status>
             </div>
         `;
     }
@@ -210,27 +215,27 @@ export class BorsukActionForm extends connect(store)(LitElement) {
         // });
     }
 
-    onPageChange(event) {
-        console.log('Zmieniam strone');
-        console.log(event.target.current);
+    // onPageChange(event) {
+    //     console.log('Zmieniam strone');
+    //     console.log(event.target.current);
 
-        switch(event.target.current) {
-            case 1:
-                this.formInputTemplate = this.startInputTemplate;
-                console.log('______ ustawiam startInputTemplate ______');
-                break;
-            case 2:
-                this.formInputTemplate = this.actionInputTemplate;
-                console.log('______ ustawiam actionInputTemplate ______');
-                break;
-            case 3:
-                this.formInputTemplate = this.summaryInputTemplate;
-                console.log('______ ustawiam summaryInputTemplate ______');
-                break;
-            default:
-                this.formInputTemplate = this.actionInputTemplate;
-        }
-    }
+    //     switch(event.target.current) {
+    //         case 1:
+    //             this.formInputTemplate = this.startInputTemplate;
+    //             console.log('______ ustawiam startInputTemplate ______');
+    //             break;
+    //         case 2:
+    //             this.formInputTemplate = this.actionInputTemplate;
+    //             console.log('______ ustawiam actionInputTemplate ______');
+    //             break;
+    //         case 3:
+    //             this.formInputTemplate = this.summaryInputTemplate;
+    //             console.log('______ ustawiam summaryInputTemplate ______');
+    //             break;
+    //         default:
+    //             this.formInputTemplate = this.actionInputTemplate;
+    //     }
+    // }
 
     stateChanged(state) {
         if (actionClickSelector(state) === validateVersionAction) { this.validateVersion(state, this._page); }

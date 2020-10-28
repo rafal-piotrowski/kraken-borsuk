@@ -55,5 +55,9 @@ export const BorsukCampFormStyle = css`
         /* color: white; */
         text-align: center;
     }
+
+    .footer {
+        padding-bottom: 50px;
+    }
     
 `;
