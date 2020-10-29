@@ -1,12 +1,12 @@
 {
-    "productGroupDict": [
+    "commonConditions": [
         {
             "id": "1",
-            "name": "OTH",
+            "name": "Posiada OKO",
             "index": 0
         },{
             "id": "2",
-            "name": "brak",
+            "name": "Salary",
             "index": 1
         }
     ]

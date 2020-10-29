@@ -1,0 +1,17 @@
+{
+    "deliveryMethods": [
+        {
+            "id": "1",
+            "name": "kurier",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "poczta",
+            "index": 1
+        },{
+            "id": "3",
+            "name": "InPost",
+            "index": 2
+        }
+    ]
+}

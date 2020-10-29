@@ -1,12 +1,12 @@
 {
-    "productGroupDict": [
+    "actionMinorType": [
         {
             "id": "1",
-            "name": "OTH",
+            "name": "Minor-Informational",
             "index": 0
         },{
             "id": "2",
-            "name": "brak",
+            "name": "Minor-Obligatory",
             "index": 1
         }
     ]

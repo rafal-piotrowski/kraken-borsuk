@@ -1,0 +1,17 @@
+{
+    "creditCardBinCodes": [
+        {
+            "id": "1",
+            "name": "BIN1",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "BIN9",
+            "index": 1
+        },{
+            "id": "3",
+            "name": "Credit",
+            "index": 2
+        }
+    ]
+}

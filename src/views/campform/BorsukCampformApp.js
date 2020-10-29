@@ -40,8 +40,9 @@ import { store } from '../../redux/store.js';
 // załadowanie kreatorów akcji.
 import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSlots, getSidebarTypes, getSidebarNames, getSearchResults, 
     navigate, changeStatus, getVersionsList, getSchedulesList, getPublicationsList, getChannelActionsParams, updateHtmlFlg, getButtonsFlags } from '../../redux/actions/campform.js';
-import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict, 
-        getResponseCodesDict, getSquadsDict, getPersLevelDict, getUnusedEventsDict, getActionTypeDict, getEmployeeDict } from '../../redux/actions/dictionaries.js';
+import { getCampaignProductGroups, getObligatoryConditions, getEventsDict, getCommonConditions, getParameters, getGroupTypes, getChannelCycleTypes, getProductCategories,
+        getProductRelations, getSquadsDict, getGeneralPersonalization, getUnusedEventsDict, getActionCharacter, getActionMajorType, getActionMinorType, getUserAccounts,
+        getDebitCardBinCodes, getCreditCardBinCodes, getChannelTypes, getDeliveryMethods } from '../../redux/actions/dictionaries.js';
 import { setClickAction } from '../../redux/actions/customevents.js';
 import { setGlobalVar } from '../../redux/actions/globals.js';
 
@@ -91,12 +92,12 @@ export class BorsukCampformApp extends BorsukApp {
         // this._setButtonsFlags();
 
         // ładowanie słowników
-        this._setProductGroupDict();
+        this._setCampaignProductGroups();
         // this._setCategoryDict();
-        this._setPersLevelDict();
-        this._setSquadsDict();
-        this._setActionTypeDict();
-        this._setEmployeeDict();
+        this._setGeneralPersonalization();
+        this._setSquads();
+        this._setActionCharacter();
+        this._setUserAccounts();
         this._setEventsDict();
         this._setUnusedEventsDict();
         // this._setPushActionDict();
@@ -181,35 +182,99 @@ export class BorsukCampformApp extends BorsukApp {
     // }
 
     // metody do zasilenia słowników
-    _setProductGroupDict(jsonData) {
-        if (jsonData) { store.dispatch(getProductGroupDict(jsonData.productGroupDict)); } 
-        else { loadJSON('/src/properties/_productGroupDict.json').then(data => { store.dispatch(getProductGroupDict(data.productGroupDict)); }) }
+    _setUserAccounts(jsonData) {
+        if (jsonData) { store.dispatch(getUserAccounts(jsonData.userAccounts)); } 
+        else { loadJSON('/src/properties/_userAccounts.json').then(data => { store.dispatch(getUserAccounts(data.userAccounts)); }) }
     }
 
-    // _setCategoryDict(jsonData) {
-    //     if (jsonData) { store.dispatch(getCategoryDict(jsonData.categoryDict)); } 
-    //     else { loadJSON('/src/properties/_categoryDict.json').then(data => { store.dispatch(getCategoryDict(data.categoryDict)); }) }
-    // }
-
-    _setPersLevelDict(jsonData) {
-        if (jsonData) { store.dispatch(getPersLevelDict(jsonData.persLevelDict)); } 
-        else { loadJSON('/src/properties/_persLevelDict.json').then(data => { store.dispatch(getPersLevelDict(data.persLevelDict)); }) }
+    // ACTION MATRIX
+    _setActionCharacter(jsonData) {
+        if (jsonData) { store.dispatch(getActionCharacter(jsonData.actionCharacter)); } 
+        else { loadJSON('/src/properties/_actionCharacter.json').then(data => { store.dispatch(getActionCharacter(data.actionCharacter)); }) }
     }
 
-    _setSquadsDict(jsonData) {
-        if (jsonData) { store.dispatch(getSquadsDict(jsonData.squadsDict)); } 
-        else { loadJSON('/src/properties/_squadsDict.json').then(data => { store.dispatch(getSquadsDict(data.squadsDict)); }) }
+    _setActionMajorType(jsonData) {
+        if (jsonData) { store.dispatch(getActionMajorType(jsonData.actionMajorType)); } 
+        else { loadJSON('/src/properties/_actionMajorType.json').then(data => { store.dispatch(getActionMajorType(data.actionMajorType)); }) }
     }
 
-    _setActionTypeDict(jsonData) {
-        if (jsonData) { store.dispatch(getActionTypeDict(jsonData.actionTypeDict)); } 
-        else { loadJSON('/src/properties/_actionTypeDict.json').then(data => { store.dispatch(getActionTypeDict(data.actionTypeDict)); }) }
+    _setActionMinorType(jsonData) {
+        if (jsonData) { store.dispatch(getActionMinorType(jsonData.actionMinorType)); } 
+        else { loadJSON('/src/properties/_actionMinorType.json').then(data => { store.dispatch(getActionMinorType(data.actionMinorType)); }) }
     }
 
-    _setEmployeeDict(jsonData) {
-        if (jsonData) { store.dispatch(getEmployeeDict(jsonData.employeeDict)); } 
-        else { loadJSON('/src/properties/_employeeDict.json').then(data => { store.dispatch(getEmployeeDict(data.employeeDict)); }) }
+    _setCampaignProductGroups(jsonData) {
+        if (jsonData) { store.dispatch(getCampaignProductGroups(jsonData.campaignProductGroups)); } 
+        else { loadJSON('/src/properties/_campaignProductGroups.json').then(data => { store.dispatch(getCampaignProductGroups(data.campaignProductGroups)); }) }
     }
+
+    _setSquads(jsonData) {
+        if (jsonData) { store.dispatch(getSquadsDict(jsonData.squads)); } 
+        else { loadJSON('/src/properties/_squads.json').then(data => { store.dispatch(getSquadsDict(data.squads)); }) }
+    }
+
+    _setObligatoryConditions(jsonData) {
+        if (jsonData) { store.dispatch(getObligatoryConditions(jsonData.obligatoryConditions)); } 
+        else { loadJSON('/src/properties/_obligatoryConditions.json').then(data => { store.dispatch(getObligatoryConditions(data.obligatoryConditions)); }) }
+    }
+
+    _setCommonConditions(jsonData) {
+        if (jsonData) { store.dispatch(getCommonConditions(jsonData.commonConditions)); } 
+        else { loadJSON('/src/properties/_commonConditions.json').then(data => { store.dispatch(getCommonConditions(data.commonConditions)); }) }
+    }
+
+    _setParameters(jsonData) {
+        if (jsonData) { store.dispatch(getParameters(jsonData.parameters)); } 
+        else { loadJSON('/src/properties/_parameters.json').then(data => { store.dispatch(getParameters(data.parameters)); }) }
+    }
+
+    _setGeneralPersonalization(jsonData) {
+        if (jsonData) { store.dispatch(getGeneralPersonalization(jsonData.generalPersonalization)); } 
+        else { loadJSON('/src/properties/_generalPersonalization.json').then(data => { store.dispatch(getGeneralPersonalization(data.generalPersonalization)); }) }
+    }
+
+    _setGroupTypes(jsonData) {
+        if (jsonData) { store.dispatch(getGroupTypes(jsonData.groupTypes)); }
+        else { loadJSON('/src/properties/_groupTypes.json').then(data => { store.dispatch(getGroupTypes(data.groupTypes)); }) }
+    }
+
+    _setChannelCycleTypes(jsonData) {
+        if (jsonData) { store.dispatch(getChannelCycleTypes(jsonData.channelCycleTypes)); }
+        else { loadJSON('/src/properties/_channelCycleTypes.json').then(data => { store.dispatch(getChannelCycleTypes(data.channelCycleTypes)); }) }
+    }
+
+    _setProductRelations(jsonData) {
+        if (jsonData) { store.dispatch(getProductRelations(jsonData.productRelations)); }
+        else { loadJSON('/src/properties/_productRelations.json').then(data => { store.dispatch(getProductRelations(data.productRelations)); }) }
+    }
+
+    _setProductCategories(jsonData) {
+        if (jsonData) { store.dispatch(getProductCategories(jsonData.productCategories)); }
+        else { loadJSON('/src/properties/_productCategories.json').then(data => { store.dispatch(getProductCategories(data.productCategories)); }) }
+    }
+
+    _setDebitCardBinCodes(jsonData) {
+        if (jsonData) { store.dispatch(getDebitCardBinCodes(jsonData.debitCardBinCodes)); }
+        else { loadJSON('/src/properties/_debitCardBinCodes.json').then(data => { store.dispatch(getDebitCardBinCodes(data.debitCardBinCodes)); }) }
+    }
+
+    _setCreditCardBinCodes(jsonData) {
+        if (jsonData) { store.dispatch(getCreditCardBinCodes(jsonData.creditCardBinCodes)); }
+        else { loadJSON('/src/properties/_creditCardBinCodes.json').then(data => { store.dispatch(getCreditCardBinCodes(data.creditCardBinCodes)); }) }
+    }
+
+    _setChannelTypes(jsonData) {
+        if (jsonData) { store.dispatch(getChannelTypes(jsonData.channelTypes)); }
+        else { loadJSON('/src/properties/_channelTypes.json').then(data => { store.dispatch(getChannelTypes(data.channelTypes)); }) }
+    }
+
+    _setDeliveryMethods(jsonData) {
+        if (jsonData) { store.dispatch(getDeliveryMethods(jsonData.deliveryMethods)); }
+        else { loadJSON('/src/properties/_deliveryMethods.json').then(data => { store.dispatch(getDeliveryMethods(data.deliveryMethods)); }) }
+    }
+
+
+    
 
     _setEventsDict(jsonData) {
         if (jsonData) { store.dispatch(getEventsDict(jsonData.eventsDict)); } 

@@ -1,16 +1,16 @@
 {
-    "squadsDict": [
+    "channelTypes": [
         {
             "id": "1",
-            "name": "Squad 1",
+            "name": "elektroniczny",
             "index": 0
         },{
             "id": "2",
-            "name": "Squad 9",
+            "name": "tradycyjny",
             "index": 1
         },{
             "id": "3",
-            "name": "Expert Team",
+            "name": "oddział",
             "index": 2
         }
     ]

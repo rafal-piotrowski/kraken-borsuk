@@ -67,7 +67,7 @@ import { store } from '../../../redux/store.js';
 // import { changeFormValue } from '../../../redux/actions/cesuboffer.js';
 
 import customevents, { actionClickSelector, actionParamSelector } from '../../../redux/reducers/customevents.js';
-import { dictProductGroupSelector, dictCategorySelector, dictEventsSelector, dictUnusedEventsSelector, dictActionTypeSelector, dictEmployeeSelector, dictSquadsSelector } from '../../../redux/reducers/dictionaries.js';
+import { dictCampaignProductGroupsSelector, dictCategorySelector, dictEventsSelector, dictUnusedEventsSelector, dictActionCharacterSelector, dictEmployeeSelector, dictSquadsSelector } from '../../../redux/reducers/dictionaries.js';
 import { cesubofferPageReselector } from '../../../redux/reducers/campform.js';
 import globals, { globalSidebarSelector } from '../../../redux/reducers/globals.js';
 
@@ -578,13 +578,13 @@ export class BorsukActionInputForm extends connect(store)(LitElement) {
             }
         }
 
-        if (this.productGroupDict !== dictProductGroupSelector(state)) { this.productGroupDict = dictProductGroupSelector(state); }
+        if (this.productGroupDict !== dictCampaignProductGroupsSelector(state)) { this.productGroupDict = dictCampaignProductGroupsSelector(state); }
         if (this.categoryDict !== dictCategorySelector(state)) { this.categoryDict = dictCategorySelector(state); }
         if (this.eventsDict !== dictEventsSelector(state)) { this.eventsDict = dictEventsSelector(state); }
         if (this.unusedEventsDict !== dictUnusedEventsSelector(state)) { this.unusedEventsDict = dictUnusedEventsSelector(state); }
         if (this.subOfferDetails !== cesubofferPageReselector(state)) { this.subOfferDetails = cesubofferPageReselector(state); }
 
-        if (this.actionTypeDict !== dictActionTypeSelector(state)) { this.actionTypeDict = dictActionTypeSelector(state) }
+        if (this.actionTypeDict !== dictActionCharacterSelector(state)) { this.actionTypeDict = dictActionCharacterSelector(state) }
         if (this.employeesDict !== dictEmployeeSelector(state)) { this.employeesDict = dictEmployeeSelector(state) }
         if (this.squadsDict !== dictSquadsSelector(state)) { this.squadsDict = dictSquadsSelector(state) } 
 

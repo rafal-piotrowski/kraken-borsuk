@@ -1,0 +1,17 @@
+{
+    "productRelations": [
+        {
+            "id": "1",
+            "name": "SOW",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "JOF",
+            "index": 1
+        },{
+            "id": "3",
+            "name": "PUO",
+            "index": 2
+        }
+    ]
+}

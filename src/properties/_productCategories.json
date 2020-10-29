@@ -1,0 +1,17 @@
+{
+    "productCategories": [
+        {
+            "id": "1",
+            "name": "ACA",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "OKO",
+            "index": 1
+        },{
+            "id": "3",
+            "name": "SAV",
+            "index": 2
+        }
+    ]
+}

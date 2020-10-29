@@ -1,12 +1,12 @@
 {
-    "productGroupDict": [
+    "obligatoryConditions": [
         {
             "id": "1",
-            "name": "OTH",
+            "name": "Zgoda na marketing",
             "index": 0
         },{
             "id": "2",
-            "name": "brak",
+            "name": "Brak sprzeciwu na profilowanie",
             "index": 1
         }
     ]

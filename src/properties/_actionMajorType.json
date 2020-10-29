@@ -1,12 +1,12 @@
 {
-    "productGroupDict": [
+    "actionMajorType": [
         {
             "id": "1",
-            "name": "OTH",
+            "name": "Informational",
             "index": 0
         },{
             "id": "2",
-            "name": "brak",
+            "name": "Obligatory",
             "index": 1
         }
     ]

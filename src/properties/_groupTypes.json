@@ -1,0 +1,17 @@
+{
+    "groupTypes": [
+        {
+            "id": "1",
+            "name": "GroupType 1",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "GroupType 9",
+            "index": 1
+        },{
+            "id": "3",
+            "name": "GroupType 102",
+            "index": 2
+        }
+    ]
+}

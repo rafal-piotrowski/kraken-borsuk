@@ -63,6 +63,11 @@ const loadPage = (page, slot) => (dispatch) => {
         import('../../components/collections/borsuk-action-input-form.js');
       });
       break;
+    case 'S98':
+      import('../../components/borsuk-filter-campform.js').then((module) => {
+          // console.log('loading ... '+slot+' - '+page);
+      });
+        break;
     case 'S99':
       import('../../components/borsuk-filter-form.js').then((module) => {
           // console.log('loading ... '+slot+' - '+page);

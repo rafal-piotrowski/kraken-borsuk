@@ -11,10 +11,25 @@ import {
     GET_ACTIONS_PARAMS_DICT,
     UPDATE_ACTPARAMS_VISIBLE,
     GET_UNUSED_EVENTS_DICT,
-    GET_ACTION_TYPE_DICT,
-    GET_EMPLOYEE_DICT,
-    GET_PERS_LEVEL_DICT,
-    GET_SQUADS_DICT
+    GET_ACTION_CHARACTER,
+    GET_ACTION_MAJOR_TYPE,
+    GET_ACTION_MINOR_TYPE,
+    GET_USER_ACCOUNTS,
+    GET_GENERAL_PERSONALIZATION,
+    GET_SQUADS_DICT,
+    GET_CAMPAIGN_PRODUCT_GROUPS,
+    GET_OBLIGATORY_CONDITIONS,
+    GET_COMMON_CONDITIONS,
+    GET_PARAMETERS,
+    GET_GROUP_TYPES,
+    GET_CHANNEL_CYCLE_TYPES,
+    GET_PRODUCT_RELATIONS,
+    GET_PRODUCT_CATEGORIES,
+    GET_DEBIT_CARD_BIN_CODES,
+    GET_CREDIT_CARD_BIN_CODES,
+    GET_CHANNEL_TYPES,
+    GET_DELIVERY_METHODS
+
   } from '../actions/dictionaries.js';
 
   const INITIAL_STATE = {
@@ -29,10 +44,22 @@ import {
     conpardict: {},
     actpardict: {},
     uneventsdict: {},
-    actiontypedict: {},
+    actioncharacter: {},
     employeedict: {},
     persleveldict: {},
-    squadsdict: {}
+    squadsdict: {},
+    camprdgrps: {},
+    obligocndts: {},
+    commoncndts: {},
+    parameters: {},
+    grouptypes: {},
+    chncycletypes: {},
+    prdrelations: {},
+    prdcategories: {},
+    debitbins: {},
+    creditbins: {},
+    channeltypes: {},
+    deliverymethods: {}
 };
 
 const dictionaries = (state = INITIAL_STATE, action) => {
@@ -47,7 +74,7 @@ const dictionaries = (state = INITIAL_STATE, action) => {
                 ...state,
                 categorydict: action.categorydict
             }
-        case GET_PERS_LEVEL_DICT:
+        case GET_GENERAL_PERSONALIZATION:
             return {
                 ...state,
                 persleveldict: action.persleveldict
@@ -57,7 +84,7 @@ const dictionaries = (state = INITIAL_STATE, action) => {
                 ...state,
                 squadsdict: action.squadsdict
             }
-        case GET_EMPLOYEE_DICT:
+        case GET_USER_ACCOUNTS:
             return {
                 ...state,
                 employeedict: action.employeedict
@@ -107,10 +134,80 @@ const dictionaries = (state = INITIAL_STATE, action) => {
                 ...state,
                 actpardict: action.actpardict
             }
-        case GET_ACTION_TYPE_DICT:
+        case GET_ACTION_MAJOR_TYPE:
             return {
                 ...state,
-                actiontypedict: action.actiontypedict
+                actionmajortype: action.actionmajortype
+            }
+        case GET_ACTION_MINOR_TYPE:
+            return {
+                ...state,
+                actionminortype: action.actionminortype
+            }
+        case GET_ACTION_CHARACTER:
+            return {
+                ...state,
+                actioncharacter: action.actioncharacter
+            }
+        case GET_CAMPAIGN_PRODUCT_GROUPS:
+            return {
+                ...state,
+                camprdgrps: action.camprdgrps
+            }
+        case GET_OBLIGATORY_CONDITIONS:
+            return {
+                ...state,
+                obligocndts: action.obligocndts
+            }
+        case GET_COMMON_CONDITIONS:
+            return {
+                ...state,
+                commoncndts: action.commoncndts
+            }
+        case GET_PARAMETERS:
+            return {
+                ...state,
+                parameters: action.parameters
+            }
+        case GET_GROUP_TYPES:
+            return {
+                ...state,
+                grouptypes: action.grouptypes
+            }
+        case GET_CHANNEL_CYCLE_TYPES:
+            return {
+                ...state,
+                chncycletypes: action.chncycletypes
+            }
+        case GET_PRODUCT_RELATIONS:
+            return {
+                ...state,
+                prdrelations: action.prdrelations
+            }
+        case GET_PRODUCT_CATEGORIES:
+            return {
+                ...state,
+                prdcategories: action.prdcategories
+            }
+        case GET_DEBIT_CARD_BIN_CODES:
+            return {
+                ...state,
+                debitbins: action.debitbins
+            }
+        case GET_CREDIT_CARD_BIN_CODES:
+            return {
+                ...state,
+                creditbins: action.creditbins
+            }
+        case GET_CHANNEL_TYPES:
+            return {
+                ...state,
+                channeltypes: action.channeltypes
+            }
+        case GET_DELIVERY_METHODS:
+            return {
+                ...state,
+                deliverymethods: action.deliverymethods
             }
         case UPDATE_ACTPARAMS_VISIBLE:
             return {
@@ -135,7 +232,21 @@ export const dictResponseCodesSelector = state => state.dictionaries.rescodesdic
 export const dictContentParamsSelector = state => state.dictionaries.conpardict;
 export const dictActionsParamsSelector = state => state.dictionaries.actpardict;
 export const dictUnusedEventsSelector = state => state.dictionaries.uneventsdict;
-export const dictActionTypeSelector = state => state.dictionaries.actiontypedict;
+export const dictActionCharacterSelector = state => state.dictionaries.actioncharacter;
+export const dictActionMajorTypeSelector = state => state.dictionaries.actionmajortype;
+export const dictActionMinorTypeSelector = state => state.dictionaries.actionminortype;
 export const dictEmployeeSelector = state => state.dictionaries.employeedict;
 export const dictPersLevelSelector = state => state.dictionaries.persleveldict;
 export const dictSquadsSelector = state => state.dictionaries.squadsdict;
+export const dictCampaignProductGroupsSelector = state => state.dictionaries.camprdgrps;
+export const dictObligatoryConditionsSelector = state => state.dictionaries.obligocndts;
+export const dictCommonConditionsSelector = state => state.dictionaries.commoncndts;
+export const dictParametersSelector = state => state.dictionaries.parameters;
+export const dictGroupTypesSelector = state => state.dictionaries.grouptypes;
+export const dictChannelCycleTypesSelector = state => state.dictionaries.chncycletypes;
+export const dictProductRelationsSelector = state => state.dictionaries.prdrelations;
+export const dictProductCategoriesSelector = state => state.dictionaries.prdcategories;
+export const dictDebitBinsSelector = state => state.dictionaries.debitbins;
+export const dictCreditBinsSelector = state => state.dictionaries.creditbins;
+export const dictChannelTypesSelector = state => state.dictionaries.channeltypes;
+export const dictDeliveryMethodsSelector = state => state.dictionaries.deliverymethods;

@@ -1,0 +1,33 @@
+{
+    "campaignProductGroups": [
+        {
+            "id": "1",
+            "name": "Hipoteczne",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "brak",
+            "index": 1
+        },{
+            "id": "3",
+            "name": "Karty kredytowe",
+            "index": 2
+        },{
+            "id": "4",
+            "name": "Oszczędności",
+            "index": 3
+        },{
+            "id": "5",
+            "name": "Pożyczki",
+            "index": 4
+        },{
+            "id": "6",
+            "name": "Rachunki",
+            "index": 5
+        },{
+            "id": "7",
+            "name": "Ubezpieczenia",
+            "index": 6
+        }
+    ]
+}

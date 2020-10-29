@@ -1,0 +1,17 @@
+{
+    "channelCycleTypes": [
+        {
+            "id": "1",
+            "name": "Cycle 1",
+            "index": 0
+        },{
+            "id": "2",
+            "name": "Cycle 2",
+            "index": 1
+        },{
+            "id": "3",
+            "name": "Cycle 3",
+            "index": 2
+        }
+    ]
+}

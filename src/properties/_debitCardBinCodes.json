@@ -1,16 +1,16 @@
 {
-    "persLevelDict": [
+    "debitCardBinCodes": [
         {
             "id": "1",
-            "name": "Client driven",
+            "name": "BIN1",
             "index": 0
         },{
             "id": "2",
-            "name": "Bank driven",
+            "name": "BIN9",
             "index": 1
         },{
             "id": "3",
-            "name": "Default",
+            "name": "Debit",
             "index": 2
         }
     ]

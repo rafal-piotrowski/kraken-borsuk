@@ -1,12 +1,12 @@
 {
-    "productGroupDict": [
+    "parameters": [
         {
             "id": "1",
-            "name": "OTH",
+            "name": "first_parameter",
             "index": 0
         },{
             "id": "2",
-            "name": "brak",
+            "name": "second_parameter",
             "index": 1
         }
     ]
