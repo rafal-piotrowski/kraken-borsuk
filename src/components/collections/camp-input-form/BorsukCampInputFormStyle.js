@@ -111,6 +111,40 @@ export const BorsukCampInputFormStyle = css`
       background: var(--ing-8percent-black-color);
     }
 
+  .formCardGrid {
+    display: grid;
+    justify-items: left;
+    align-items: left;
+  }
+
+  .formCard {
+    border-radius: 4px;
+    margin: 0 25px 0 25px;
+    padding: 10px 20px 20px 20px;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.12), 0 4px 4px 0 rgba(0, 0, 0, 0.24);
+  }
+
+  .formCard span {
+    text-align: left;
+    font-size: 0.8rem;
+  }
+
+  .formCard p {
+    text-align: left;
+    font-weight: bold;
+  }
+
+  .formCardAnswer {
+    /* background-color: #FFA90D; */
+    background-color: rgba(207, 139, 87, 0.2);
+  }
+
+  .commentBlock {
+    border-top: solid 1px lightgrey;
+    padding-top: 25px;
+    margin: 10px;
+  }
+
   .errorBorder {
     border: 1px solid var(--ing-minus-color);
     border-radius: 5px 5px 5px 5px;
@@ -209,5 +243,6 @@ export const BorsukCampInputFormStyle = css`
 
     .subpage[active] {
         display: block;
+        padding-bottom: 25px;
     }
 `;

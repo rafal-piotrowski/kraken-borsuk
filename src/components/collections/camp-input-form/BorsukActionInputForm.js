@@ -278,7 +278,24 @@ export class BorsukActionInputForm extends connect(store)(LitElement) {
     get statusTemplate() {
         return html`
             <div id="statusBlock" class="subpage" active>
-                <h1>Informacje ogólne</h1>
+                <h1>Event_BLIK_transakcja_gotowkowa</h1>
+                <p>Zgłaszający akcję: <strong>Rafał Piotrowski</strong></p>
+                <p>Właściciel biznesowy: <strong>Marian Paździoch</strong></p>
+                <p>Data modyfikacji: <strong>2020-10-29, 9:00</strong></p>
+
+                <div class="formGrid formGrid12 commentBlock">
+                    <div class="formSpanGrid6"></div>
+                    <div class="formCardGrid inputFrame formSpanGrid6 formCard formCardAnswer">
+                        <p>Wiesław Lech</p>
+                        <span>warunki wprowadzone w formatce są zupełnie nieprzemyślane.</span>
+                        <span>Proszę o natychmiastową poprawę !</span>
+                    </div>
+                    <div class="formCardGrid inputFrame formSpanGrid6 formCard">
+                        <p>Ja</p>
+                        <span>formatka wysłana do akceptacji</span>
+                    </div>
+                    <div class="formSpanGrid6"></div>
+                </div>
             </div>
         `;
     }
