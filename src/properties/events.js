@@ -40,6 +40,9 @@ export const removeVersionEvent = 'evRemoveVersion';
 export const copyVersionEvent = 'evCopyVersion';
 export const approveVersionEvent = 'evApproveVersion';
 
+// eventy cyklu towrzenia formatek akcji
+export const saveCampEvent = 'evSaveCampaign';
+
 // eventy schedulera
 export const addScheduleEvent = 'evAddScheduleVersion';
 export const editScheduleEvent = 'evEditScheduleVersion';

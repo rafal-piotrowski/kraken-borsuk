@@ -34,7 +34,8 @@ import {
     ADD_CE_TAB,
     REMOVE_CE_SLOT,
     ADD_CE_SLOT,
-    UPDATE_CE_TAB
+    UPDATE_CE_TAB,
+    DISACTIVATE_CHANGED_FLG
 } from '../actions/cesuboffer.js';
 
 import { createSelector } from 'reselect';
@@ -87,6 +88,11 @@ const cesuboffer = (state = INITIAL_STATE, action) => {
                 cechnltabs: Object.keys(state.cechnltabs).map((key) => (state.cechnltabs[key].parentPageId === disPage && (state.cechnltabs[key].tabPageId === action.prev)) ? 
                                                                         { ...state.cechnltabs[key], tabActive: false } : { ...state.cechnltabs[key] })
             };
+        case DISACTIVATE_CHANGED_FLG:
+            return {
+                ...state,
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], changedFlg: false } : state.cesubslots[key])
+            }
         case GET_CESUBOFFER_TABS:
             return {
                 ...state,
@@ -160,67 +166,101 @@ const cesuboffer = (state = INITIAL_STATE, action) => {
 
             // formularz edycji suboferty
             if (action.sParam === 'subofferName') {
-                return { ...state, cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], subofferName: action.nValue } : state.cesubslots[key]) }
+                return { ...state, cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], subofferName: action.nValue, changedFlg: true } : state.cesubslots[key]) }
             }
             if (action.sParam === 'groupId') {
-                return { ...state, cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], groupId: action.nValue } : state.cesubslots[key]) }
+                return { ...state, cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], groupId: action.nValue, changedFlg: true } : state.cesubslots[key]) }
             }
-            if (action.sParam === 'categoryId') {
+            if (action.sParam === 'categoryIdInsert') {
                 return { ...state, cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], categoryId: action.nValue } : state.cesubslots[key]) }
             }
+            if (action.sParam === 'categoryIdChange') {
+                return { ...state, cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], categoryId: action.nValue, changedFlg: true } : state.cesubslots[key]) }
+            }
             if (action.sParam === 'eventId') {
-                return { ...state, cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], eventId: action.nValue } : state.cesubslots[key]) }
+                return { ...state, cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], eventId: action.nValue, changedFlg: true } : state.cesubslots[key]) }
             }
 
             // formularz edycji wersji
             if (action.sParam === 'versionName') {
-                return { ...state, cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], versionName: action.nValue } : state.cesubslots[key]) }
+                return { ...state, cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], versionName: action.nValue, changedFlg: true } : state.cesubslots[key]) }
             }
             if (action.sParam === 'pushAndSms') {
-                return { ...state, cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], pushAndSms: action.nValue } : state.cesubslots[key]) }
+                return { ...state, cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], pushAndSms: action.nValue, changedFlg: true } : state.cesubslots[key]) }
             }
 
             // podformularz dla kanału PUSH, SMS, Wiadomość
             if (action.sParam === 'formMessageText') {
-                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], content: action.nValue } : state.cechnlslots[key]) }
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], content: action.nValue } : state.cechnlslots[key]),
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], changedFlg: true } : state.cesubslots[key]) }
             }
             if (action.sParam === 'formInLink') {
-                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], inLink: action.nValue } : state.cechnlslots[key]) }
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], inLink: action.nValue } : state.cechnlslots[key]),
+                            cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], changedFlg: true } : state.cesubslots[key]) }
             }
             if (action.sParam === 'formOutLink') {
-                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], outLink: action.nValue } : state.cechnlslots[key]) }
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], outLink: action.nValue } : state.cechnlslots[key]),
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], changedFlg: true } : state.cesubslots[key]) }
             }
-            if (action.sParam === 'formPushAction') {
-                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], actionId: action.nValue } : state.cechnlslots[key]) }
+            if (action.sParam === 'formPushActionInsert') {
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], actionId: action.nValue } : state.cechnlslots[key]) }
             }
-            if (action.sParam === 'formSendPeriod') {
-                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], sendPeriodId: action.nValue } : state.cechnlslots[key]) }
+            if (action.sParam === 'formPushActionChange') {
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], actionId: action.nValue } : state.cechnlslots[key]),
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], changedFlg: true } : state.cesubslots[key]) }
             }
-            if (action.sParam === 'formPhoneType') {
-                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], phoneTypeId: action.nValue } : state.cechnlslots[key]) }
+
+            if (action.sParam === 'formSendPeriodInsert') {
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], sendPeriodId: action.nValue } : state.cechnlslots[key]) }
             }
+            if (action.sParam === 'formSendPeriodChange') {
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], sendPeriodId: action.nValue } : state.cechnlslots[key]),
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], changedFlg: true } : state.cesubslots[key]) }
+            }
+            if (action.sParam === 'formPhoneTypeInsert') {
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], phoneTypeId: action.nValue } : state.cechnlslots[key]) }
+            }
+            if (action.sParam === 'formPhoneTypeChange') {
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], phoneTypeId: action.nValue } : state.cechnlslots[key]),
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], changedFlg: true } : state.cesubslots[key]) }
+            }
+
             if (action.sParam === 'formMessageTitle') {
-                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], title: action.nValue } : state.cechnlslots[key]) }
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], title: action.nValue } : state.cechnlslots[key]),
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], changedFlg: true } : state.cesubslots[key]) }
             }
             if (action.sParam === 'formMessageExpireTime') {
-                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], expire: action.nValue } : state.cechnlslots[key]) }
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], expire: action.nValue } : state.cechnlslots[key]),
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], changedFlg: true } : state.cesubslots[key]) }
             }
-            if (action.sParam === 'formMesagesGroup') {
-                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], groupId: action.nValue } : state.cechnlslots[key]) }
+            if (action.sParam === 'formMesagesGroupInsert') {
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], groupId: action.nValue } : state.cechnlslots[key]) }
             }
+            if (action.sParam === 'formMesagesGroupChange') {
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], groupId: action.nValue } : state.cechnlslots[key]),
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], changedFlg: true } : state.cesubslots[key]) }
+            }
+
             if (action.sParam === 'notificationEventId') {
-                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], eventId: action.nValue } : state.cechnlslots[key]) }
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], eventId: action.nValue } : state.cechnlslots[key]),
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], changedFlg: true } : state.cesubslots[key]) }
             }
             if (action.sParam === 'formSendFrom') {
-                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], sendFrom: action.nValue } : state.cechnlslots[key]) }
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], sendFrom: action.nValue } : state.cechnlslots[key]),
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], changedFlg: true } : state.cesubslots[key]) }
             }
             if (action.sParam === 'formSendTo') {
-                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], sendTo: action.nValue } : state.cechnlslots[key]) }
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], sendTo: action.nValue } : state.cechnlslots[key]),
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], changedFlg: true } : state.cesubslots[key]) }
             }
 
             // text editor
-            if (action.sParam === 'editor') {
-                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabPageId ? { ...state.cechnlslots[key], content: action.nValue } : state.cechnlslots[key]) }
+            if (action.sParam === 'editorInsert') {
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], content: action.nValue } : state.cechnlslots[key])}
+            }
+            if (action.sParam === 'editorChange') {
+                return { ...state, cechnlslots: Object.keys(state.cechnlslots).map((key) => state.cechnlslots[key].tabPageId === action.tabSubPageId ? { ...state.cechnlslots[key], content: action.nValue } : state.cechnlslots[key]),
+                cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], changedFlg: true } : state.cesubslots[key]) }
             }
 
         case CHANGE_CHANNEL_ACTIVE_FLG:

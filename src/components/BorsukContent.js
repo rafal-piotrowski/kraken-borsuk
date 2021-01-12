@@ -125,6 +125,8 @@ export class BorsukContent extends connect(store)(LitElement) {
 
     updated(changedProps) {
         if (changedProps.has('_page')) {
+            this.inspectStateChanges(this.ceSlotValues);
+
             // this.inspectStateChanges();
             const pageTitle = this.appTitle + ' - ' + this._page;
             updateMetadata({
@@ -154,11 +156,18 @@ export class BorsukContent extends connect(store)(LitElement) {
         import('../redux/reducers/'+this.app+'.js').then((module) => {
             if (this.cesubofferTabsList !== module.cesubofferTabsSelector(state)) { this.cesubofferTabsList = module.cesubofferTabsSelector(state); }
             if (this.ceSlotValues !== module.cesubofferPageReselector(state)) { this.ceSlotValues = module.cesubofferPageReselector(state); 
-                this.inspectStateChanges(); 
+                if (this.ceSlotValues.length > 0) {
+                    this.inspectStateChanges(this.ceSlotValues);
+                }
             }
-            if (this.ceChannelsValues !== module.ceChannelsSlotReselector(state)) { this.ceChannelsValues = module.ceChannelsSlotReselector(state); this.inspectStateChanges(); }
-            if (this.ceSlotBckpValues !== module.cesubofferPageBckpReselector(state)) { this.ceSlotBckpValues = module.cesubofferPageBckpReselector(state) }
-            if (this.ceChannelsBckpValues !== module.ceChannelsSlotBckpReselector(state)) { this.ceChannelsBckpValues = module.ceChannelsSlotBckpReselector(state) }
+            // if (this.ceSlotValues !== module.cesubofferPageReselector(state)) { this.ceSlotValues = module.cesubofferPageReselector(state); 
+            //     this.inspectStateChanges(); 
+            // }
+            // if (this.ceChannelsValues !== module.ceChannelsSlotReselector(state)) { this.ceChannelsValues = module.ceChannelsSlotReselector(state); this.inspectStateChanges(); }
+
+            // if (this.ceSlotBckpValues !== module.cesubofferPageBckpReselector(state)) { this.ceSlotBckpValues = module.cesubofferPageBckpReselector(state) }
+            // if (this.ceChannelsBckpValues !== module.ceChannelsSlotBckpReselector(state)) { this.ceChannelsBckpValues = module.ceChannelsSlotBckpReselector(state) }
+
             // if (this._page !== getActivePageFromFlag(state)) { this._page = getActivePageFromFlag(state); }
             // if (this._slot !== getActiveSlotFromFlag(state)) { this._slot = getActiveSlotFromFlag(state); }
             // this._page = getActivePage(state);
@@ -167,15 +176,13 @@ export class BorsukContent extends connect(store)(LitElement) {
         });
     }
 
-    inspectStateChanges() {
-        if (JSON.stringify(Object.values(this.ceSlotValues)) === JSON.stringify(Object.values(this.ceSlotBckpValues)) &&
-            JSON.stringify(Object.values(this.ceChannelsValues)) === JSON.stringify(Object.values(this.ceChannelsBckpValues)))
-        {
-            if (this._slot === 'S01') { this.shadowRoot.getElementById("subofferContent").removeAttribute("unsaved"); }
-            if (this._slot === 'S02') { this.shadowRoot.getElementById("versionContent").removeAttribute("unsaved"); }
-        } else {
+    inspectStateChanges(ceSlotValues) {
+        if (ceSlotValues[0].changedFlg) {
             if (this._slot === 'S01') { this.shadowRoot.getElementById("subofferContent").setAttribute("unsaved", ""); }
             if (this._slot === 'S02') { this.shadowRoot.getElementById("versionContent").setAttribute("unsaved", ""); }
+        } else {
+            if (this._slot === 'S01') { this.shadowRoot.getElementById("subofferContent").removeAttribute("unsaved"); }
+            if (this._slot === 'S02') { this.shadowRoot.getElementById("versionContent").removeAttribute("unsaved"); }
         }
     }
 

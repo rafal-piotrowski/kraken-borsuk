@@ -30,3 +30,4 @@ actions2events.set(actions.get('addScheduleAction'),        events.get('addSched
 actions2events.set(actions.get('editScheduleAction'),       events.get('editScheduleEvent'));
 actions2events.set(actions.get('removeScheduleAction'),     events.get('removeScheduleEvent'));
 actions2events.set(actions.get('filterResetAction'),        events.get('filterResetEvent'));
+actions2events.set(actions.get('saveCampAction'),           events.get('saveCampEvent'));

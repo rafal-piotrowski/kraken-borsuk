@@ -39,6 +39,10 @@ export const removeVersionAction = 'removeVersion';
 export const copyVersionAction = 'copyVersion';
 export const approveVersionAction = 'approveVersion';
 
+// akcje cyklu tworzenia formatek akcji
+export const validateCampAction = 'validateCampaign';
+export const saveCampAction = 'saveCampaign';
+
 // akcje schedulera
 export const addScheduleAction = 'addScheduleVersion';
 export const editScheduleAction = 'editScheduleVersion';

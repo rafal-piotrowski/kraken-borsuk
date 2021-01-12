@@ -98,6 +98,7 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
                                                 id="formMessageText"
                                                 .listButtons=${this.editorEmbedButtons}
                                                 .histButtons=${this.editorHistButtons}
+                                                @click=${() => this.openGate()}
                                                 @ev-confirm-text-change=${this.editorTextChanged}>
                                 </borsuk-editor>
                             </div>
@@ -108,6 +109,7 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
                                                         class="inputFormSize90" 
                                                         label=${titles.get('pushActionGoTo')}
                                                         @iron-select=${() => this.pushActionChanged('formPushAction')}
+                                                        @tap=${() => this.openGate()}
                                                         selected-item-label="${i.actionId}"
                                                         error-message=${titles.get('errorMessageLinkField')}>
 
@@ -222,6 +224,7 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
                                                     class="inputFormSize90" 
                                                     label=${titles.get('sendPeriodLabel')} 
                                                     @iron-select=${() => this.periodsChanged('formSendPeriod')}
+                                                    @tap=${() => this.openGate()}
                                                     selected-item-label=${i.sendPeriodId} 
                                                     required
                                                     error-message=${titles.get('errorMessageRequiredField')}>
@@ -291,6 +294,7 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
             actionsParamsDict: { type: Array },
             editorEmbedButtons: { type: Array },
             editorHistButtons: { type: Array },
+            gateState: { type: Boolean }
         };
     }
 
@@ -306,6 +310,7 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
         this.actionsParamsDict = [];
         this.paramsToItems = [];
         this.contentFlg = false;
+        this.gateState = false;
 
         this._removeParamButtonRendererBound = this.removeParamButtonRenderer.bind(this);
 
@@ -355,6 +360,7 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
         }
 
         if (changedProps.has('_page')) {
+            this.gateState = false;
             this.clearValidateStatus();
         }
     }
@@ -385,7 +391,7 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
     editorTextChanged(event) {
         if (this.shadowRoot.getElementById("formMessageText").getText().trim().length > 0) {
             this.shadowRoot.getElementById("formMessageText").removeAttribute("error");
-            store.dispatch(changeFormValue(this._subpage, 'editor', event.detail.textChanged));
+            store.dispatch(changeFormValue(this._page, 'editor'+((this.gateState)?'Change':'Insert'), event.detail.textChanged, this._subpage));
         } else {
             this.shadowRoot.getElementById("formMessageText").setAttribute("error", "");
         }
@@ -446,7 +452,11 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
     }
 
     pushInputChanged(param) {
-        store.dispatch(changeFormValue(this._subpage, param, this.shadowRoot.getElementById(param).value));
+        store.dispatch(changeFormValue(this._page, param, this.shadowRoot.getElementById(param).value, this._subpage));
+    }
+
+    openGate() {
+        this.gateState = true;
     }
 
     pushActionChanged(param) {
@@ -465,7 +475,8 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
             this.shadowRoot.getElementById('actionsControler').setAttribute("class", "inputGrid inputFrame formSpanGrid12 formGrid12 formBorder formBottomShadow");
         }
 
-        store.dispatch(changeFormValue(this._subpage, param, this.pushActionDict[this.shadowRoot.getElementById(param).selected].id));
+        store.dispatch(changeFormValue(this._page, param+((this.gateState)?'Change':'Insert'), this.pushActionDict[this.shadowRoot.getElementById(param).selected].id, this._subpage));        
+        this.gateState = false;
     }
 
     addActionToList() {
@@ -497,7 +508,8 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
     }
 
     periodsChanged(param) {
-        store.dispatch(changeFormValue(this._subpage, param, this.periodsDict[this.shadowRoot.getElementById(param).selected].id));
+        store.dispatch(changeFormValue(this._page, param+((this.gateState)?'Change':'Insert'), this.periodsDict[this.shadowRoot.getElementById(param).selected].id, this._subpage));        
+        this.gateState = false;
     }
  
     timeValidate() {
@@ -511,8 +523,8 @@ export class BorsukPushInputForm extends connect(store)(LitElement) {
             this.shadowRoot.getElementById("formSendTo").invalid = true;
         }
 
-        store.dispatch(changeFormValue(this._subpage, "formSendFrom", this.shadowRoot.getElementById("formSendFrom").value));
-        store.dispatch(changeFormValue(this._subpage, "formSendTo", this.shadowRoot.getElementById("formSendTo").value));
+        store.dispatch(changeFormValue(this._page, "formSendFrom", this.shadowRoot.getElementById("formSendFrom").value, this._subpage));
+        store.dispatch(changeFormValue(this._page, "formSendTo", this.shadowRoot.getElementById("formSendTo").value, this._subpage));
 
     }
  

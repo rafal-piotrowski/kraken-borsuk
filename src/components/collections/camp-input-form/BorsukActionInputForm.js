@@ -1,3 +1,5 @@
+/* eslint-disable prefer-object-spread */
+/* eslint-disable prefer-const */
 /* eslint-disable no-plusplus */
 /* eslint-disable arrow-body-style */
 /* eslint-disable lit/no-useless-template-literals */
@@ -55,7 +57,7 @@ import { MinMaxDate, Required, IsDate, MinDate, MaxDate } from '@lion/form-core'
 import { events } from '../../../properties/events.js';
 import { titles } from '../../../properties/titles.js';
 
-import { validateSubofferAction } from '../../../properties/actions.js';
+import { validateCampAction, saveCampAction } from '../../../properties/actions.js';
 
 // konektor do store-a
 import { connect } from 'pwa-helpers/connect-mixin.js';
@@ -64,7 +66,8 @@ import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../../redux/store.js';
 
 // załadowanie kreatorów akcji.
-// import { changeFormValue } from '../../../redux/actions/cesuboffer.js';
+import { changeFormValue } from '../../../redux/actions/campform.js';
+import { setClickAction } from '../../../redux/actions/customevents.js';
 
 import customevents, { actionClickSelector, actionParamSelector } from '../../../redux/reducers/customevents.js';
 import { dictCampaignProductGroupsSelector, dictCategorySelector, dictEventsSelector, dictUnusedEventsSelector, dictActionCharacterSelector, dictEmployeeSelector, dictSquadsSelector } from '../../../redux/reducers/dictionaries.js';
@@ -97,11 +100,18 @@ const actionCreatorTemplate = (name) => {
     `;
 }
 
-const actionNameTemplate = () => {
+const actionNameTemplate = (name, moduleName) => {
+    console.log(moduleName);
     return html`
         <borsuk-input
             class="input90"
-            label="Nazwa akcji">
+            label="Nazwa akcji"
+            id="formActionName"
+            @click=${() => moduleName.clickInputChange()}
+            @focus=${() => moduleName.focusInputChange()}
+            @blur=${() => moduleName.blurInputChange()}
+            @change=${() => moduleName.campInputChanged('formActionName')}
+            value=${name}>
                 <div slot="help-text">podaj nazwę zgłaszanej akcji</div>
                 <div slot="before" style="color: red;">*</div>
         </borsuk-input>
@@ -222,7 +232,7 @@ export class BorsukActionInputForm extends connect(store)(LitElement) {
         this.eventsDict = [];
         this.unusedEventsDict = [];
         this.actionTypeDict = [];
-        this.subOfferDetails = {};
+        this.campaignDetails = {};
         this.employeesDict = [];
         this.squadsDict = [];
         this.formInputTemplate = this.statusTemplate;
@@ -235,7 +245,7 @@ export class BorsukActionInputForm extends connect(store)(LitElement) {
             unusedEventsDict: { type: Array },
             categoryDict: { type: Array },
             productGroupDict: { type: Array },
-            subOfferDetails: { type: Object },
+            campaignDetails: { type: Object },
             _page: { type: String },
             actionTypeDict: { type: Array },
             employeesDict: { type: Array },
@@ -305,16 +315,16 @@ export class BorsukActionInputForm extends connect(store)(LitElement) {
             <div id="formBlock" class="subpage">
                 <div class="formGrid formGrid12">
 
-                    ${Object.keys(this.subOfferDetails).map((key) => {
-                        const i = this.subOfferDetails[key];
+                    ${Object.keys(this.campaignDetails).map((key) => {
+                        const i = this.campaignDetails[key];
                         return html`
 
                             <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
-                                ${actionCreatorTemplate('Rafał Piotrowski')}
+                                ${actionCreatorTemplate(i.applyingUserId)}
                             </div>
 
                             <div class="inputGrid inputFrame formSpanGrid12 formBorder formBottomShadow">
-                                ${actionNameTemplate()}
+                                ${actionNameTemplate(i.actionName, this)}
                             </div>
 
                             <div class="inputGrid inputFrame formSpanGrid6 formBorder formBottomShadow">
@@ -487,6 +497,23 @@ export class BorsukActionInputForm extends connect(store)(LitElement) {
         }
     }
 
+    campInputChanged(param) {
+        console.log('______________ wywołano event on-change __________________');
+        store.dispatch(changeFormValue(this._page, param, this.shadowRoot.getElementById(param).value, this._subpage));
+    }
+
+    focusInputChange() {
+        console.log('______________ wywołano event on-focus __________________');
+    }
+
+    blurInputChange() {
+        console.log('______________ wywołano event on-blur __________________');
+    }
+
+    clickInputChange() {
+        console.log('______________ wywołano event on-click __________________');
+    }
+
     chooseEmployeeFromDict() {
         this.shadowRoot.getElementById("employeeModal").openModal();
     }
@@ -529,24 +556,52 @@ export class BorsukActionInputForm extends connect(store)(LitElement) {
         // this.shadowRoot.getElementById("eventId").invalid = false;
     }
 
-    validateForm(page) {
-        if (page === this._page) {
-            this.shadowRoot.getElementById("subofferName").validate();
-            this.shadowRoot.getElementById("formCategory").validate();
-            this.shadowRoot.getElementById("formProductGroup").validate();
-            this.shadowRoot.getElementById("eventId").validate();
+    validateForm(state, page) {
+        console.log('__________________ uruchomiono walidację formatki akcji ________________________');
 
-            if (this.shadowRoot.getElementById("subofferName").invalid === false &&
-                this.shadowRoot.getElementById("formCategory").invalid === false &&
-                this.shadowRoot.getElementById("formProductGroup").invalid === false &&
-                this.shadowRoot.getElementById("eventId").invalid === false) {
-                    return true;
-                } else {
-                    return false;
-                }
+        if (page === this._page) {
+            console.log('========= page jest równy this.page ============');
+
+            this.saveCampaignForm(state, page);
+            // this.shadowRoot.getElementById("subofferName").validate();
+            // this.shadowRoot.getElementById("formCategory").validate();
+            // this.shadowRoot.getElementById("formProductGroup").validate();
+            // this.shadowRoot.getElementById("eventId").validate();
+
+            // if (this.shadowRoot.getElementById("subofferName").invalid === false &&
+            //     this.shadowRoot.getElementById("formCategory").invalid === false &&
+            //     this.shadowRoot.getElementById("formProductGroup").invalid === false &&
+            //     this.shadowRoot.getElementById("eventId").invalid === false) {
+            //         return true;
+            //     } else {
+            //         return false;
+            //     }
         }
     }
-                
+
+    saveCampaignForm(state, param) {
+        let formInfo = [];
+        for(let i = 0; i < Object.keys(cesubofferPageReselector(state)).length; i++){
+            formInfo.push({ applyingUserId: cesubofferPageReselector(state)[i].applyingUserId, 
+                            actionName: cesubofferPageReselector(state)[i].actionName,
+                            actionMatrixId: cesubofferPageReselector(state)[i].actionMatrixId,
+                            productGroupId: cesubofferPageReselector(state)[i].productGroupId,
+                            squadId: cesubofferPageReselector(state)[i].squadId
+                        });
+        }
+        
+        if (!param) {
+            this.formElements = Object.assign({formValues: formInfo});
+        } else {
+            this.formElements = Object.assign({pageId: param}, {formValues: formInfo});
+        }
+
+        console.log('________________ saveCampaignForm _______________');
+        console.log(this.formElements);
+
+        store.dispatch(setClickAction(saveCampAction, this.formElements));
+    }
+
     updated(changedProps) {
         if (changedProps.has('_page')) {
             this.clearValidateStatus();
@@ -582,13 +637,13 @@ export class BorsukActionInputForm extends connect(store)(LitElement) {
         if (this.categoryDict !== dictCategorySelector(state)) { this.categoryDict = dictCategorySelector(state); }
         if (this.eventsDict !== dictEventsSelector(state)) { this.eventsDict = dictEventsSelector(state); }
         if (this.unusedEventsDict !== dictUnusedEventsSelector(state)) { this.unusedEventsDict = dictUnusedEventsSelector(state); }
-        if (this.subOfferDetails !== cesubofferPageReselector(state)) { this.subOfferDetails = cesubofferPageReselector(state); }
+        if (this.campaignDetails !== cesubofferPageReselector(state)) { this.campaignDetails = cesubofferPageReselector(state); console.log(this.campaignDetails); }
 
         if (this.actionTypeDict !== dictActionCharacterSelector(state)) { this.actionTypeDict = dictActionCharacterSelector(state) }
         if (this.employeesDict !== dictEmployeeSelector(state)) { this.employeesDict = dictEmployeeSelector(state) }
         if (this.squadsDict !== dictSquadsSelector(state)) { this.squadsDict = dictSquadsSelector(state) } 
 
-        if (actionClickSelector(state) === validateSubofferAction) { this.validateForm(state, this._page); }
+        if (actionClickSelector(state) === validateCampAction) { this.validateForm(state, this._page); }
         this._page = state.campform.page;
         this._slot = state.campform.slot;
     }

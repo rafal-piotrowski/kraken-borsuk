@@ -93,6 +93,7 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
                                                     class="inputFormSize90" 
                                                     label=${titles.get('messageGroupLabel')} 
                                                     @iron-select=${() => this.messageGroupChanged('formMesagesGroup')}
+                                                    @tap=${() => this.openGate()}
                                                     selected-item-label=${i.groupId} required
                                                     error-message=${titles.get('errorMessageRequiredField')}>
                                     <paper-listbox id="formMesagesGroup" slot="dropdown-content" selected="${Object.values(this.messageGroupDict).findIndex(p => p.id === i.groupId)}">
@@ -188,6 +189,7 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
             editorAlignButtons: { type: Array },
             editorTypoButtons: { type: Array },
             editorHistButtons: { type: Array },
+            gateState: { type: Boolean }
         };
     }
 
@@ -202,6 +204,7 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
         this.messageGroupDict = [];
         this.groupSelected = null;
         this.contentFlg = false;
+        this.gateState = false;
 
         this.editorHistButtons = [{
             buttonId: actions.get('textUndoAction'),  // definicja z actions
@@ -344,6 +347,13 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
         }.bind(this), false);
     }
 
+    updated(changedProps) {
+        if (changedProps.has('_page')) {
+            this.gateState = false;
+            this.clearValidateStatus();
+        }
+    }
+
     shouldUpdate() {
         return this.active;
     }
@@ -368,7 +378,7 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
     editorTextChanged(event) {
         if (this.shadowRoot.getElementById("formMessageText").getText().trim().length > 0) {
             this.shadowRoot.getElementById("formMessageText").removeAttribute("error");
-            store.dispatch(changeFormValue(this._subpage, 'editor', event.detail.textChanged));
+            store.dispatch(changeFormValue(this._page, 'editor', event.detail.textChanged, this._subpage));
         } else {
             this.shadowRoot.getElementById("formMessageText").setAttribute("error", "");
         }
@@ -377,7 +387,7 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
     messageInputChanged(param) {
         this.shadowRoot.getElementById(param).validate();
         if (this.shadowRoot.getElementById(param).invalid === false) {
-            store.dispatch(changeFormValue(this._subpage, param, this.shadowRoot.getElementById(param).value));
+            store.dispatch(changeFormValue(this._page, param, this.shadowRoot.getElementById(param).value, this._subpage));
         }
     }
         
@@ -410,8 +420,13 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
         }
     }
 
+    openGate() {
+        this.gateState = true;
+    }
+
     messageGroupChanged(param) {
-        store.dispatch(changeFormValue(this._subpage, param, this.messageGroupDict[this.shadowRoot.getElementById(param).selected].id));
+        store.dispatch(changeFormValue(this._page, param+((this.gateState)?'Change':'Insert'), this.messageGroupDict[this.shadowRoot.getElementById(param).selected].id, this._subpage));        
+        this.gateState = false;
     }
  
     chooseEventFromDict() {
@@ -420,11 +435,11 @@ export class BorsukMessageInputForm extends connect(store)(LitElement) {
  
     confirmModal(event) {
         const chosenEvent = JSON.parse(event.detail.chosenEvent);
-        store.dispatch(changeFormValue(this._subpage, 'notificationEventId', chosenEvent.event.id));
+        store.dispatch(changeFormValue(this._page, 'notificationEventId', chosenEvent.event.id, this._subpage));
     }
  
     eventRemove() {
-        store.dispatch(changeFormValue(this._subpage, 'notificationEventId', ''));
+        store.dispatch(changeFormValue(this._page, 'notificationEventId', '', this._subpage));
     }
  
     submitForm() {

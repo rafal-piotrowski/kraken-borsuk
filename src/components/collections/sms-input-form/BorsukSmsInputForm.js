@@ -85,6 +85,7 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
                                                     class="inputFormSize90" 
                                                     label=${titles.get('phoneTypeLabel')} 
                                                     @iron-select=${() => this.smsPhoneTypeChanged('formPhoneType')}
+                                                    @tap=${() => this.openGate()}
                                                     selected-item-label=${i.phoneTypeId} required
                                                     error-message=${titles.get('errorMessageRequiredField')}>
                                     <paper-listbox id="formPhoneType" slot="dropdown-content" selected="${Object.values(this.phoneTypeDict).findIndex(p => p.id === i.phoneTypeId)}">
@@ -106,6 +107,7 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
                                                     class="inputFormSize90" 
                                                     label=${titles.get('sendPeriodLabel')} 
                                                     @iron-select=${() => this.periodsChanged('formSendPeriod')}
+                                                    @tap=${() => this.openGate()}
                                                     selected-item-label=${i.sendPeriodId} 
                                                     required
                                                     error-message=${titles.get('errorMessageRequiredField')}>
@@ -173,7 +175,8 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
             _subslot: { type: String },
             smsDetails: { type: Object },
             phoneTypeDict: { type: Array },
-            periodsDict: { type: Array }
+            periodsDict: { type: Array },
+            gateState: { type: Boolean }
         };
     }
 
@@ -183,6 +186,7 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
         this.periodsDict = [];
         this.smsDetails = {};
         this.contentFlg = false;
+        this.gateState = false;
     }
 
     firstUpdated() {
@@ -201,6 +205,7 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
 
     updated(changedProps) {
         if (changedProps.has('_page')) {
+            this.gateState = false;
             this.clearValidateStatus();
         }
     }
@@ -223,7 +228,7 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
     smsInputChanged(param) {
         this.shadowRoot.getElementById(param).validate();
         if (this.shadowRoot.getElementById(param).invalid === false) {
-            store.dispatch(changeFormValue(this._subpage, param, this.shadowRoot.getElementById(param).value));
+            store.dispatch(changeFormValue(this._page, param, this.shadowRoot.getElementById(param).value, this._subpage));
         }
     }
 
@@ -257,12 +262,18 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
         formMessageText.value = s.join('');
     }
 
+    openGate() {
+        this.gateState = true;
+    }
+
     smsPhoneTypeChanged(param) {
-        store.dispatch(changeFormValue(this._subpage, param, this.phoneTypeDict[this.shadowRoot.getElementById(param).selected].id));
+        store.dispatch(changeFormValue(this._page, param+((this.gateState)?'Change':'Insert'), this.phoneTypeDict[this.shadowRoot.getElementById(param).selected].id, this._subpage));        
+        this.gateState = false;
     }
 
     periodsChanged(param) {
-        store.dispatch(changeFormValue(this._subpage, param, this.periodsDict[this.shadowRoot.getElementById(param).selected].id));
+        store.dispatch(changeFormValue(this._page, param+((this.gateState)?'Change':'Insert'), this.periodsDict[this.shadowRoot.getElementById(param).selected].id, this._subpage));        
+        this.gateState = false;
     }
  
     timeValidate() {
@@ -276,8 +287,8 @@ export class BorsukSmsInputForm extends connect(store)(LitElement) {
             this.shadowRoot.getElementById("formSendTo").invalid = true;
         }
 
-        store.dispatch(changeFormValue(this._subpage, "formSendFrom", this.shadowRoot.getElementById("formSendFrom").value));
-        store.dispatch(changeFormValue(this._subpage, "formSendTo", this.shadowRoot.getElementById("formSendTo").value));
+        store.dispatch(changeFormValue(this._page, "formSendFrom", this.shadowRoot.getElementById("formSendFrom").value, this._subpage));
+        store.dispatch(changeFormValue(this._page, "formSendTo", this.shadowRoot.getElementById("formSendTo").value, this._subpage));
 
     }
 

@@ -21,6 +21,9 @@ import './packages/borsuk-button.js';
 import './packages/borsuk-icon.js';
 import '@polymer/iron-collapse/iron-collapse';
 import './collections/borsuk-events-modal.js';
+import './packages/borsuk-datepicker.js';
+
+import { MinMaxDate, Required, IsDate, MinDate, MaxDate } from '@lion/form-core';
 
 import { filterConfirmAction, filterSelectResultAction, filterResetAction } from '../properties/actions.js';
 
@@ -40,6 +43,24 @@ import { setClickAction } from '../redux/actions/customevents.js';
 // import { ceSearchResultsSelector } from '../redux/reducers/cesuboffer.js';
 import { dictEventsSelector } from '../redux/reducers/dictionaries.js';
 import globals, { globalAppSelector } from '../redux/reducers/globals.js';
+
+class IsRealDate extends IsDate {
+    static getMessage({ fieldName }) {
+        return `Wprowadź poprawną datę ${fieldName} w formacie "Dzien.Miesiąc.Rok".`;
+    }
+}
+ 
+class IsRequired extends Required {
+    static getMessage({ fieldName }) {
+        return `Pole ${fieldName} jest wymagane.`;
+    }
+}
+ 
+class IsMinDate extends MinDate {
+    static getMessage({ fieldName }) {
+        return `Pole ${fieldName} nie może być mniejsza od Daty od.`;
+    }
+}
 
 export class BorsukFilterForm extends connect(store)(LitElement) {
     static get styles() {
@@ -140,6 +161,18 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
                             <paper-checkbox id="prodPublishedCheckbox"><span class="titleCheckbox checkboxElement">produkcja</span></paper-checkbox>
                     </div>
 
+                    <div class="inputGrid formSpanGrid12">
+                        <borsuk-datepicker
+                            id="datePickerEnd"
+                            label="Data do"
+                            .modelValue=${this.today}
+                            .validators=${[new IsRequired(), new IsRealDate()]}>
+                            <div slot="help-text">
+                            
+                            </div>
+                        </borsuk-datepicker>
+                    </div>
+
                     <div class="inputGrid formSpanGrid12 checkboxContener">
                         <div class="flexbuttons">
                             <borsuk-button wide @click="${this.filterConfirm}">Filtruj</borsuk-button>
@@ -226,9 +259,10 @@ export class BorsukFilterForm extends connect(store)(LitElement) {
     isCollapsed() {
         if (this.shadowRoot.getElementById("filterContentCollapse").getAttribute('opened') === null) {
             this.shadowRoot.getElementById("filterContentCollapse").setAttribute('opened', '');
-        } else {
-            this.shadowRoot.getElementById("filterContentCollapse").removeAttribute('opened');
         }
+        //  else {
+        //     this.shadowRoot.getElementById("filterContentCollapse").removeAttribute('opened');
+        // }
     }
 
     filterConfirm(event) {

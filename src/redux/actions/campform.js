@@ -207,12 +207,13 @@ export const getSearchResults = (results) => (dispatch) => {
   });
 };
 
-export const changeFormValue = (tabPageId, sParam, nValue) => {
+export const changeFormValue = (tabPageId, sParam, nValue, tabSubPageId) => {
   return {
     type: CHANGE_FORM_VALUE,
     tabPageId,
     sParam,
-    nValue
+    nValue,
+    tabSubPageId
   };
 };
 

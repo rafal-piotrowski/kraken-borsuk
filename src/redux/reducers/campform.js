@@ -153,6 +153,13 @@ const campform = (state = INITIAL_STATE, action) => {
             }
         case CHANGE_FORM_VALUE:
 
+            // formularz edycji formatki akcji
+            if (action.sParam === 'formActionName') {
+                return { ...state, cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], actionName: action.nValue } : state.cesubslots[key]) }
+            }
+
+
+
             // formularz edycji suboferty
             if (action.sParam === 'subofferName') {
                 return { ...state, cesubslots: Object.keys(state.cesubslots).map((key) => state.cesubslots[key].tabPageId === action.tabPageId ? { ...state.cesubslots[key], subofferName: action.nValue } : state.cesubslots[key]) }
@@ -289,6 +296,7 @@ export const cesubofferSlotsReselector = createSelector(
     }
   )
 
+// reselector do przebudowy nazewnictwa dla slotu S22 z danymi do formatki akcji
 export const cesubofferPageReselector = createSelector(
     [ cesubofferSlotsSelector, getActivePage ],
     (cesubslots, page) => {

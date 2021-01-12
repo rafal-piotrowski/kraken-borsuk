@@ -21,7 +21,7 @@ import { borsukAddSuboffer, borsukAddVersion, borsukApprove, borsukCopySuboffer,
     borsukPublishTest, borsukPublishProd, borsukPublic, borsukChevronDown, borsukChevronUp,
     borsukRemoveSuboffer, borsukRemove, borsukSaveSuboffer, borsukSave } from '../icons/icons.js';
 import { saveSubofferAction, removeSubofferAction, copySubofferAction, 
-    addVersionAction, publishTestAction, publishProdAction, validateVersionAction,
+    addVersionAction, publishTestAction, publishProdAction, validateVersionAction, validateCampAction,
     saveVersionAction, removeVersionAction, copyVersionAction, approveVersionAction } from '../properties/actions.js';
 
 import './collections/borsuk-actionform-status.js';
@@ -157,8 +157,8 @@ export class BorsukActionForm extends connect(store)(LitElement) {
         super();
         this.formInputTemplate = this.actionInputTemplate;
         this.formButtons = [{
-            buttonId: validateVersionAction,
-            buttonTooltip: 'Zapisz wersję',
+            buttonId: validateCampAction,
+            buttonTooltip: 'Zapisz formatkę',
             buttonIcon: borsukSave,
             buttonActive: true,
             buttonList: [{

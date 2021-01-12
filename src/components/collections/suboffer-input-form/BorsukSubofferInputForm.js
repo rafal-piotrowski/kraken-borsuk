@@ -57,6 +57,7 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
         this.eventsDict = [];
         this.unusedEventsDict = [];
         this.subOfferDetails = {};
+        this.gateState = false;
     }
 
     static get properties() {
@@ -66,7 +67,8 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
             categoryDict: { type: Array },
             productGroupDict: { type: Array },
             subOfferDetails: { type: Object },
-            _page: { type: String }
+            _page: { type: String },
+            gateState: { type: Boolean }
         }
     }
 
@@ -124,6 +126,7 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
                                     class="inputFormSize90"
                                     label=${titles.get('subofferCategoryLabel')}
                                     @iron-select=${() => this.categoryChanged('categoryId')}
+                                    @tap=${() => this.openGate()}
                                     selected-item-label=${i.categoryId} required
                                     error-message=${titles.get('errorMessageRequiredField')}>
                         
@@ -148,6 +151,7 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
                                     class="inputFormSize90"
                                     label=${titles.get('subofferProductGroupLabel')}
                                     @iron-select=${() => this.productGroupChanged('groupId')}
+                                    @tap=${() => this.openGate()}
                                     selected-item-label=${i.groupId}>
                                 
                                     <paper-listbox id="groupId" slot="dropdown-content" selected="${Object.values(this.productGroupDict).findIndex(p => p.id === i.groupId)}">
@@ -197,15 +201,21 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
     productGroupChanged(param) {
         this.shadowRoot.getElementById("formProductGroup").validate();
         if (this.shadowRoot.getElementById("formProductGroup").invalid === false) {
-            store.dispatch(changeFormValue(this._page, param, this.productGroupDict[this.shadowRoot.getElementById(param).selected].id));
+            store.dispatch(changeFormValue(this._page, param+((this.gateState)?'Change':'Insert'), this.productGroupDict[this.shadowRoot.getElementById(param).selected].id));
         }
+        this.gateState = false;
+    }
+
+    openGate() {
+        this.gateState = true;
     }
 
     categoryChanged(param) {
         this.shadowRoot.getElementById("formCategory").validate();
         if (this.shadowRoot.getElementById("formCategory").invalid === false) {
-            store.dispatch(changeFormValue(this._page, param, this.categoryDict[this.shadowRoot.getElementById(param).selected].id));
-        }
+            store.dispatch(changeFormValue(this._page, param+((this.gateState)?'Change':'Insert'), this.categoryDict[this.shadowRoot.getElementById(param).selected].id));
+        }        
+        this.gateState = false;
     }
 
     confirmModal(event) {
@@ -241,6 +251,7 @@ export class BorsukSubofferInputForm extends connect(store)(LitElement) {
                 
     updated(changedProps) {
         if (changedProps.has('_page')) {
+            this.gateState = false;
             this.clearValidateStatus();
         }
     }

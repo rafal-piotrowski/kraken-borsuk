@@ -35,6 +35,7 @@ export const ADD_CE_TAB = 'ADD_CE_TAB';
 export const REMOVE_CE_SLOT = 'REMOVE_CE_SLOT';
 export const ADD_CE_SLOT = 'ADD_CE_SLOT';
 export const UPDATE_CE_TAB = 'UPDATE_CE_TAB';
+export const DISACTIVATE_CHANGED_FLG = 'DISACTIVATE_CHANGED_FLG';
 
 export const navigate = (path, search) => (dispatch) => {
 
@@ -277,12 +278,13 @@ export const getSearchResults = (results) => (dispatch) => {
   });
 };
 
-export const changeFormValue = (tabPageId, sParam, nValue) => {
+export const changeFormValue = (tabPageId, sParam, nValue, tabSubPageId) => {
   return {
     type: CHANGE_FORM_VALUE,
     tabPageId,
     sParam,
-    nValue
+    nValue,
+    tabSubPageId
   };
 };
 
@@ -390,4 +392,11 @@ export const getButtonsFlags = (ceBtnsFlags) => (dispatch) => {
     type: GET_BUTTONS_FLAGS,
     cebtnsflgs
   });
+};
+
+export const disactivateChangedFlg = (tabPageId) => {
+  return {
+    type: DISACTIVATE_CHANGED_FLG,
+    tabPageId
+  };
 };

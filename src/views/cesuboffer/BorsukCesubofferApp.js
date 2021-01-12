@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable import/named */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-plusplus */
@@ -40,7 +41,7 @@ import { store } from '../../redux/store.js';
 // załadowanie kreatorów akcji.
 import { getCesubofferTabs, getCesubofferSlots, getCeChannelTabs, getCeChannelSlots, getSidebarTypes, getSidebarNames, getSearchResults, 
         navigate, changeStatus, getVersionsList, getSchedulesList, getPublicationsList, getChannelActionsParams, updateHtmlFlg, getButtonsFlags,
-        removeCeTab, addCeTab, removeCeSlot, addCeSlot, updateCeTab } from '../../redux/actions/cesuboffer.js';
+        removeCeTab, addCeTab, removeCeSlot, addCeSlot, updateCeTab, disactivateChangedFlg } from '../../redux/actions/cesuboffer.js';
 import { getProductGroupDict, getCategoryDict, getEventsDict, getPushActionDict, getPeriodsDict, getPhoneTypeDict, getMessageGroupDict, 
         getResponseCodesDict, getContentParamsDict, getActionsParamsDict, getUnusedEventsDict } from '../../redux/actions/dictionaries.js';
 import { setClickAction } from '../../redux/actions/customevents.js';
@@ -330,44 +331,76 @@ export class BorsukCesubofferApp extends BorsukApp {
         // if (actionClickSelector(state) === actions.get('logoutAction')) { localStorage.clear(); location.reload(); }
         if (this.currentActionClick !== actionClickSelector(state)) { this.currentActionClick = actionClickSelector(state)}
         if (actionClickSelector(state) === actions.get('closeTabAction') ||
-            actionClickSelector(state) === actions.get('homeAction') ||
-            actionClickSelector(state) === actions.get('logoutAction') ||
-            actionClickSelector(state) === actions.get('addSubofferAction') ||
+            // actionClickSelector(state) === actions.get('homeAction') ||
+            // actionClickSelector(state) === actions.get('logoutAction') ||
+            // actionClickSelector(state) === actions.get('addSubofferAction') ||
             actionClickSelector(state) === actions.get('editSubofferAction') ||
             actionClickSelector(state) === actions.get('editVersionAction') ||
             actionClickSelector(state) === actions.get('addVersionAction') ||
             actionClickSelector(state) === actions.get('copySubofferAction') ||
             actionClickSelector(state) === actions.get('copyVersionAction') ||
             actionClickSelector(state) === actions.get('removeVersionAction') ||
-            actionClickSelector(state) === actions.get('removeSubofferAction') ||
-            actionClickSelector(state) === actions.get('filterOpenAction')) {
+            actionClickSelector(state) === actions.get('removeSubofferAction') 
+            // ||
+            // actionClickSelector(state) === actions.get('filterOpenAction')
+            ) 
+            {
             this.fireProtectEvent(state, actionClickSelector(state), actionParamSelector(state) ? actionParamSelector(state) : null);
         } else {
             this.fireCustomEvent(state, actionClickSelector(state), actionParamSelector(state) ? actionParamSelector(state) : null)
         }
+
+        if (actionClickSelector(state) === actions.get('saveSubofferAction') ||
+            actionClickSelector(state) === actions.get('saveVersionAction')) {
+                store.dispatch(setClickAction(''));
+                store.dispatch(disactivateChangedFlg(actionParamSelector(state).pageId));
+        }
+
         this._page = getActivePage(state);
+        // console.log('============ page from stateChanged is: '+this._page);
+        
     }
 
     fireProtectEvent(state, type, param) {
 
-        let checkingState = Object.values(cesubofferSlotsSelector(state));
-        let originState = Object.values(cesubofferSlotsBckpSelector(state));
-        let checkingChannelsState = Object.values(ceChannelSlotsSelector(state));
-        let originChannelsState = Object.values(ceChannelSlotsBckpSelector(state));
+        // let checkingState = Object.values(cesubofferSlotsSelector(state));
+        // let originState = Object.values(cesubofferSlotsBckpSelector(state));
+        // let checkingChannelsState = Object.values(ceChannelSlotsSelector(state));
+        // let originChannelsState = Object.values(ceChannelSlotsBckpSelector(state));
 
         let token = {"tokenKey": type}
         this.closingPage = param;
 
-        if (JSON.stringify(checkingState) === JSON.stringify(originState) &&
-            JSON.stringify(checkingChannelsState) === JSON.stringify(originChannelsState))
-        {
-            this.fireCustomEvent(state, type, param);
-        } else {
+        // console.log('============================================ fireProtectEvent =========================================');
+        // console.log('actual page is: '+this._page);
+        // console.log(type);
+        // console.log('event pageId is: '+param.pageId);
+        // console.log('event nodeId is: '+param.nodeId);
+        // console.log(this.cesubofferSlotsList);
+
+        const paramPageId = (param.pageId) ? param.pageId : this._page;
+
+        // console.log(paramPageId);
+
+        if (Object.values(this.cesubofferSlotsList).filter(subslot => subslot.tabPageId === paramPageId)[0].changedFlg) {
             this.openModal( 'M', 'C',
                         "",
                         titles.get('errorSavingLabel'),
                         "", JSON.stringify(token));
+        } else {
+            this.fireCustomEvent(state, type, param);
         }
+
+        // if (JSON.stringify(checkingState) === JSON.stringify(originState) &&
+        //     JSON.stringify(checkingChannelsState) === JSON.stringify(originChannelsState))
+        // {
+        //     this.fireCustomEvent(state, type, param);
+        // } else {
+        //     this.openModal( 'M', 'C',
+        //                 "",
+        //                 titles.get('errorSavingLabel'),
+        //                 "", JSON.stringify(token));
+        // }
     }
 
     fireCustomEvent(state, type, param) {
