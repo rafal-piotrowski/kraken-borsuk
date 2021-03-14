@@ -130,7 +130,7 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
 
         // need this for use of class metods inside the renderers:
         this._chevronColumnRendererBound = this.chevronColumnRenderer.bind(this);
-        this._addScheduleButtonRendererBound = this.addScheduleButtonRenderer.bind(this);
+        // this._addScheduleButtonRendererBound = this.addScheduleButtonRenderer.bind(this);
         this._rowDetailsRendererBound = this.rowDetailsRenderer.bind(this);
         this._goToVersionRendererBound = this.goToVersionRenderer.bind(this);
     }
@@ -170,7 +170,7 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
 
                                 <vaadin-grid-column width="10%" id="buttonCol" .renderer=${this._goToVersionRendererBound}>
                                 </vaadin-grid-column>
-                                <vaadin-grid-column width="10%" id="buttonCol" .renderer=${this._addScheduleButtonRendererBound}>
+                                <vaadin-grid-column width="10%" id="buttonCol" .renderer=${this.addScheduleButtonRenderer.bind(this)}>
                                 </vaadin-grid-column>
 
                                 <div class="test123">[[item]]</div>
@@ -343,6 +343,9 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
     }
 
     addScheduleButtonRenderer(root, column, rowData) {
+        console.log('==================================== tu addScheduleButtonRenderer =============================================');
+        console.log(this);
+
         render(
             html`
             <borsuk-button smicon animate 
@@ -458,8 +461,9 @@ export class BorsukVersionsList extends connect(store)(LitElement) {
     }
 
     _addVersionToSchedule(item) {
-        // console.log('%%%%%%%%%%%% addVersionToSchedule %%%%%%%%%%%%%%');
+        console.log('%%%%%%%%%%%% addVersionToSchedule %%%%%%%%%%%%%%');
         // console.log(item);
+        console.log(this);
 
         this.resetDatepickerInputValidation();
  
